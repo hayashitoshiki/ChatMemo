@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_bottom_chat_24"
+        android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/fixedPhraseListFragment"
+        android:icon="@drawable/ic_bottom_phrase_24"
+        android:title="@string/title_phrase" />
+
+</menu>

@@ -1,0 +1,41 @@
+package com.example.chatmemo.ui.phrase
+
+import androidx.lifecycle.*
+import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.repository.DataBaseRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+/**
+ * 定型文一覧画面_UIロジック
+ *
+ * @property dataBaseRepository DBアクセス用repository
+ */
+class FixedPhraseListViewModel(private val dataBaseRepository: DataBaseRepository) : ViewModel() {
+
+    private val _phraseList = MutableLiveData<List<Template>>()
+    val phraseList: LiveData<List<Template>> = _phraseList
+    val status = MutableLiveData<Boolean>()
+
+    // リスト取得
+    fun getList() {
+        viewModelScope.launch {
+            _phraseList.postValue(dataBaseRepository.getPhraseTitle())
+        }
+    }
+
+    // 定型文リスト削除
+    fun deletePhrase(template : Template) {
+        viewModelScope.launch {
+            status.postValue(null)
+            if (dataBaseRepository.getRoomByTemplateId(template.id!!).isEmpty()) {
+                dataBaseRepository.deletePhraseByTitle(template.id)
+                dataBaseRepository.deleteTemplateTitle(template)
+                _phraseList.postValue(dataBaseRepository.getPhraseTitle())
+                status.postValue(true)
+            } else {
+                status.postValue(false)
+            }
+        }
+    }
+}

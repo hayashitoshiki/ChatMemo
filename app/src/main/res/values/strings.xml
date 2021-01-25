@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">ChatMemo</string>
+
+    <!-- Title -->
+    <string name="title_room_add">ルーム名</string>
+    <string name="title_room_name_edit">ルーム名変更</string>
+    <string name="title_room_phrase_edit">定型文設定</string>
+    <string name="title_phrase_add">定型文追加</string>
+    <string name="title_phrase_list">定型文リスト</string>
+
+    <!-- Label -->
+    <string name="label_room_name_old">元のルーム名　</string>
+    <string name="label_room_name_new">新しいルーム名</string>
+    <string name="label_room_phrase_list">定型文</string>
+    <string name="label_room_phrase_mode">表示順</string>
+    <string name="label_phrase_mode_normal">順番</string>
+    <string name="label_phrase_mode_random">ランダム</string>
+
+    <!-- Button -->
+    <string name="btn_room_in">入室</string>
+    <string name="btn_room_new">新規作成</string>
+    <string name="btn_phrase_new">定型文作成</string>
+    <string name="btn_change"><u>編集</u></string>
+    <string name="btn_delete"><u>削除</u></string>
+    <string name="btn_submit_change">変更</string>
+    <string name="btn_submit_new">新規作成</string>
+    <string name="btn_add">追加</string>
+
+    <!-- Hint -->
+    <string name="hint_room_name">最大２０文字</string>
+    <string name="hint_message">メッセージを入力..</string>
+
+    <!-- Navigation Bottom -->
+    <string name="title_home">ホーム</string>
+    <string name="title_phrase">定型文</string>
+
+    <!-- Error Message -->
+    <string name="error_nothing_room">新しくチャットルームを作成しよう!</string>
+    <string name="error_nothing_phrase">定型文リストを作成しよう！</string>
+    <string name="error_phrase_title">すでに同じタイトルが保存されています。</string>
+</resources>

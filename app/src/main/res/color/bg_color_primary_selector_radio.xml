@@ -1,0 +1,5 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/bg_color_primary" android:state_checked="true" android:state_enabled="true" />
+    <item android:color="@color/bg_color_primary_secondary" android:state_checked="false" android:state_enabled="true" />
+    <item android:color="@color/bg_disable" android:state_enabled="false" />
+</selector>

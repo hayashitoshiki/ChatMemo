@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base Color-->
+    <color name="bg_color_primary">@color/blue_gray_500</color>
+    <color name="bg_color_primary_dark">@color/blue_gray_600</color>
+    <color name="bg_color_accent">@color/brown_500</color>
+
+    <!-- Text Color -->
+    <color name="text_color_light_primary">#FFFFFFFF</color>
+    <color name="text_color_light_secondary">#B3FFFFFF</color>
+    <color name="text_color_light_disable">#80FFFFFF</color>
+    <color name="text_color_dark_primary">#DE000000</color>
+    <color name="text_color_dark_secondary">#8A000000</color>
+    <color name="text_color_dark_disable">#61000000</color>
+    <color name="text_color_error">#B00020</color>
+
+    <!-- disable -->
+    <color name="bg_color_primary_secondary">#B3607D8B</color>
+    <color name="bg_disable">#C5C5C5</color>
+
+    <!-- Other -->
+    <color name="blue_gray_200">#B0BEC5</color>
+    <color name="blue_gray_500">#607D8B</color>
+    <color name="blue_gray_600">#546E7A</color>
+    <color name="brown_500">#795548</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="gray_300">#E0E0E0</color>
+    <color name="gray_700">#616161</color>
+
+    <!-- Transparent -->
+    <color name="transparent">#00E0E0E0</color>
+</resources>

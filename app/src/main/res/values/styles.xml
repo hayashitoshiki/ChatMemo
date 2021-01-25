@@ -1,0 +1,51 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.ChatMemo" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/bg_color_primary</item>
+        <item name="colorPrimaryDark">@color/bg_color_primary_dark</item>
+        <item name="colorAccent">@color/bg_color_accent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:spotShadowAlpha">0.5</item>
+        <item name="materialButtonStyle">@style/Widget.MyApp.Button</item>
+        <item name="chipStyle">@style/Widget.MyApp.Chip</item>
+        <item name="floatingActionButtonStyle">@style/Widget.MyApp.FloatingButton</item>
+    </style>
+
+    <!-- Button -->
+    <style name="Widget.MyApp.Button" parent="Widget.MaterialComponents.Button">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MyApp.Button</item>
+        <item name="android:textColor">@color/text_color_light_selector_button</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.MyApp.Button" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">30dp</item>
+    </style>
+
+    <!-- Floating Button -->
+    <style name="Widget.MyApp.FloatingButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/bg_color_accent</item>
+        <item name="android:textColor">@color/text_color_light_selector_button</item>
+        <item name="tabIconTint">@color/text_color_light_selector_button</item>
+    </style>
+
+    <!-- Chip -->
+    <style name="Widget.MyApp.Chip" parent="@style/Widget.MaterialComponents.Chip.Filter">
+        <item name="android:textColor">@color/text_color_light_selector_radio</item>
+        <item name="chipBackgroundColor">@color/bg_color_primary_selector_radio</item>
+    </style>
+
+    <!-- Splash -->
+    <style name="AppTheme.Splash" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_drawable</item>
+    </style>
+
+    <!-- Toolbar -->
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorControlNormal">@color/black</item>
+        <item name="android:translationZ">16dp</item>
+        <item name="android:hardwareAccelerated">true</item>
+        <item name="android:spotShadowAlpha">1.0</item>
+    </style>
+</resources>
