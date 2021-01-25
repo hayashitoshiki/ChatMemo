@@ -41,4 +41,4 @@ MVVM
 https://github.com/hayashitoshiki/ChatMemo/tree/master/app/src/main
 
 ## ソースドキュメント
-https://github.com/hayashitoshiki/ChatMemo/blob/master/app/doc/module_package.md
+https://github.com/hayashitoshiki/ChatMemo/blob/master/app/doc/app/index.md
