@@ -15,13 +15,13 @@ import kotlinx.coroutines.launch
  */
 class RoomAddViewModel(private val dataBaseRepository: DataBaseRepository) : ViewModel() {
 
-    val titleText = MutableLiveData<String>("")
+    val titleText = MutableLiveData("")
     private var mTemplateList = listOf<Template>()
     private val _phraseTitleList = MutableLiveData<List<String>>()
     val phraseTitleList: LiveData<List<String>> = _phraseTitleList
-    val phraseTitleValueInt = MutableLiveData<Int>(0)
-    val modeValueInt = MutableLiveData<Int>(0)
-    private val _isEnableSubmitButton = MutableLiveData<Boolean>(false)
+    val phraseTitleValueInt = MutableLiveData(0)
+    val modeValueInt = MutableLiveData(0)
+    private val _isEnableSubmitButton = MutableLiveData(false)
     val isEnableSubmitButton: LiveData<Boolean> = _isEnableSubmitButton
 
     init {
@@ -34,8 +34,8 @@ class RoomAddViewModel(private val dataBaseRepository: DataBaseRepository) : Vie
     }
 
     // 新規ルーム作成
-    suspend fun createRoom() : ChatRoom {
-        val room = ChatRoom(null, titleText.value!!, null, 0, null,null, null)
+    suspend fun createRoom(): ChatRoom {
+        val room = ChatRoom(null, titleText.value!!, null, 0, null, null, null)
         if (phraseTitleValueInt.value!! != 0) {
             room.templateId = mTemplateList[phraseTitleValueInt.value!! - 1].id
             room.templateMode = modeValueInt.value!!

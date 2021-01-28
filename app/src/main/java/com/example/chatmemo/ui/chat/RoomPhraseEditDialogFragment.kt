@@ -20,7 +20,13 @@ import org.koin.core.parameter.parametersOf
  */
 class RoomPhraseEditDialogFragment : DialogFragment() {
 
-    private val viewModel: RoomPhraseEditViewModel by inject { parametersOf(requireArguments().getSerializable("room") as ChatRoom) }
+    private val viewModel: RoomPhraseEditViewModel by inject {
+        parametersOf(
+            requireArguments().getSerializable(
+                "room"
+            ) as ChatRoom
+        )
+    }
     private lateinit var binding: DialogRoomPhraseEditBinding
 
     override fun onCreateView(
@@ -28,7 +34,8 @@ class RoomPhraseEditDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.dialog_room_phrase_edit, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.dialog_room_phrase_edit, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         return binding.root

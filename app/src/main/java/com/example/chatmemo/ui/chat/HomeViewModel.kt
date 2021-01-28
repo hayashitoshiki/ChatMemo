@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
  * ホーム画面_ロジック
  * @property dataBaseRepository DB取得リポジトリ
  */
-class HomeViewModel (private val dataBaseRepository : DataBaseRepository): ViewModel() {
+class HomeViewModel(private val dataBaseRepository: DataBaseRepository) : ViewModel() {
 
     val chatRoomList: LiveData<List<ChatRoom>> = dataBaseRepository.getRoomAll()
 

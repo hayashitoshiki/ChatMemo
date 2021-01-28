@@ -1,9 +1,11 @@
 package com.example.chatmemo.ui.phrase
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.chatmemo.model.entity.Template
 import com.example.chatmemo.model.repository.DataBaseRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -25,7 +27,7 @@ class FixedPhraseListViewModel(private val dataBaseRepository: DataBaseRepositor
     }
 
     // 定型文リスト削除
-    fun deletePhrase(template : Template) {
+    fun deletePhrase(template: Template) {
         viewModelScope.launch {
             status.postValue(null)
             if (dataBaseRepository.getRoomByTemplateId(template.id!!).isEmpty()) {

@@ -28,5 +28,5 @@ interface PhraseDao {
     suspend fun getAllByTitle(templateId: Long): List<Phrase>
 
     @Query("delete from phrases WHERE template_id = :templateId")
-    fun deleteById(templateId :Long)
+    fun deleteById(templateId: Long)
 }

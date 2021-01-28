@@ -24,13 +24,13 @@ interface RoomDao {
     fun getAll(): LiveData<List<ChatRoom>>
 
     @Query("SELECT * FROM room WHERE title = :title")
-    suspend fun getRoomByTitle(title :String) : List<ChatRoom>
+    suspend fun getRoomByTitle(title: String): List<ChatRoom>
 
     @Query("SELECT * FROM room WHERE template_id = :templateId")
-    suspend fun getRoomByTemplateId(templateId :Long) : List<ChatRoom>
+    suspend fun getRoomByTemplateId(templateId: Long): List<ChatRoom>
 
     @Query("SELECT * FROM room WHERE id = :id")
-    fun getRoomById(id :Long) : LiveData<ChatRoom>
+    fun getRoomById(id: Long): LiveData<ChatRoom>
 
     @Query("delete from room WHERE id = :id")
     suspend fun deleteById(id: Long)

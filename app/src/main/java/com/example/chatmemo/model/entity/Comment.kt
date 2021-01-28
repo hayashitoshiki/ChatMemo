@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey
  * @property roomId 紐づいているルームID
  */
 @Entity(tableName = "comments")
-data class Comment (
+data class Comment(
     @PrimaryKey(autoGenerate = true) val id: Long?,
     var text: String,
     var user: Int,

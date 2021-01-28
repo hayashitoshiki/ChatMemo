@@ -24,8 +24,9 @@ import java.util.*
  * @property context コンテキスト
  * @property commentList 取得したコメント情報
  */
-class ChatRecyclerAdapter(private val context: Context, private var commentList: List<Comment>) :
-    RecyclerView.Adapter<ChatRecyclerAdapter.ViewHolder>() {
+class ChatRecyclerAdapter(
+    private val context: Context, private var commentList: List<Comment>
+) : RecyclerView.Adapter<ChatRecyclerAdapter.ViewHolder>() {
 
     // 参照するviewの定義
     open class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -39,7 +40,8 @@ class ChatRecyclerAdapter(private val context: Context, private var commentList:
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context).inflate(R.layout.item_comment, parent, false)
+        val inflater = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_comment, parent, false)
         return ViewHolder(inflater)
     }
 
@@ -48,8 +50,11 @@ class ChatRecyclerAdapter(private val context: Context, private var commentList:
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val comment =  commentList[position]
-        if (position == 0 || (position > 0 && commentList[position - 1].createdAt.substring(0, 10) != commentList[position].createdAt.substring(0, 10))) {
+        val comment = commentList[position]
+        if (position == 0 || (position > 0 && commentList[position - 1].createdAt.substring(
+                0, 10
+            ) != commentList[position].createdAt.substring(0, 10))
+        ) {
             comment.createdAt.substring(0, 10).let {
                 holder.dataTextView.visibility = View.VISIBLE
                 holder.dataTextView.text = if (it == getDataNow()) {
@@ -69,7 +74,9 @@ class ChatRecyclerAdapter(private val context: Context, private var commentList:
                 holder.commentBlackTextView.text = comment.text
                 holder.commentBlackTextView.setOnLongClickListener {
                     val clipboard: ClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText("PhoneNumber", holder.commentBlackTextView.text)
+                    val clip = ClipData.newPlainText(
+                        "PhoneNumber", holder.commentBlackTextView.text
+                    )
                     clipboard.setPrimaryClip(clip)
                     true
                 }
@@ -81,7 +88,9 @@ class ChatRecyclerAdapter(private val context: Context, private var commentList:
                 holder.commentWhiteTextView.text = comment.text
                 holder.commentWhiteTextView.setOnLongClickListener {
                     val clipboard: ClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText("PhoneNumber", holder.commentBlackTextView.text)
+                    val clip = ClipData.newPlainText(
+                        "PhoneNumber", holder.commentBlackTextView.text
+                    )
                     clipboard.setPrimaryClip(clip)
                     true
                 }
@@ -91,7 +100,7 @@ class ChatRecyclerAdapter(private val context: Context, private var commentList:
 
     // 日付取得
     @SuppressLint("SimpleDateFormat")
-    private fun getDataNow() : String {
+    private fun getDataNow(): String {
         val df: DateFormat = SimpleDateFormat("yyyy/MM/dd")
         val date = Date(System.currentTimeMillis())
         return df.format(date)

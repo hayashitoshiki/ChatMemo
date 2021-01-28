@@ -21,8 +21,7 @@ import java.util.*
 /**
  * ルームリスト用アダプター
  */
-class RoomListAdapter(private var items: List<ChatRoom>) :
-    RecyclerView.Adapter<RoomListAdapter.ViewHolder>() {
+class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<RoomListAdapter.ViewHolder>() {
 
     private lateinit var listener: OnItemClickListener
     private var viewBinderHelper: ViewBinderHelper = ViewBinderHelper()
@@ -39,9 +38,7 @@ class RoomListAdapter(private var items: List<ChatRoom>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_room_list,
-            parent,
-            false
+            R.layout.item_room_list, parent, false
         )
         return ViewHolder(inflater)
     }
@@ -52,21 +49,21 @@ class RoomListAdapter(private var items: List<ChatRoom>) :
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val room =  items[position]
+        val room = items[position]
         var x = 0f
         viewBinderHelper.bind(holder.swipeRevealLayout, items[position].toString())
 
         // ルーム名
         holder.roomNameTextView.text = room.title
         // 最新コメント
-        room.commentLast?.also{
+        room.commentLast?.also {
             holder.commentTextView.text = it
             holder.commentTextView.visibility = View.VISIBLE
         } ?: run {
             holder.commentTextView.visibility = View.GONE
         }
         // 最新コメント時間
-        room.commentTime?.also{ commentTime ->
+        room.commentTime?.also { commentTime ->
             commentTime.substring(0, 10).let {
                 holder.timeTextView.visibility = View.VISIBLE
                 holder.timeTextView.text = if (it == getDataNow()) {
@@ -81,11 +78,11 @@ class RoomListAdapter(private var items: List<ChatRoom>) :
         // カードタップ
         holder.container.setOnTouchListener { v, event ->
             when (event.action) {
-                MotionEvent.ACTION_DOWN ->{
+                MotionEvent.ACTION_DOWN -> {
                     x = event.x
                 }
-                MotionEvent.ACTION_UP -> {
-                    if ( -5 < x - event.x && x- event.x < 5) {
+                MotionEvent.ACTION_UP   -> {
+                    if (-5 < x - event.x && x - event.x < 5) {
                         listener.onItemClickListener(v, position, items[position])
                     }
                     x = 0f
@@ -103,7 +100,7 @@ class RoomListAdapter(private var items: List<ChatRoom>) :
 
     // 日付取得
     @SuppressLint("SimpleDateFormat")
-    private fun getDataNow() : String {
+    private fun getDataNow(): String {
         val df: DateFormat = SimpleDateFormat("yyyy/MM/dd")
         val date = Date(System.currentTimeMillis())
         return df.format(date)
@@ -115,7 +112,7 @@ class RoomListAdapter(private var items: List<ChatRoom>) :
     }
 
     //インターフェースの作成
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         fun onItemClickListener(view: View, position: Int, item: ChatRoom)
     }
 

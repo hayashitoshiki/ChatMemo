@@ -1,7 +1,6 @@
 package com.example.chatmemo.ui.phrase
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,10 +27,11 @@ class FixedPhraseListFragment : Fragment() {
     private val viewModel: FixedPhraseListViewModel by viewModel()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_fixed_phrase_list, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_fixed_phrase_list, container, false
+        )
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         return binding.root
@@ -41,36 +42,38 @@ class FixedPhraseListFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.title = "定型文一覧"
         viewModel.getList()
         viewModel.phraseList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
-        viewModel.status.observe(viewLifecycleOwner, Observer  { if (it != null && !it) showErrorToast()})
+        viewModel.status.observe(
+            viewLifecycleOwner,
+            Observer { if (it != null && !it) showErrorToast() })
 
         val adapter = PhraseTitleListAdapter(listOf())
         val layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = layoutManager
         // リストビューの各項目タップ
-        adapter.setOnItemClickListener(object : PhraseTitleListAdapter.OnItemClickListener{
+        adapter.setOnItemClickListener(object : PhraseTitleListAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, position: Int, item: Template) {
                 when (view.id) {
                     R.id.txt_name -> {
-                        val action = FixedPhraseListFragmentDirections.actionFixedPhraseListFragmentToFixedPhraseAddFragment(item)
+                        val action = FixedPhraseListFragmentDirections.actionFixedPhraseListFragmentToFixedPhraseAddFragment(
+                            item
+                        )
                         findNavController().navigate(action)
                     }
                     R.id.btn_delete -> {
-                        AlertDialog.Builder(requireActivity())
-                            .setTitle("定型文削除")
-                            .setMessage("削除しますか？")
-                            .setPositiveButton("はい") { _, _ ->
+                        AlertDialog.Builder(requireActivity()).setTitle("定型文削除")
+                            .setMessage("削除しますか？").setPositiveButton("はい") { _, _ ->
                                 viewModel.deletePhrase(item)
-                            }
-                            .setNegativeButton("いいえ", null)
-                            .show()
+                            }.setNegativeButton("いいえ", null).show()
                     }
                 }
             }
         })
         // 追加ボタン
         binding.fab.setOnClickListener {
-            val action = FixedPhraseListFragmentDirections.actionFixedPhraseListFragmentToFixedPhraseAddFragment(null)
+            val action = FixedPhraseListFragmentDirections.actionFixedPhraseListFragmentToFixedPhraseAddFragment(
+                null
+            )
             findNavController().navigate(action)
         }
     }

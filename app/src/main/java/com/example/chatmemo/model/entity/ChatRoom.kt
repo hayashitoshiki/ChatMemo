@@ -23,4 +23,4 @@ data class ChatRoom(
     @ColumnInfo(name = "phrase_point") var phrasePoint: String?,
     @ColumnInfo(name = "comment_last") var commentLast: String?,
     @ColumnInfo(name = "comment_time") var commentTime: String?
-): java.io.Serializable
+) : java.io.Serializable

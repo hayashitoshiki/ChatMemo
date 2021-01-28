@@ -1,11 +1,13 @@
 package com.example.chatmemo.ui.phrase
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.chatmemo.model.entity.Phrase
 import com.example.chatmemo.model.entity.Template
 import com.example.chatmemo.model.repository.DataBaseRepository
 import kotlinx.coroutines.launch
-import kotlin.collections.ArrayList
 
 /**
  * 定型文作成画面_UIロジック
@@ -15,11 +17,11 @@ import kotlin.collections.ArrayList
 class FixedPhraseAddViewModel(private val dataBaseRepository: DataBaseRepository) : ViewModel() {
 
     private var mTemplate = Template(null, "")
-    val titleText = MutableLiveData<String>("")
-    val phraseText = MutableLiveData<String>("")
-    private val _isEnablePhraseSubmitButton = MutableLiveData<Boolean>(false)
+    val titleText = MutableLiveData("")
+    val phraseText = MutableLiveData("")
+    private val _isEnablePhraseSubmitButton = MutableLiveData(false)
     val isPhraseEnableSubmitButton: LiveData<Boolean> = _isEnablePhraseSubmitButton
-    private val _isEnableSubmitButton = MutableLiveData<Boolean>(false)
+    private val _isEnableSubmitButton = MutableLiveData(false)
     val isEnableSubmitButton: LiveData<Boolean> = _isEnableSubmitButton
     private val _phraseList = MutableLiveData<ArrayList<Phrase>>(arrayListOf())
     val phraseList: LiveData<ArrayList<Phrase>> = _phraseList
@@ -70,13 +72,12 @@ class FixedPhraseAddViewModel(private val dataBaseRepository: DataBaseRepository
 
     // 追加
     fun addPhrase() {
-        val templateId =
-            if (mTemplate.id != null) {
-                mTemplate.id!!
-            } else {
-                0
-            }
-        val phrase = Phrase(null, phraseText.value!!,templateId)
+        val templateId = if (mTemplate.id != null) {
+            mTemplate.id!!
+        } else {
+            0
+        }
+        val phrase = Phrase(null, phraseText.value!!, templateId)
         val list = phraseList.value!!
         list.add(phrase)
         _phraseList.postValue(list)

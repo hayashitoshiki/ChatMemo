@@ -20,11 +20,21 @@ import org.koin.core.parameter.parametersOf
  */
 class RoomTitleEditDialogFragment : DialogFragment() {
 
-    private val viewModel: RoomTitleEditViewModel by inject { parametersOf(requireArguments().getSerializable("room") as ChatRoom) }
+    private val viewModel: RoomTitleEditViewModel by inject {
+        parametersOf(
+            requireArguments().getSerializable(
+                "room"
+            ) as ChatRoom
+        )
+    }
     private lateinit var binding: DialogRoomTitleEditBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.dialog_room_title_edit, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.dialog_room_title_edit, container, false
+        )
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         return binding.root
@@ -33,7 +43,9 @@ class RoomTitleEditDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.newRoomTitle.observe(viewLifecycleOwner, Observer { viewModel.changeSubmitButton(it)})
+        viewModel.newRoomTitle.observe(
+            viewLifecycleOwner,
+            Observer { viewModel.changeSubmitButton(it) })
         dialog!!.window!!.setBackgroundDrawableResource(R.color.transparent)
 
         // 検索ボタン

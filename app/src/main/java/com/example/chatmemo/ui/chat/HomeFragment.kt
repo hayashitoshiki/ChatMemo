@@ -30,12 +30,10 @@ class HomeFragment : Fragment(), CoroutineScope {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModel()
     private val job = SupervisorJob()
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
+    override val coroutineContext: CoroutineContext = Dispatchers.Main + job
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -47,7 +45,7 @@ class HomeFragment : Fragment(), CoroutineScope {
         (activity as AppCompatActivity).supportActionBar?.title = "ルーム一覧"
         (activity as MainActivity).showNavigationBottom()
 
-        viewModel.chatRoomList.observe(viewLifecycleOwner, Observer{ viewUpDate(it) })
+        viewModel.chatRoomList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
 
         val adapter = RoomListAdapter(listOf())
         val layoutManager = LinearLayoutManager(requireContext())
@@ -55,22 +53,18 @@ class HomeFragment : Fragment(), CoroutineScope {
         binding.recyclerView.layoutManager = layoutManager
 
         // リストビューの各項目タップ
-        adapter.setOnItemClickListener(object : RoomListAdapter.OnItemClickListener{
+        adapter.setOnItemClickListener(object : RoomListAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, position: Int, item: ChatRoom) {
                 when (view.id) {
                     R.id.container_main -> {
                         val action = HomeFragmentDirections.actionHomeFragmentToChatFragment(item)
                         findNavController().navigate(action)
                     }
-                    R.id.btn_delete -> {
-                        AlertDialog.Builder(requireActivity())
-                            .setTitle("ルーム削除")
-                            .setMessage("削除しますか？")
-                            .setPositiveButton("はい") { _, _ ->
+                    R.id.btn_delete     -> {
+                        AlertDialog.Builder(requireActivity()).setTitle("ルーム削除")
+                            .setMessage("削除しますか？").setPositiveButton("はい") { _, _ ->
                                 viewModel.deleteRoom(item.id!!)
-                            }
-                            .setNegativeButton("いいえ", null)
-                            .show()
+                            }.setNegativeButton("いいえ", null).show()
                     }
                 }
             }

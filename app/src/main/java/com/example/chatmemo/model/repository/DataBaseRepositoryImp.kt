@@ -2,15 +2,13 @@ package com.example.chatmemo.model.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import com.example.chatmemo.model.entity.ChatRoom
 import com.example.chatmemo.model.entity.Comment
 import com.example.chatmemo.model.entity.Phrase
-import com.example.chatmemo.model.entity.ChatRoom
 import com.example.chatmemo.model.entity.Template
 import com.example.chatmemo.ui.MyApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.lang.Exception
-import kotlin.collections.ArrayList
 
 class DataBaseRepositoryImp : DataBaseRepository {
 
@@ -61,7 +59,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     // region 定型文
 
     // テンプレートタイトル登録
-    override suspend fun createTemplate(templateTitle: Template) : Boolean {
+    override suspend fun createTemplate(templateTitle: Template): Boolean {
         return withContext(Dispatchers.IO) {
             var flg = true
             val list = templateDao.getAllByTitle(templateTitle.title)
@@ -76,8 +74,9 @@ class DataBaseRepositoryImp : DataBaseRepository {
             return@withContext flg
         }
     }
+
     // テンプレートタイトル登録
-    override suspend fun updateTemplate(templateTitle: Template) : Boolean {
+    override suspend fun updateTemplate(templateTitle: Template): Boolean {
         return withContext(Dispatchers.IO) {
             templateDao.update(templateTitle)
             return@withContext true
@@ -85,21 +84,21 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // テンプレート削除
-    override suspend fun deleteTemplateTitle(template : Template) {
+    override suspend fun deleteTemplateTitle(template: Template) {
         withContext(Dispatchers.IO) {
             templateDao.delete(template)
         }
     }
 
     // タイトルに紐づくテンプレートタイトル取得
-    override suspend fun getTemplateByTitle(title: String) : Template {
+    override suspend fun getTemplateByTitle(title: String): Template {
         return withContext(Dispatchers.IO) {
             return@withContext templateDao.getAllByTitle(title)[0]
         }
     }
 
     // タイトルに紐づくテンプレートタイトル取得
-    override suspend fun getTemplateById(id: Long) : Template {
+    override suspend fun getTemplateById(id: Long): Template {
         return withContext(Dispatchers.IO) {
             return@withContext templateDao.getTemplateById(id)
         }
@@ -113,7 +112,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // 定型文登録
-    override suspend fun addPhrase(phraseList: ArrayList<Phrase>) : Boolean {
+    override suspend fun addPhrase(phraseList: ArrayList<Phrase>): Boolean {
         return withContext(Dispatchers.IO) {
             phraseDao.getAll().forEach { p ->
                 if (p.templateId == phraseList.first().templateId) {
@@ -128,7 +127,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // コメント更新
-    override suspend fun updatePhrase(phraseList: ArrayList<Phrase>, templateId :Long) : Boolean {
+    override suspend fun updatePhrase(phraseList: ArrayList<Phrase>, templateId: Long): Boolean {
         return withContext(Dispatchers.IO) {
             phraseDao.deleteById(templateId)
             phraseList.forEach {
@@ -138,12 +137,12 @@ class DataBaseRepositoryImp : DataBaseRepository {
         }
     }
 
-    override suspend fun deletePhraseByTitle(templateId :Long): Boolean {
+    override suspend fun deletePhraseByTitle(templateId: Long): Boolean {
         return withContext(Dispatchers.IO) {
             try {
                 phraseDao.deleteById(templateId)
             } catch (e: Exception) {
-                Log.e(TAG, "Failer :$e")
+                Log.e(TAG, "Failure :$e")
                 return@withContext false
             }
             return@withContext true
@@ -151,7 +150,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // タイトルに紐づいた定型文取得
-    override suspend fun getPhraseByTitle(templateId: Long) : List<Phrase> {
+    override suspend fun getPhraseByTitle(templateId: Long): List<Phrase> {
         return withContext(Dispatchers.IO) {
             return@withContext phraseDao.getAllByTitle(templateId)
         }
@@ -162,7 +161,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     // region ルーム
 
     // ルーム作成
-    override suspend fun createRoom(chatRoom : ChatRoom) {
+    override suspend fun createRoom(chatRoom: ChatRoom) {
         return withContext(Dispatchers.IO) {
             roomDao.insert(chatRoom)
         }
@@ -183,7 +182,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // ルーム取得
-    override suspend fun getRoomByTitle(title :String) : ChatRoom {
+    override suspend fun getRoomByTitle(title: String): ChatRoom {
         return withContext(Dispatchers.IO) {
             val rooms = roomDao.getRoomByTitle(title)
             return@withContext rooms[0]
@@ -191,17 +190,17 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // Idに紐づくルーム取得
-    override fun getRoomById(id: Long) : LiveData<ChatRoom> {
+    override fun getRoomById(id: Long): LiveData<ChatRoom> {
         return roomDao.getRoomById(id)
     }
 
     // ルーム全取得
-    override fun getRoomAll() : LiveData<List<ChatRoom>> {
+    override fun getRoomAll(): LiveData<List<ChatRoom>> {
         return roomDao.getAll()
     }
 
     // 指定したテンプレートが使用されているルーム取得
-    override suspend fun getRoomByTemplateId(templateId: Long) : List<ChatRoom> {
+    override suspend fun getRoomByTemplateId(templateId: Long): List<ChatRoom> {
         return withContext(Dispatchers.IO) {
             return@withContext roomDao.getRoomByTemplateId(templateId)
         }

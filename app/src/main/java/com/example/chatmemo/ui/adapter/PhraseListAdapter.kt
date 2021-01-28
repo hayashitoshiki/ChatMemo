@@ -16,8 +16,7 @@ import java.util.*
  * 定型文作成画面用のリストビューアダプター
  * @property items 定型文リスト
  */
-class PhraseListAdapter(private var items: ArrayList<Phrase>) :
-    RecyclerView.Adapter<PhraseListAdapter.ViewHolder>() {
+class PhraseListAdapter(private var items: ArrayList<Phrase>) : RecyclerView.Adapter<PhraseListAdapter.ViewHolder>() {
 
     private lateinit var listener: OnItemClickListener
     private var viewBinderHelper: ViewBinderHelper = ViewBinderHelper()
@@ -31,9 +30,7 @@ class PhraseListAdapter(private var items: ArrayList<Phrase>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_phrase,
-            parent,
-            false
+            R.layout.item_phrase, parent, false
         )
         return ViewHolder(inflater)
     }
@@ -43,7 +40,7 @@ class PhraseListAdapter(private var items: ArrayList<Phrase>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item =  items[position]
+        val item = items[position]
         viewBinderHelper.bind(holder.swipeRevealLayout, items[position].toString())
 
         // 値代入

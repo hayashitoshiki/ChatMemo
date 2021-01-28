@@ -21,19 +21,20 @@ import com.example.chatmemo.databinding.FragmentChatBinding
 import com.example.chatmemo.model.entity.Comment
 import com.example.chatmemo.ui.MainActivity
 import com.example.chatmemo.ui.adapter.ChatRecyclerAdapter
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import java.util.*
-import kotlin.collections.ArrayList
-
 import kotlin.coroutines.CoroutineContext
 
 
 /**
  * チャット画面
  */
-class ChatFragment : Fragment(), CoroutineScope{
+class ChatFragment : Fragment(), CoroutineScope {
 
     companion object {
         private const val REQUEST_CODE = 1
@@ -46,12 +47,10 @@ class ChatFragment : Fragment(), CoroutineScope{
     private val args: ChatFragmentArgs by navArgs()
     private val viewModel: ChatViewModel by inject { parametersOf(args.data.id) }
     private val job = SupervisorJob()
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
+    override val coroutineContext: CoroutineContext = Dispatchers.Main + job
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_chat, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -78,7 +77,7 @@ class ChatFragment : Fragment(), CoroutineScope{
         binding.recyclerView.layoutManager = layoutManager
 
         // 文字入力
-        viewModel.commentText.observe(viewLifecycleOwner, Observer{
+        viewModel.commentText.observe(viewLifecycleOwner, Observer {
             viewModel.changeSubmitButton(it)
             // 高さ自動統制
             binding.editText.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
@@ -128,7 +127,7 @@ class ChatFragment : Fragment(), CoroutineScope{
         binding.btnChangeUser.setOnClickListener { viewModel.changeUser() }
         // 音声ボタン
         binding.btnVoice.setOnClickListener {
-            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).let{
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).let {
                 it.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.JAPANESE.toString())
                 it.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 10)
                 it.putExtra(RecognizerIntent.EXTRA_PROMPT, "話してください")
@@ -141,8 +140,7 @@ class ChatFragment : Fragment(), CoroutineScope{
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === REQUEST_CODE && resultCode === RESULT_OK) {
-            val result: ArrayList<String>? =
-                data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            val result: ArrayList<String>? = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
 
             if (result != null && result.size > 0) {
                 isFirst = true
@@ -182,7 +180,7 @@ class ChatFragment : Fragment(), CoroutineScope{
                 dialogFragment.show(requireActivity().supportFragmentManager, null)
             }
             // ルーム名変更ボタン
-            R.id.menu_edit_room -> {
+            R.id.menu_edit_room        -> {
                 val dialogFragment = RoomTitleEditDialogFragment()
                 val bundle = Bundle()
                 bundle.putSerializable("room", viewModel.chatRoom.value!!)
@@ -190,16 +188,13 @@ class ChatFragment : Fragment(), CoroutineScope{
                 dialogFragment.show(requireActivity().supportFragmentManager, null)
             }
             // 新規作成ボタン
-            R.id.menu_delete_room -> {
-                AlertDialog.Builder(requireActivity())
-                    .setTitle("ルームを削除しますか？")
+            R.id.menu_delete_room      -> {
+                AlertDialog.Builder(requireActivity()).setTitle("ルームを削除しますか？")
                     .setPositiveButton("はい") { dialog, _ ->
                         viewModel.deleteRoom()
                         findNavController().popBackStack()
                         dialog.dismiss()
-                    }
-                    .setNegativeButton("いいえ", null)
-                    .show()
+                    }.setNegativeButton("いいえ", null).show()
             }
         }
         return true

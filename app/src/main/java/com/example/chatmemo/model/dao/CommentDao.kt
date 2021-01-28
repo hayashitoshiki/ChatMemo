@@ -1,6 +1,9 @@
 package com.example.chatmemo.model.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 import com.example.chatmemo.model.entity.Comment
 
 /**

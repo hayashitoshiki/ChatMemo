@@ -1,10 +1,13 @@
 package com.example.chatmemo.ui.chat
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.chatmemo.model.Const
+import com.example.chatmemo.model.entity.ChatRoom
 import com.example.chatmemo.model.entity.Comment
 import com.example.chatmemo.model.entity.Phrase
-import com.example.chatmemo.model.entity.ChatRoom
 import com.example.chatmemo.model.repository.DataBaseRepository
 import kotlinx.coroutines.launch
 import java.text.DateFormat
@@ -16,7 +19,9 @@ import java.util.*
  *
  * @property dataBaseRepository DBアクセス用repository
  */
-class ChatViewModel(private val id: Long, private val dataBaseRepository: DataBaseRepository) : ViewModel() {
+class ChatViewModel(
+    id: Long, private val dataBaseRepository: DataBaseRepository
+) : ViewModel() {
 
     val chatRoom: LiveData<ChatRoom> = dataBaseRepository.getRoomById(id)
     val commentText = MutableLiveData("")
@@ -46,7 +51,9 @@ class ChatViewModel(private val id: Long, private val dataBaseRepository: DataBa
     fun submit() {
         viewModelScope.launch {
             chatRoom.value?.also { room ->
-                val comment = Comment(null, commentText.value!!, Const.BLACK, getDataNow(), room.id!!)
+                val comment = Comment(
+                    null, commentText.value!!, Const.BLACK, getDataNow(), room.id!!
+                )
                 dataBaseRepository.addComment(comment)
                 room.commentLast = comment.text
                 room.commentTime = comment.createdAt
@@ -56,19 +63,14 @@ class ChatViewModel(private val id: Long, private val dataBaseRepository: DataBa
                 if (room.templateId != null) {
                     when (room.templateMode) {
                         // 順番出力
-                        Const.ORDER -> {
-                            val index =
-                                if (room.phrasePoint != null && phraseList.size - 1 != room.phrasePoint!!.toInt()) {
-                                    room.phrasePoint!!.toInt() + 1
-                                } else {
-                                    0
-                                }
+                        Const.ORDER  -> {
+                            val index = if (room.phrasePoint != null && phraseList.size - 1 != room.phrasePoint!!.toInt()) {
+                                room.phrasePoint!!.toInt() + 1
+                            } else {
+                                0
+                            }
                             val comment2 = Comment(
-                                null,
-                                phraseList[index].text,
-                                Const.WHITE,
-                                getDataNow(),
-                                room.id
+                                null, phraseList[index].text, Const.WHITE, getDataNow(), room.id
                             )
                             dataBaseRepository.addComment(comment2)
                             room.commentLast = comment2.text
@@ -92,13 +94,15 @@ class ChatViewModel(private val id: Long, private val dataBaseRepository: DataBa
                                 room.phrasePoint = null
                             }
                             val whiteComment = phraseList2.random()
-                            val comment2 =
-                                Comment(null, whiteComment.text, Const.WHITE, getDataNow(), room.id)
+                            val comment2 = Comment(
+                                null, whiteComment.text, Const.WHITE, getDataNow(), room.id
+                            )
                             dataBaseRepository.addComment(comment2)
                             if (room.phrasePoint == null) {
                                 room.phrasePoint = phraseList.indexOf(whiteComment).toString() + ","
                             } else {
-                                room.phrasePoint += phraseList.indexOf(whiteComment).toString() + ","
+                                room.phrasePoint += phraseList.indexOf(whiteComment)
+                                    .toString() + ","
                             }
                             room.commentLast = comment2.text
                             room.commentTime = comment2.createdAt
@@ -116,7 +120,7 @@ class ChatViewModel(private val id: Long, private val dataBaseRepository: DataBa
 
     // 日付取得
     @Suppress("SimpleDateFormat")
-    private fun getDataNow() : String {
+    private fun getDataNow(): String {
         val df: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
         val date = Date(System.currentTimeMillis())
         return df.format(date)

@@ -17,8 +17,7 @@ import com.example.chatmemo.model.entity.Template
  * 定型文リスト画面用のリサイクルビューアダプター
  * @property items 定型文のタイトルリスト
  */
-class PhraseTitleListAdapter(private var items: List<Template>) :
-    RecyclerView.Adapter<PhraseTitleListAdapter.ViewHolder>() {
+class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.Adapter<PhraseTitleListAdapter.ViewHolder>() {
 
     private lateinit var listener: OnItemClickListener
     private var viewBinderHelper: ViewBinderHelper = ViewBinderHelper()
@@ -32,9 +31,7 @@ class PhraseTitleListAdapter(private var items: List<Template>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_phrase_title,
-            parent,
-            false
+            R.layout.item_phrase_title, parent, false
         )
         return ViewHolder(inflater)
     }
@@ -46,18 +43,18 @@ class PhraseTitleListAdapter(private var items: List<Template>) :
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var x = 0f
-        val template =  items[position]
+        val template = items[position]
         viewBinderHelper.bind(holder.swipeRevealLayout, items[position].toString())
 
         // 値代入
         holder.textView.text = template.title
         holder.textView.setOnTouchListener { _, event ->
             when (event.action) {
-                MotionEvent.ACTION_DOWN ->{
+                MotionEvent.ACTION_DOWN -> {
                     x = event.x
                 }
-                MotionEvent.ACTION_UP -> {
-                    if ( -5 < x - event.x && x- event.x < 5) {
+                MotionEvent.ACTION_UP   -> {
+                    if (-5 < x - event.x && x - event.x < 5) {
                         listener.onItemClickListener(holder.textView, position, template)
                     }
                     x = 0f
@@ -78,7 +75,7 @@ class PhraseTitleListAdapter(private var items: List<Template>) :
     }
 
     //インターフェースの作成
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         fun onItemClickListener(view: View, position: Int, item: Template)
     }
 

@@ -28,14 +28,10 @@ class FixedPhraseAddFragment : Fragment() {
     private val args: FixedPhraseAddFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_fixed_phrase_add,
-            container,
-            false
+            inflater, R.layout.fragment_fixed_phrase_add, container, false
         )
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
@@ -50,17 +46,21 @@ class FixedPhraseAddFragment : Fragment() {
         viewModel.submitState.observe(viewLifecycleOwner, Observer { back(it) })
         viewModel.phraseList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
         viewModel.titleText.observe(viewLifecycleOwner, Observer { viewModel.changeSubmitButton() })
-        viewModel.phraseText.observe(viewLifecycleOwner, Observer { viewModel.changePhraseSubmitButton(it) })
+        viewModel.phraseText.observe(
+            viewLifecycleOwner,
+            Observer { viewModel.changePhraseSubmitButton(it) })
 
         // 定型文リスト
         val adapter = PhraseListAdapter(arrayListOf())
         val layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = layoutManager
-        adapter.setOnItemClickListener(object : PhraseListAdapter.OnItemClickListener{
+        adapter.setOnItemClickListener(object : PhraseListAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, position: Int) {
                 when (view.id) {
-                    R.id.btn_delete -> { viewModel.removePhraseList(position) }
+                    R.id.btn_delete -> {
+                        viewModel.removePhraseList(position)
+                    }
                 }
             }
         })
@@ -83,9 +83,7 @@ class FixedPhraseAddFragment : Fragment() {
             true -> findNavController().popBackStack()
             false -> {
                 Toast.makeText(
-                    requireContext(),
-                    R.string.error_phrase_title,
-                    Toast.LENGTH_SHORT
+                    requireContext(), R.string.error_phrase_title, Toast.LENGTH_SHORT
                 ).show()
             }
         }

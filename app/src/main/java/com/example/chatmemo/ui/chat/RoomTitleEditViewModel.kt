@@ -10,7 +10,10 @@ import com.example.chatmemo.model.repository.DataBaseRepository
  * ルーム名変更ダイアログ_ロジック
  * @property dataBaseRepository DB取得リポジトリ
  */
-class RoomTitleEditViewModel(private var chatRoom: ChatRoom, private val dataBaseRepository: DataBaseRepository) : ViewModel() {
+class RoomTitleEditViewModel(
+    private var chatRoom: ChatRoom,
+    private val dataBaseRepository: DataBaseRepository
+) : ViewModel() {
 
     val newRoomTitle = MutableLiveData("")
     private val _oldRoomTitle = MutableLiveData<String>()
@@ -24,10 +27,10 @@ class RoomTitleEditViewModel(private var chatRoom: ChatRoom, private val dataBas
     }
 
     // ルーム名変更
-     suspend fun changeRoomName(roomName: String) {
+    suspend fun changeRoomName(roomName: String) {
         chatRoom.title = roomName
         dataBaseRepository.updateRoom(chatRoom)
-     }
+    }
 
     // 変更ボタン活性・非活性制御
     fun changeSubmitButton(title: String) {
