@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -17,48 +18,55 @@ import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentRoomAddBinding
 import com.example.chatmemo.model.entity.ChatRoom
 import kotlinx.coroutines.launch
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 /**
  * 新規ルーム作成画面
  */
 class RoomAddFragment : Fragment() {
 
+    private val modeList = listOf("順番", "ランダム")
+
     private lateinit var binding: FragmentRoomAddBinding
-    private val viewModel: RoomAddViewModel by viewModel()
+    private val viewModel: RoomAddViewModel by inject { parametersOf(modeList) }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_room_add, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
-
-        // editTextフォーカス制御
-        binding.editTitle.setOnFocusChangeListener { v, hasFocus ->
-            if (! hasFocus) {
-                val imm =
-                    activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(v.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-            }
-        }
-        binding.root.setOnTouchListener { v, event ->
-            binding.root.requestFocus()
-            v?.onTouchEvent(event) ?: true
-        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.title = "ルーム作成"
-        viewModel.titleText.observe(viewLifecycleOwner, Observer { viewModel.changeSubmitButton() })
-        viewModel.phraseTitleValueInt.observe(
-            viewLifecycleOwner,
-            Observer { viewModel.changeSubmitButton() })
 
+        viewModel.templateTitleList.observe(viewLifecycleOwner, Observer {
+            val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                requireActivity(), android.R.layout.simple_dropdown_item_1line, it
+            )
+            binding.spinnerTitle.setAdapter(arrayAdapter)
+        })
+
+        // spinner 設定
+        binding.spinnerTitle.let { spinner ->
+            val arrayAdapter = ArrayAdapter(
+                requireActivity(), android.R.layout.simple_dropdown_item_1line, listOf("")
+            )
+            spinner.setAdapter(arrayAdapter)
+            spinner.keyListener = null
+        }
+        binding.spinnerMode.let { spinner ->
+            val arrayAdapter = ArrayAdapter(
+                requireActivity(), android.R.layout.simple_dropdown_item_1line, modeList
+            )
+            spinner.setAdapter(arrayAdapter)
+            spinner.keyListener = null
+        }
         // 新規作成ボタン
         binding.btnAddRoom.setOnClickListener {
             lifecycleScope.launch {
@@ -66,6 +74,17 @@ class RoomAddFragment : Fragment() {
                 val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(chatRoom)
                 findNavController().navigate(action)
             }
+        }
+        // editTextフォーカス制御
+        binding.editTitle.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(v.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        }
+        binding.root.setOnTouchListener { v, event ->
+            binding.root.requestFocus()
+            v?.onTouchEvent(event) ?: true
         }
     }
 }

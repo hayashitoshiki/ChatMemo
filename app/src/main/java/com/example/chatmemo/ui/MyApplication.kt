@@ -48,8 +48,12 @@ class MyApplication : Application() {
     private val module: Module = module {
         viewModel { HomeViewModel(get()) }
         viewModel { (id: Long) -> ChatViewModel(id, get()) }
-        viewModel { RoomAddViewModel(get()) }
-        viewModel { (room: ChatRoom) -> RoomPhraseEditViewModel(room, get()) }
+        viewModel { (modeList: List<String>) -> RoomAddViewModel(modeList, get()) }
+        viewModel { (room: ChatRoom, modeList: List<String>) ->
+            RoomPhraseEditViewModel(
+                room, modeList, get()
+            )
+        }
         viewModel { (room: ChatRoom) -> RoomTitleEditViewModel(room, get()) }
         viewModel { FixedPhraseAddViewModel(get()) }
         viewModel { FixedPhraseListViewModel(get()) }

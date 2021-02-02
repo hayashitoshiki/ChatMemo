@@ -14,14 +14,16 @@ import kotlinx.coroutines.launch
  * @property dataBaseRepository DB取得リポジトリ
  */
 class RoomPhraseEditViewModel(
-    private var chatRoom: ChatRoom, private val dataBaseRepository: DataBaseRepository
+    private var chatRoom: ChatRoom,
+    private val modelist: List<String>,
+    private val dataBaseRepository: DataBaseRepository
 ) : ViewModel() {
 
     private var mTemplateList = listOf<Template?>()
-    private val _roomTitleList = MutableLiveData<List<String>>()
-    val roomTitleList: LiveData<List<String>> = _roomTitleList
-    val roomTitleValueInt = MutableLiveData(0)
-    val modeValueInt = MutableLiveData(0)
+    private val _templateTitleList = MutableLiveData<List<String>>()
+    val templateTitleList: LiveData<List<String>> = _templateTitleList
+    val templateTitleValue = MutableLiveData<String>()
+    val modeValue = MutableLiveData<String>()
     private val _isEnableSubmitButton = MutableLiveData(false)
     val isEnableSubmitButton: LiveData<Boolean> = _isEnableSubmitButton
 
@@ -31,7 +33,7 @@ class RoomPhraseEditViewModel(
             val templateList = dataBaseRepository.getPhraseTitle()
             templateList.forEach { list.add(it.title) }
             mTemplateList = templateList
-            _roomTitleList.postValue(list)
+            _templateTitleList.postValue(list)
             chatRoom.templateId?.also {
                 var templateTitle: String? = null
                 templateList.forEach { template ->
@@ -42,38 +44,39 @@ class RoomPhraseEditViewModel(
                 if (templateTitle != null) {
                     val index = list.indexOf(templateTitle!!)
                     if (index != -1) {
-                        roomTitleValueInt.postValue(index)
+                        templateTitleValue.postValue(list[index])
                     }
                 }
             }
             chatRoom.templateMode?.also {
-                modeValueInt.postValue(it)
+                modeValue.postValue(modelist[it - 1])
             }
         }
     }
 
     // 入力バリデート
     fun validate() {
-        if (_roomTitleList.value != null && roomTitleValueInt.value != null && modeValueInt.value != null) {
-            _isEnableSubmitButton.value = if (roomTitleValueInt.value!! != 0) {
-                modeValueInt.value!! != 0 && (mTemplateList[roomTitleValueInt.value!!]!!.id != chatRoom.templateId || modeValueInt.value!! != chatRoom.templateMode)
+        if (templateTitleList.value != null && templateTitleValue.value != null && modeValue.value != null) {
+            val titleList = templateTitleList.value!!
+            val title = templateTitleValue.value!!
+            val titleIndex = titleList.indexOf(title)
+            val modeName = modeValue.value!!
+            val modeId = modelist.indexOf(modeName) + 1
+
+            _isEnableSubmitButton.value = if (titleIndex != 0) {
+                val templateId = mTemplateList[titleIndex - 1]!!.id
+                (templateId != chatRoom.templateId || modeId != chatRoom.templateMode)
             } else {
                 chatRoom.templateId != null
             }
         }
     }
 
-    // 定型文表示形式の変更
-    fun checkedChangeMode(checkedId: Int) {
-        modeValueInt.value = checkedId
-        validate()
-    }
-
     // 送信
     suspend fun submit() {
-        if (roomTitleValueInt.value!! != 0) {
-            chatRoom.templateId = mTemplateList[roomTitleValueInt.value!!]!!.id
-            chatRoom.templateMode = modeValueInt.value!!
+        if (templateTitleValue.value!! != "選択なし") {
+            chatRoom.templateId = mTemplateList[templateTitleList.value!!.indexOf(templateTitleValue.value!!) - 1]!!.id
+            chatRoom.templateMode = modelist.indexOf(modeValue.value!!)
             chatRoom.phrasePoint = null
         } else {
             chatRoom.templateId = null

@@ -17,6 +17,7 @@
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MyApp.Button</item>
         <item name="android:textColor">@color/text_color_light_selector_button</item>
     </style>
+
     <style name="ShapeAppearanceOverlay.MyApp.Button" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">30dp</item>
@@ -33,6 +34,18 @@
     <style name="Widget.MyApp.Chip" parent="@style/Widget.MaterialComponents.Chip.Filter">
         <item name="android:textColor">@color/text_color_light_selector_radio</item>
         <item name="chipBackgroundColor">@color/bg_color_primary_selector_radio</item>
+    </style>
+
+    <!-- TextInputLayout -->
+    <style name="Custom.TextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="hintTextColor">@color/bg_color_accent</item>
+        <item name="boxStrokeColor">@color/bg_color_accent</item>
+    </style>
+
+    <!-- Spinner -->
+    <style name="Custom.Spinner" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="hintTextColor">@color/bg_color_accent</item>
+        <item name="boxStrokeColor">@color/bg_color_accent</item>
     </style>
 
     <!-- Splash -->

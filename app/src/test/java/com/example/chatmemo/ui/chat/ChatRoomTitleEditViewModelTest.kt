@@ -15,11 +15,10 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 import org.junit.rules.TestRule
 
 /**
@@ -70,8 +69,8 @@ class ChatRoomTitleEditViewModelTest {
     @Test
     fun changeRoomName() {
         runBlocking {
-        viewModel.changeRoomName("test")
-            coVerify{(databaseRepository).updateRoom(any())}
+            viewModel.changeRoomName("test")
+            coVerify { (databaseRepository).updateRoom(any()) }
         }
     }
 
@@ -81,10 +80,13 @@ class ChatRoomTitleEditViewModelTest {
     @Test
     fun changeSubmitButton() {
         // 入力文字なし
-        viewModel.changeSubmitButton("")
+        viewModel.newRoomTitle.value = ""
         assertEquals(viewModel.isEnableSubmitButton.value, false)
-        // 入力文字あり
-        viewModel.changeSubmitButton("test")
+        // 入力文字あり && 同じ文字列
+        viewModel.newRoomTitle.value = "test"
+        assertEquals(viewModel.isEnableSubmitButton.value, false)
+        // 入力文字あり && 違う文字列
+        viewModel.newRoomTitle.value = "test2"
         assertEquals(viewModel.isEnableSubmitButton.value, true)
     }
 }

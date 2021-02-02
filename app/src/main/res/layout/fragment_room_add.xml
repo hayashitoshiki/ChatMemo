@@ -1,114 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.example.chatmemo.ui.chat.RoomAddViewModel" />
 
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusableInTouchMode="true">
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="32dp"
-            android:text="@string/title_room_add"
-            android:textColor="@color/text_color_dark_primary"
-            android:textSize="@dimen/body"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/edit_title"
-            android:layout_width="0dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/continar_room_title"
+            style="@style/Custom.TextInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/title_room_add"
+                android:inputType="textEmailAddress"
+                android:text="@={viewModel.titleText}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/container_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="64dp"
-            android:gravity="center"
-            android:hint="@string/hint_room_name"
-            android:inputType="textPersonName"
-            android:text="@={viewModel.titleText}"
-            android:textSize="@dimen/body"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/title"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginEnd="8dp"
+            android:hint="@string/label_room_phrase_list"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/continar_room_title"
+            style="@style/Custom.Spinner">
 
-        <TextView
-            android:id="@+id/txt_old_title_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/label_room_phrase_list"
-            android:textColor="@color/text_color_dark_primary"
-            android:textSize="@dimen/body"
-            app:layout_constraintStart_toStartOf="@+id/title"
-            app:layout_constraintTop_toBottomOf="@+id/edit_title" />
-        <Spinner
-            android:id="@+id/spinner_phrase_list"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="64dp"
-            android:layout_gravity="center"
-            android:textSize="@dimen/body"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/edit_title"
-            app:layout_constraintTop_toBottomOf="@+id/edit_title"
-            android:entries="@{viewModel.phraseTitleList}"
-            android:selectedItemPosition="@={viewModel.phraseTitleValueInt}" />
-
-
-        <TextView
-            android:id="@+id/txt_new_title_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/label_room_phrase_mode"
-            android:textColor="@color/text_color_dark_secondary"
-            android:textSize="@dimen/body"
-            app:layout_constraintStart_toStartOf="@+id/txt_old_title_label"
-            app:layout_constraintTop_toBottomOf="@+id/txt_old_title_label"
-            android:enabled="@{viewModel.phraseTitleValueInt != 0}" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="@+id/spinner_phrase_list"
-            app:layout_constraintTop_toBottomOf="@+id/spinner_phrase_list"
-            app:singleSelection="true">
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
+            <AutoCompleteTextView
+                android:id="@+id/spinner_title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checked="@{viewModel.modeValueInt == 1}"
-                android:enabled="@{viewModel.phraseTitleValueInt != 0}"
-                android:onClick="@{() -> viewModel.checkedChangeMode(1)}"
-                android:text="@string/label_phrase_mode_normal"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textSize="@dimen/body" />
+                android:text="@={viewModel.templateTitleValue}" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/container_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/label_room_phrase_mode"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/container_title"
+            style="@style/Custom.Spinner">
+
+            <AutoCompleteTextView
+                android:id="@+id/spinner_mode"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checked="@{viewModel.modeValueInt == 2}"
-                android:enabled="@{viewModel.phraseTitleValueInt != 0}"
-                android:onClick="@{() -> viewModel.checkedChangeMode(2)}"
-                android:text="@string/label_phrase_mode_random"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textSize="@dimen/body" />
-        </com.google.android.material.chip.ChipGroup>
+                android:text="@={viewModel.modeValue}" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add_room"
@@ -120,8 +88,7 @@
             android:textSize="@dimen/body"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
-
+            app:layout_constraintTop_toBottomOf="@+id/container_mode" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

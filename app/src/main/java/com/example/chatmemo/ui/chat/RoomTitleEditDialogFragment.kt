@@ -1,12 +1,13 @@
 package com.example.chatmemo.ui.chat
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.DialogRoomTitleEditBinding
@@ -43,9 +44,6 @@ class RoomTitleEditDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.newRoomTitle.observe(
-            viewLifecycleOwner,
-            Observer { viewModel.changeSubmitButton(it) })
         dialog!!.window!!.setBackgroundDrawableResource(R.color.transparent)
 
         // 検索ボタン
@@ -54,6 +52,17 @@ class RoomTitleEditDialogFragment : DialogFragment() {
                 viewModel.changeRoomName(viewModel.newRoomTitle.value!!)
                 dismiss()
             }
+        }
+        // editTextフォーカス制御
+        binding.editTitle.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(v.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        }
+        binding.root.setOnTouchListener { v, event ->
+            binding.root.requestFocus()
+            v?.onTouchEvent(event) ?: true
         }
     }
 
