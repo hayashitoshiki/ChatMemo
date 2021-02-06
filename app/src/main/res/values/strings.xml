@@ -15,6 +15,9 @@
     <string name="label_room_phrase_mode">表示順</string>
     <string name="label_phrase_mode_normal">順番</string>
     <string name="label_phrase_mode_random">ランダム</string>
+    <string name="label_phrase_title">タイトル</string>
+    <string name="label_phrase_message">メッセージ</string>
+    <string name="label_phrase_message_list">メッセージ一覧</string>
 
     <!-- Button -->
     <string name="btn_room_in">入室</string>

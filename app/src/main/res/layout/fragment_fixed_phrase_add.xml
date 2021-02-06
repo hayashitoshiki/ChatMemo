@@ -1,88 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.example.chatmemo.ui.phrase.FixedPhraseAddViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
+        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:windowSoftInputMode="adjustPan">
 
-        <EditText
-            android:id="@+id/edt_title"
-            android:layout_width="0dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/continar_room_title"
+            style="@style/Custom.TextInput"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="64dp"
-            android:gravity="center"
-            android:hint="定型文タイトル"
-            android:inputType="textPersonName"
-            android:text="@={viewModel.titleText}"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/img_down_arrow">
 
-        <EditText
-            android:id="@+id/edit_phrase"
-            android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/body"
+                android:hint="@string/label_phrase_title"
+                android:inputType="textEmailAddress"
+                android:text="@={viewModel.titleText}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_input"
+            style="@style/ToolbarTheme"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:ems="10"
-            android:gravity="center"
-            android:hint="検索ワード"
-            android:inputType="textPersonName"
-            android:text="@={viewModel.phraseText}"
-            app:layout_constraintEnd_toStartOf="@+id/btn_submit"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_title" />
-
-        <ImageButton
-            android:id="@+id/btn_submit"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:layout_marginEnd="32dp"
-            android:background="#00000000"
-            android:src="@drawable/ic_send_36"
-            android:tint="@color/gray_700"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/shape_rounded_corners_10dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/edit_phrase"
-            android:enabled="@{viewModel.isPhraseEnableSubmitButton}" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/continar_room_title">
+
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/edit_pharase"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:hint="@string/label_phrase_message"
+                        android:includeFontPadding="false"
+                        android:text="@={viewModel.phraseText}"
+                        android:textSize="@dimen/body"
+                        android:textColor="@color/text_color_dark_secondary"
+                        android:textColorHint="@color/text_color_dark_secondary"></EditText>
+                </LinearLayout>
+            </ScrollView>
+
+            <ImageButton
+                android:id="@+id/btn_submit"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="#00000000"
+                android:src="@drawable/ic_toolbar_add_room_24"
+                android:tint="@color/gray_700"
+                android:visibility="@{viewModel.isPhraseEnableSubmitButton ? View.VISIBLE : View.INVISIBLE}" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_phrase_message_list"
+            android:textSize="@dimen/body"
+            app:layout_constraintStart_toStartOf="@+id/layout_input"
+            app:layout_constraintTop_toBottomOf="@+id/layout_input" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="64dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_phrase"
-            app:layout_constraintVertical_bias="1.0" />
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_add"
+            app:layout_constraintTop_toBottomOf="@+id/txt_list" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
             android:enabled="@{viewModel.isEnableSubmitButton}"
             android:text="@{viewModel.submitText}"
             android:textColor="@color/white"
             android:textSize="@dimen/body"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

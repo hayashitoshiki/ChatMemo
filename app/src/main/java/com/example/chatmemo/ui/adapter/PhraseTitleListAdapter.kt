@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
-import com.example.chatmemo.R
+import com.example.chatmemo.databinding.ItemPhraseTitleBinding
 import com.example.chatmemo.model.entity.Template
 
 /**
@@ -23,15 +23,17 @@ class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.A
     private var viewBinderHelper: ViewBinderHelper = ViewBinderHelper()
 
     // 参照するviewの定義
-    open class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val textView: TextView = v.findViewById(R.id.txt_name)
-        val deleteButton: ImageButton = v.findViewById(R.id.btn_delete)
-        val swipeRevealLayout: SwipeRevealLayout = v.findViewById(R.id.container)
+    open class ViewHolder(v: ItemPhraseTitleBinding) : RecyclerView.ViewHolder(v.root) {
+        val textView: TextView = v.txtName
+        val deleteButton: ImageButton = v.btnDelete
+        val swipeRevealLayout: SwipeRevealLayout = v.container
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_phrase_title, parent, false
+        val inflater = ItemPhraseTitleBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
         return ViewHolder(inflater)
     }

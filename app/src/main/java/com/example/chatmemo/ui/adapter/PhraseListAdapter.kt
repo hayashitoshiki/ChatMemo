@@ -1,5 +1,6 @@
 package com.example.chatmemo.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,8 +8,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
-import com.chauthai.swipereveallayout.ViewBinderHelper
-import com.example.chatmemo.R
+import com.example.chatmemo.databinding.ItemPhraseBinding
 import com.example.chatmemo.model.entity.Phrase
 import java.util.*
 
@@ -19,19 +19,17 @@ import java.util.*
 class PhraseListAdapter(private var items: ArrayList<Phrase>) : RecyclerView.Adapter<PhraseListAdapter.ViewHolder>() {
 
     private lateinit var listener: OnItemClickListener
-    private var viewBinderHelper: ViewBinderHelper = ViewBinderHelper()
 
     // 参照するviewの定義
-    open class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        var textView: TextView = v.findViewById(R.id.txt_phrase)
-        var deleteButton: ImageButton = v.findViewById(R.id.btn_delete)
-        var swipeRevealLayout: SwipeRevealLayout = v.findViewById(R.id.container)
+    open class ViewHolder(v: ItemPhraseBinding) : RecyclerView.ViewHolder(v.root) {
+        var indexText: TextView = v.txtIndex
+        var phraseText: TextView = v.txtPhrase
+        var deleteButton: ImageButton = v.btnDelete
+        var swipeRevealLayout: SwipeRevealLayout = v.container
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_phrase, parent, false
-        )
+        val inflater = ItemPhraseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(inflater)
     }
 
@@ -39,16 +37,22 @@ class PhraseListAdapter(private var items: ArrayList<Phrase>) : RecyclerView.Ada
         return items.size
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        viewBinderHelper.bind(holder.swipeRevealLayout, items[position].toString())
+        holder.swipeRevealLayout.close(true)
 
         // 値代入
-        holder.textView.text = item.text
+        holder.indexText.text = (position + 1).toString() + ". "
+        holder.phraseText.text = item.text
+
         // 削除ボタン
         holder.deleteButton.setOnClickListener {
             if (holder.swipeRevealLayout.isOpened) {
-                listener.onItemClickListener(it, position)
+                items.removeAt(position)
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, itemCount)
+                listener.onItemClickListener(it, position, items)
             }
         }
     }
@@ -59,7 +63,7 @@ class PhraseListAdapter(private var items: ArrayList<Phrase>) : RecyclerView.Ada
 
     //インターフェースの作成
     interface OnItemClickListener {
-        fun onItemClickListener(view: View, position: Int)
+        fun onItemClickListener(view: View, position: Int, items: ArrayList<Phrase>)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

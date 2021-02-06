@@ -15,11 +15,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.Rule
+import org.junit.Test
 import org.junit.rules.TestRule
 
 /**
@@ -48,8 +47,8 @@ class FixedPhraseAddViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
-        val phrase1 = Phrase(1,"first",1)
-        val phrase2 = Phrase(2,"second",1)
+        val phrase1 = Phrase(1, "first", 1)
+        val phrase2 = Phrase(2, "second", 1)
         val room1 = ChatRoom(1, "test", null, null, null, null, "")
         val room2 = ChatRoom(1, "test", 1, 1, "", "", "")
         databaseRepository = mockk<DataBaseRepository>().also {
@@ -57,7 +56,7 @@ class FixedPhraseAddViewModelTest {
             coEvery { it.updateTemplate(any()) } returns true
             coEvery { it.addPhrase(any()) } returns true
             coEvery { it.updatePhrase(any(), any()) } returns true
-            coEvery { it.getPhraseByTitle(any()) } returns listOf(phrase1,phrase2)
+            coEvery { it.getPhraseByTitle(any()) } returns listOf(phrase1, phrase2)
             coEvery { it.getTemplateByTitle(any()) } returns template1
             coEvery { it.getPhraseTitle() } returns listOf(template1, template2)
             coEvery { it.getTemplateById(template1.id!!) } returns template1
@@ -94,6 +93,7 @@ class FixedPhraseAddViewModelTest {
         viewModel.init(template1)
         assertEquals(viewModel.submitText.value, "更新")
     }
+
     /**
      * 送信ボタン
      */
@@ -102,13 +102,13 @@ class FixedPhraseAddViewModelTest {
         // 新規登録
         viewModel.init(null)
         viewModel.submit()
-        coVerify{(databaseRepository).createTemplate(any())}
-        coVerify{(databaseRepository).addPhrase(any())}
+        coVerify { (databaseRepository).createTemplate(any()) }
+        coVerify { (databaseRepository).addPhrase(any()) }
         // 既存更新
         viewModel.init(template1)
         viewModel.submit()
-        coVerify{(databaseRepository).updateTemplate(any())}
-        coVerify{(databaseRepository).updatePhrase(any(), any())}
+        coVerify { (databaseRepository).updateTemplate(any()) }
+        coVerify { (databaseRepository).updatePhrase(any(), any()) }
     }
 
     /**
@@ -122,26 +122,16 @@ class FixedPhraseAddViewModelTest {
     }
 
     /**
-     * 定型文リスト削除
-     */
-    @Test
-    fun removePhraseList() {
-        viewModel.addPhrase()
-        val oldSize = viewModel.phraseList.value!!.size
-        viewModel.removePhraseList(0)
-        assertEquals(viewModel.phraseList.value!!.size, oldSize - 1)
-    }
-
-    /**
      * 定型文文章追加ボタン活性・非活性
      */
     @Test
     fun changePhraseSubmitButton() {
         // 入力なし
-        viewModel.changePhraseSubmitButton("")
+        //viewModel.changePhraseSubmitButton("")
         assertEquals(viewModel.isPhraseEnableSubmitButton.value, false)
         // 入力あり
-        viewModel.changePhraseSubmitButton("test")
+        viewModel.phraseText.value = "test"
+        // viewModel.changePhraseSubmitButton("test")
         assertEquals(viewModel.isPhraseEnableSubmitButton.value, true)
     }
 
@@ -152,21 +142,21 @@ class FixedPhraseAddViewModelTest {
     fun changeSubmitButton() {
         // タイトルなし + 定型文リストなし
         viewModel.titleText.value = ""
-        viewModel.changeSubmitButton()
+        //viewModel.changeSubmitButton()
         assertEquals(viewModel.isEnableSubmitButton.value, false)
         // タイトルあり + 定型文リストなし
         viewModel.titleText.value = "aaa"
-        viewModel.changeSubmitButton()
+        //viewModel.changeSubmitButton()
         assertEquals(viewModel.isEnableSubmitButton.value, false)
         // タイトルなし + 定型文リストあり
         viewModel.titleText.value = ""
         viewModel.addPhrase()
-        viewModel.changeSubmitButton()
+        //viewModel.changeSubmitButton()
         assertEquals(viewModel.isEnableSubmitButton.value, false)
         // タイトルあり + 定型文リストあり
         viewModel.titleText.value = "aaa"
         viewModel.addPhrase()
-        viewModel.changeSubmitButton()
+        //viewModel.changeSubmitButton()
         assertEquals(viewModel.isEnableSubmitButton.value, true)
     }
 }

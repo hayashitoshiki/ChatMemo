@@ -1,9 +1,6 @@
 package com.example.chatmemo.ui.phrase
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.chatmemo.model.entity.Phrase
 import com.example.chatmemo.model.entity.Template
 import com.example.chatmemo.model.repository.DataBaseRepository
@@ -19,9 +16,9 @@ class FixedPhraseAddViewModel(private val dataBaseRepository: DataBaseRepository
     private var mTemplate = Template(null, "")
     val titleText = MutableLiveData("")
     val phraseText = MutableLiveData("")
-    private val _isEnablePhraseSubmitButton = MutableLiveData(false)
+    private val _isEnablePhraseSubmitButton = MediatorLiveData<Boolean>()
     val isPhraseEnableSubmitButton: LiveData<Boolean> = _isEnablePhraseSubmitButton
-    private val _isEnableSubmitButton = MutableLiveData(false)
+    private val _isEnableSubmitButton = MediatorLiveData<Boolean>()
     val isEnableSubmitButton: LiveData<Boolean> = _isEnableSubmitButton
     private val _phraseList = MutableLiveData<ArrayList<Phrase>>(arrayListOf())
     val phraseList: LiveData<ArrayList<Phrase>> = _phraseList
@@ -30,6 +27,10 @@ class FixedPhraseAddViewModel(private val dataBaseRepository: DataBaseRepository
     private val _submitText = MutableLiveData<String>()
     val submitText: LiveData<String> = _submitText
 
+    init {
+        _isEnableSubmitButton.addSource(titleText) { changeSubmitButton() }
+        _isEnablePhraseSubmitButton.addSource(phraseText) { changePhraseSubmitButton(it) }
+    }
 
     // 初期化
     fun init(template: Template?) {
@@ -85,21 +86,18 @@ class FixedPhraseAddViewModel(private val dataBaseRepository: DataBaseRepository
         changeSubmitButton()
     }
 
-    // リスト削除
-    fun removePhraseList(position: Int) {
-        val list = phraseList.value!!
-        list.removeAt(position)
-        _phraseList.value = list
-        changeSubmitButton()
+    // リスト更新
+    fun updatePhraseList(items: ArrayList<Phrase>) {
+        _phraseList.value = items
     }
 
     // 定型文文章追加ボタン
-    fun changePhraseSubmitButton(phrase: String) {
+    private fun changePhraseSubmitButton(phrase: String) {
         _isEnablePhraseSubmitButton.value = phrase.isNotEmpty()
     }
 
     // 登録・更新ボタン活性・非活性制御
-    fun changeSubmitButton() {
+    private fun changeSubmitButton() {
         _isEnableSubmitButton.value = titleText.value!!.isNotEmpty() && _phraseList.value!!.size != 0
     }
 }
