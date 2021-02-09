@@ -26,6 +26,7 @@ class RoomAddViewModel(
     init {
         _isEnableSubmitButton.addSource(titleText) { changeSubmitButton() }
         _isEnableSubmitButton.addSource(templateTitleValue) { changeSubmitButton() }
+        _isEnableSubmitButton.addSource(modeValue) { changeSubmitButton() }
         viewModelScope.launch {
             val list = arrayListOf("選択なし")
             mTemplateList = dataBaseRepository.getPhraseTitle()

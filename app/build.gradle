@@ -7,7 +7,7 @@ apply plugin: 'org.jetbrains.dokka-android'
 dokka {
     outputFormat = 'gfm'
     includes = ['doc/module_package.md']
-    outputDirectory = "$buildDir/javadoc"
+    outputDirectory = "$projectDir/javadoc"
 }
 android {
     compileSdkVersion 30

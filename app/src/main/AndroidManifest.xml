@@ -12,13 +12,17 @@
         android:theme="@style/Theme.ChatMemo">
         <activity
             android:name=".ui.MainActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:screenOrientation="portrait"
+            android:fitsSystemWindows="true"
+            android:windowSoftInputMode="adjustPan|stateUnchanged">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.chat.ChatActivity" />
     </application>
 
 </manifest>

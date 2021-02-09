@@ -1,9 +1,6 @@
 package com.example.chatmemo.ui.chat
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.chatmemo.model.Const
 import com.example.chatmemo.model.entity.ChatRoom
 import com.example.chatmemo.model.entity.Comment
@@ -27,11 +24,15 @@ class ChatViewModel(
     val commentText = MutableLiveData("")
     private val _commentList = MutableLiveData<List<Comment>>(listOf())
     val commentList: LiveData<List<Comment>> = _commentList
-    private val _isEnableSubmitButton = MutableLiveData(false)
+    private val _isEnableSubmitButton = MediatorLiveData<Boolean>()
     val isEnableSubmitButton: LiveData<Boolean> = _isEnableSubmitButton
 
     private var phraseList = listOf<Phrase>()
     private var isFirst = true
+
+    init {
+        _isEnableSubmitButton.addSource(commentText) { changeSubmitButton(it) }
+    }
 
     // ルーム更新
     fun updateRoom(chatRoom: ChatRoom) {
@@ -151,7 +152,7 @@ class ChatViewModel(
     }
 
     // 送信ボタンの活性非活性制御
-    fun changeSubmitButton(message: String) {
+    private fun changeSubmitButton(message: String) {
         _isEnableSubmitButton.postValue(message.isNotEmpty())
     }
 }

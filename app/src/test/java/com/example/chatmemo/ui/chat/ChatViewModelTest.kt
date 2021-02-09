@@ -17,11 +17,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.Rule
+import org.junit.Test
 import org.junit.rules.TestRule
 
 /**
@@ -51,15 +50,15 @@ class ChatViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
-        val comment1 = Comment(1,"first",1,"",1)
-        val comment2 = Comment(2,"second",1,"",1)
-        val phrase1 = Phrase(1,"first",1)
-        val phrase2 = Phrase(2,"second",1)
+        val comment1 = Comment(1, "first", 1, "", 1)
+        val comment2 = Comment(2, "second", 1, "", 1)
+        val phrase1 = Phrase(1, "first", 1)
+        val phrase2 = Phrase(2, "second", 1)
         databaseRepository = mockk<DataBaseRepository>().also {
             coEvery { it.deleteRoom(any()) } returns Unit
             coEvery { it.deleteCommentByRoomId(any()) } returns Unit
-            coEvery { it.getCommentAll(any()) } returns listOf(comment1,comment2)
-            coEvery { it.getPhraseByTitle(any()) } returns listOf(phrase1,phrase2)
+            coEvery { it.getCommentAll(any()) } returns listOf(comment1, comment2)
+            coEvery { it.getPhraseByTitle(any()) } returns listOf(phrase1, phrase2)
             coEvery { it.updateRoom(any()) } returns Unit
             coEvery { it.updateComment(any()) } returns Unit
             coEvery { it.addComment(any()) } returns Unit
@@ -87,7 +86,7 @@ class ChatViewModelTest {
         // 初回呼び出しのみコメント取得を行う
         viewModel.updateRoom(room1)
         viewModel.updateRoom(room1)
-        coVerify(exactly = 1) { (databaseRepository).getCommentAll(any())}
+        coVerify(exactly = 1) { (databaseRepository).getCommentAll(any()) }
         // 定型文の設定がある時のみ定型文の取得を行う
         viewModel = ChatViewModel(room1.id!!, databaseRepository)
         viewModel.updateRoom(room1)
@@ -132,10 +131,10 @@ class ChatViewModelTest {
     @Test
     fun changeSubmitButton() {
         // 入力文字なし
-        viewModel.changeSubmitButton("")
+        viewModel.commentText.value = ""
         assertEquals(viewModel.isEnableSubmitButton.value, false)
         // 入力文字あり
-        viewModel.changeSubmitButton("test")
+        viewModel.commentText.value = "test"
         assertEquals(viewModel.isEnableSubmitButton.value, true)
     }
 }

@@ -2,6 +2,7 @@ package com.example.chatmemo.ui.chat
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentRoomAddBinding
 import com.example.chatmemo.model.entity.ChatRoom
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
@@ -71,8 +73,16 @@ class RoomAddFragment : Fragment() {
         binding.btnAddRoom.setOnClickListener {
             lifecycleScope.launch {
                 val chatRoom: ChatRoom = viewModel.createRoom()
-                val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(chatRoom)
-                findNavController().navigate(action)
+                val intent = Intent(activity, ChatActivity::class.java)
+                intent.putExtra("data", chatRoom)
+                startActivity(intent)
+                launch {
+                    val job = launch {
+                        delay(500)
+                    }
+                    job.join()
+                    findNavController().popBackStack()
+                }
             }
         }
         // editTextフォーカス制御

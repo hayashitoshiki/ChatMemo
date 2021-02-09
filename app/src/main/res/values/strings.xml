@@ -41,4 +41,6 @@
     <string name="error_nothing_room">新しくチャットルームを作成しよう!</string>
     <string name="error_nothing_phrase">定型文リストを作成しよう！</string>
     <string name="error_phrase_title">すでに同じタイトルが保存されています。</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

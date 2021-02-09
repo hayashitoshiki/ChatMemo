@@ -2,10 +2,7 @@ package com.example.chatmemo.ui.phrase
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +27,13 @@ class FixedPhraseAddFragment : Fragment() {
     private lateinit var binding: FragmentFixedPhraseAddBinding
     private val viewModel: FixedPhraseAddViewModel by viewModel()
     private val args: FixedPhraseAddFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().window.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

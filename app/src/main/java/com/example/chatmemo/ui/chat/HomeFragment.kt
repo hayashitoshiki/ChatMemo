@@ -1,5 +1,6 @@
 package com.example.chatmemo.ui.chat
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
@@ -57,8 +58,9 @@ class HomeFragment : Fragment(), CoroutineScope {
             override fun onItemClickListener(view: View, position: Int, item: ChatRoom) {
                 when (view.id) {
                     R.id.container_main -> {
-                        val action = HomeFragmentDirections.actionHomeFragmentToChatFragment(item)
-                        findNavController().navigate(action)
+                        val intent = Intent(activity, ChatActivity::class.java)
+                        intent.putExtra("data", item)
+                        startActivity(intent)
                     }
                     R.id.btn_delete     -> {
                         AlertDialog.Builder(requireActivity()).setTitle("ルーム削除")

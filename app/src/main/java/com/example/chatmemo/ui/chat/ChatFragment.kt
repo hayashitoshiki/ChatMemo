@@ -1,25 +1,20 @@
 package com.example.chatmemo.ui.chat
 
-import android.app.Activity.RESULT_OK
-import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import android.speech.RecognizerIntent
 import android.view.*
 import android.view.ViewTreeObserver.OnPreDrawListener
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentChatBinding
+import com.example.chatmemo.model.entity.ChatRoom
 import com.example.chatmemo.model.entity.Comment
-import com.example.chatmemo.ui.MainActivity
 import com.example.chatmemo.ui.adapter.ChatRecyclerAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +22,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
-import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 
@@ -36,18 +30,29 @@ import kotlin.coroutines.CoroutineContext
  */
 class ChatFragment : Fragment(), CoroutineScope {
 
-    companion object {
-        private const val REQUEST_CODE = 1
-    }
-
     private var isKeyboardShowing = false
-    private var isFirst = true
 
     private lateinit var binding: FragmentChatBinding
-    private val args: ChatFragmentArgs by navArgs()
-    private val viewModel: ChatViewModel by inject { parametersOf(args.data.id) }
+    private val viewModel: ChatViewModel by inject {
+        parametersOf(
+            (requireArguments().getSerializable(
+                "data"
+            ) as ChatRoom).id
+        )
+    }
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext = Dispatchers.Main + job
+
+    companion object {
+        @JvmStatic
+        fun newInstance(name: ChatRoom?): ChatFragment {
+            val fragment = ChatFragment()
+            val args = Bundle()
+            args.putSerializable("data", name)
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -60,8 +65,8 @@ class ChatFragment : Fragment(), CoroutineScope {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as AppCompatActivity).supportActionBar?.title = args.data.title
-        (activity as MainActivity).hideNavigationBottom()
+        val data = requireArguments().getSerializable("data") as ChatRoom
+        (activity as AppCompatActivity).supportActionBar?.title = data.title
         setHasOptionsMenu(true)
 
         viewModel.commentList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
@@ -78,26 +83,14 @@ class ChatFragment : Fragment(), CoroutineScope {
 
         // 文字入力
         viewModel.commentText.observe(viewLifecycleOwner, Observer {
-            viewModel.changeSubmitButton(it)
             // 高さ自動統制
             binding.editText.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
                     binding.editText.viewTreeObserver.removeOnPreDrawListener(this)
                     if (binding.editText.lineCount in 1..4) {
                         val scrollViewLayoutParam = binding.scrollView.layoutParams as ViewGroup.MarginLayoutParams
-                        val layoutInputLayoutParams = binding.layoutInput.layoutParams as ViewGroup.MarginLayoutParams
                         scrollViewLayoutParam.height = binding.editText.height
-                        layoutInputLayoutParams.height = binding.editText.height + (16f * requireContext().resources.displayMetrics.density).toInt()
                         binding.scrollView.layoutParams = scrollViewLayoutParam
-                        binding.layoutInput.layoutParams = layoutInputLayoutParams
-                    } else if (isFirst && binding.editText.lineCount > 4) {
-                        val scrollViewLayoutParam = binding.scrollView.layoutParams as ViewGroup.MarginLayoutParams
-                        val layoutInputLayoutParams = binding.layoutInput.layoutParams as ViewGroup.MarginLayoutParams
-                        scrollViewLayoutParam.height = 340
-                        layoutInputLayoutParams.height = 340 + (16f * requireContext().resources.displayMetrics.density).toInt()
-                        binding.scrollView.layoutParams = scrollViewLayoutParam
-                        binding.layoutInput.layoutParams = layoutInputLayoutParams
-                        isFirst = false
                     }
                     return true
                 }
@@ -125,35 +118,6 @@ class ChatFragment : Fragment(), CoroutineScope {
         binding.btnSubmit.setOnClickListener { viewModel.submit() }
         // 変更ボタン
         binding.btnChangeUser.setOnClickListener { viewModel.changeUser() }
-        // 音声ボタン
-        binding.btnVoice.setOnClickListener {
-            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).let {
-                it.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.JAPANESE.toString())
-                it.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 10)
-                it.putExtra(RecognizerIntent.EXTRA_PROMPT, "話してください")
-            }
-            startActivityForResult(intent, REQUEST_CODE)
-        }
-    }
-
-    @Suppress("DEPRECATED_IDENTITY_EQUALS")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode === REQUEST_CODE && resultCode === RESULT_OK) {
-            val result: ArrayList<String>? = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-
-            if (result != null && result.size > 0) {
-                isFirst = true
-                viewModel.commentText.value = result[0]
-            } else {
-                Toast.makeText(requireContext(), "音声の認識に失敗しました", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
     override fun onDestroy() {
