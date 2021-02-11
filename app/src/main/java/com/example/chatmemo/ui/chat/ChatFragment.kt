@@ -4,16 +4,17 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.view.*
 import android.view.ViewTreeObserver.OnPreDrawListener
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentChatBinding
-import com.example.chatmemo.model.entity.ChatRoom
 import com.example.chatmemo.model.entity.Comment
 import com.example.chatmemo.ui.adapter.ChatRecyclerAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -31,28 +32,11 @@ import kotlin.coroutines.CoroutineContext
 class ChatFragment : Fragment(), CoroutineScope {
 
     private var isKeyboardShowing = false
-
+    private val args: ChatFragmentArgs by navArgs()
     private lateinit var binding: FragmentChatBinding
-    private val viewModel: ChatViewModel by inject {
-        parametersOf(
-            (requireArguments().getSerializable(
-                "data"
-            ) as ChatRoom).id
-        )
-    }
+    private val viewModel: ChatViewModel by inject { parametersOf(args.data.id) }
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext = Dispatchers.Main + job
-
-    companion object {
-        @JvmStatic
-        fun newInstance(name: ChatRoom?): ChatFragment {
-            val fragment = ChatFragment()
-            val args = Bundle()
-            args.putSerializable("data", name)
-            fragment.arguments = args
-            return fragment
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -65,8 +49,11 @@ class ChatFragment : Fragment(), CoroutineScope {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val data = requireArguments().getSerializable("data") as ChatRoom
-        (activity as AppCompatActivity).supportActionBar?.title = data.title
+
+        val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
+        binding.layoutInput.startAnimation(anim1)
+
+        (activity as AppCompatActivity).supportActionBar?.title = args.data.title
         setHasOptionsMenu(true)
 
         viewModel.commentList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
@@ -121,8 +108,20 @@ class ChatFragment : Fragment(), CoroutineScope {
     }
 
     override fun onDestroy() {
+        val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_out_bottom)
+        binding.layoutInput.startAnimation(anim1)
         job.cancel()
         super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

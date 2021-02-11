@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
@@ -48,17 +51,23 @@ class FixedPhraseListFragment : Fragment() {
 
         val adapter = PhraseTitleListAdapter(listOf())
         val layoutManager = LinearLayoutManager(requireContext())
+        val controller = AnimationUtils.loadLayoutAnimation(context, R.anim.fall_down)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.layoutAnimation = controller
         // リストビューの各項目タップ
         adapter.setOnItemClickListener(object : PhraseTitleListAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, position: Int, item: Template) {
                 when (view.id) {
                     R.id.txt_name -> {
-                        val action = FixedPhraseListFragmentDirections.actionFixedPhraseListFragmentToFixedPhraseAddFragment(
-                            item
+                        val extras = FragmentNavigatorExtras(view to "end_title_transition")
+                        val data = bundleOf("data" to item)
+                        findNavController().navigate(
+                            R.id.action_fixedPhraseListFragment_to_fixedPhraseAddFragment,
+                            data,
+                            null,
+                            extras
                         )
-                        findNavController().navigate(action)
                     }
                     R.id.btn_delete -> {
                         AlertDialog.Builder(requireActivity()).setTitle("定型文削除")
@@ -71,10 +80,10 @@ class FixedPhraseListFragment : Fragment() {
         })
         // 追加ボタン
         binding.fab.setOnClickListener {
-            val action = FixedPhraseListFragmentDirections.actionFixedPhraseListFragmentToFixedPhraseAddFragment(
-                null
+            val extras = FragmentNavigatorExtras(it to "end_fab_transition")
+            findNavController().navigate(
+                R.id.action_fixedPhraseListFragment_to_fixedPhraseAddFragment, null, null, extras
             )
-            findNavController().navigate(action)
         }
     }
 

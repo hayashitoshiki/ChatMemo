@@ -11,7 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
-import com.example.chatmemo.R
+import com.example.chatmemo.databinding.ItemRoomListBinding
 import com.example.chatmemo.model.entity.ChatRoom
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -27,18 +27,18 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
     private var viewBinderHelper: ViewBinderHelper = ViewBinderHelper()
 
     // 参照するviewの定義
-    open class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val swipeRevealLayout: SwipeRevealLayout = v.findViewById(R.id.container)
-        val container: ConstraintLayout = v.findViewById(R.id.container_main)
-        val roomNameTextView: TextView = v.findViewById(R.id.name_label)
-        val commentTextView: TextView = v.findViewById(R.id.txt_comment)
-        val timeTextView: TextView = v.findViewById(R.id.txt_date)
-        val deleteButton: ImageButton = v.findViewById(R.id.btn_delete)
+    open class ViewHolder(v: ItemRoomListBinding) : RecyclerView.ViewHolder(v.root) {
+        val swipeRevealLayout: SwipeRevealLayout = v.container
+        val container: ConstraintLayout = v.containerMain
+        val roomNameTextView: TextView = v.nameLabel
+        val commentTextView: TextView = v.txtComment
+        val timeTextView: TextView = v.txtDate
+        val deleteButton: ImageButton = v.btnDelete
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_room_list, parent, false
+        val inflater = ItemRoomListBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
         )
         return ViewHolder(inflater)
     }
@@ -76,6 +76,7 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
             holder.timeTextView.visibility = View.GONE
         }
         // カードタップ
+        holder.container.transitionName = room.id.toString()
         holder.container.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {

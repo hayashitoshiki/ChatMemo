@@ -2,11 +2,11 @@ package com.example.chatmemo.ui.chat
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
@@ -15,9 +15,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.transition.ChangeTransform
+import androidx.transition.TransitionSet
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentRoomAddBinding
 import com.example.chatmemo.model.entity.ChatRoom
+import com.example.chatmemo.ui.MainActivity
+import com.example.chatmemo.ui.transition.FabTransform
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -45,6 +49,16 @@ class RoomAddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val transition = TransitionSet().apply {
+            addTransition(ChangeTransform())
+        }
+        val trans = FabTransform(
+            resources.getColor(R.color.bg_color_accent, null), R.drawable.btn_circle_brown
+        )
+        sharedElementEnterTransition = trans
+        sharedElementReturnTransition = transition
+
         (activity as AppCompatActivity).supportActionBar?.title = "ルーム作成"
 
         viewModel.templateTitleList.observe(viewLifecycleOwner, Observer {
@@ -72,17 +86,15 @@ class RoomAddFragment : Fragment() {
         // 新規作成ボタン
         binding.btnAddRoom.setOnClickListener {
             lifecycleScope.launch {
+                (requireActivity() as MainActivity).hideNavigationBottom()
+                val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
+                binding.container.startAnimation(anim1)
+                binding.container.visibility = View.GONE
+                delay(resources.getInteger(R.integer.fade_out_time).toLong())
                 val chatRoom: ChatRoom = viewModel.createRoom()
-                val intent = Intent(activity, ChatActivity::class.java)
-                intent.putExtra("data", chatRoom)
-                startActivity(intent)
-                launch {
-                    val job = launch {
-                        delay(500)
-                    }
-                    job.join()
-                    findNavController().popBackStack()
-                }
+                val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(chatRoom)
+                findNavController().navigate(action)
+
             }
         }
         // editTextフォーカス制御

@@ -1,13 +1,14 @@
 package com.example.chatmemo.ui.chat
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
@@ -15,10 +16,7 @@ import com.example.chatmemo.databinding.FragmentHomeBinding
 import com.example.chatmemo.model.entity.ChatRoom
 import com.example.chatmemo.ui.MainActivity
 import com.example.chatmemo.ui.adapter.RoomListAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import kotlin.coroutines.CoroutineContext
 
@@ -45,22 +43,33 @@ class HomeFragment : Fragment(), CoroutineScope {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.title = "ルーム一覧"
         (activity as MainActivity).showNavigationBottom()
-
         viewModel.chatRoomList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
 
         val adapter = RoomListAdapter(listOf())
         val layoutManager = LinearLayoutManager(requireContext())
+        val controller = AnimationUtils.loadLayoutAnimation(context, R.anim.fall_down)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.layoutAnimation = controller
 
         // リストビューの各項目タップ
         adapter.setOnItemClickListener(object : RoomListAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, position: Int, item: ChatRoom) {
                 when (view.id) {
                     R.id.container_main -> {
-                        val intent = Intent(activity, ChatActivity::class.java)
-                        intent.putExtra("data", item)
-                        startActivity(intent)
+                        (requireActivity() as MainActivity).hideNavigationBottom()
+                        val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
+                        binding.recyclerView.startAnimation(anim1)
+                        binding.fab.startAnimation(anim1)
+                        binding.fab.visibility = View.GONE
+                        launch {
+                            delay(resources.getInteger(R.integer.fade_out_time).toLong())
+                            binding.recyclerView.visibility = View.GONE
+                            val action = HomeFragmentDirections.actionHomeFragmentToChatFragment(
+                                item
+                            )
+                            findNavController().navigate(action)
+                        }
                     }
                     R.id.btn_delete     -> {
                         AlertDialog.Builder(requireActivity()).setTitle("ルーム削除")
@@ -73,8 +82,10 @@ class HomeFragment : Fragment(), CoroutineScope {
         })
         // Fabボタン
         binding.fab.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToRoomAddFragment()
-            findNavController().navigate(action)
+            val extras = FragmentNavigatorExtras(it to "end_fab_transition")
+            findNavController().navigate(
+                R.id.action_homeFragment_to_roomAddFragment, null, null, extras
+            )
         }
     }
 

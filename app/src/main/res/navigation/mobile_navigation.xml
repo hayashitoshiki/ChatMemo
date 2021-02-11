@@ -9,7 +9,7 @@
         android:id="@+id/homeFragment"
         android:name="com.example.chatmemo.ui.chat.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
@@ -25,7 +25,7 @@
         android:id="@+id/chatFragment"
         android:name="com.example.chatmemo.ui.chat.ChatFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" >
+        tools:layout="@layout/fragment_chat">
         <argument
             android:name="data"
             app:argType="com.example.chatmemo.model.entity.ChatRoom" />
@@ -35,7 +35,7 @@
         android:id="@+id/fixedPhraseListFragment"
         android:name="com.example.chatmemo.ui.phrase.FixedPhraseListFragment"
         android:label="fragment_fixed_phrase_list"
-        tools:layout="@layout/fragment_fixed_phrase_list" >
+        tools:layout="@layout/fragment_fixed_phrase_list">
         <action
             android:id="@+id/action_fixedPhraseListFragment_to_fixedPhraseAddFragment"
             app:destination="@id/fixedPhraseAddFragment" />
@@ -44,18 +44,19 @@
     <fragment
         android:id="@+id/fixedPhraseAddFragment"
         android:name="com.example.chatmemo.ui.phrase.FixedPhraseAddFragment"
-        android:label="FixedPhraseAddFragment" >
+        android:label="FixedPhraseAddFragment">
         <argument
             android:name="data"
             app:argType="com.example.chatmemo.model.entity.Template"
-            app:nullable="true" />
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 
     <fragment
         android:id="@+id/roomAddFragment"
         android:name="com.example.chatmemo.ui.chat.RoomAddFragment"
         android:label="RoomAddFragment"
-        tools:layout="@layout/fragment_room_add" >
+        tools:layout="@layout/fragment_room_add">
         <action
             android:id="@+id/action_roomAddFragment_to_chatFragment"
             app:destination="@id/chatFragment"

@@ -14,7 +14,7 @@
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
             android:fitsSystemWindows="true"
-            android:windowSoftInputMode="adjustPan|stateUnchanged">
+            android:windowSoftInputMode="adjustPan">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.chat.ChatActivity" />
     </application>
 
 </manifest>

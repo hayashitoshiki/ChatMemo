@@ -31,9 +31,7 @@ class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.A
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = ItemPhraseTitleBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+            LayoutInflater.from(parent.context), parent, false
         )
         return ViewHolder(inflater)
     }
@@ -50,6 +48,7 @@ class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.A
 
         // 値代入
         holder.textView.text = template.title
+        holder.textView.transitionName = template.id.toString()
         holder.textView.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {

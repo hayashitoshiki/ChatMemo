@@ -1,8 +1,9 @@
 package com.example.chatmemo.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.chatmemo.R
@@ -26,12 +27,18 @@ class MainActivity : AppCompatActivity() {
     // フッター表示
     fun showNavigationBottom() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        navView.visibility = View.VISIBLE
+        if (navView.visibility == View.GONE) {
+            val anim1 = AnimationUtils.loadAnimation(baseContext, R.anim.slide_in_bottom)
+            navView.startAnimation(anim1)
+            navView.visibility = View.VISIBLE
+        }
     }
 
     // フッター非表示
     fun hideNavigationBottom() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        val anim1 = AnimationUtils.loadAnimation(baseContext, R.anim.slide_out_bottom)
+        navView.startAnimation(anim1)
         navView.visibility = View.GONE
     }
 }

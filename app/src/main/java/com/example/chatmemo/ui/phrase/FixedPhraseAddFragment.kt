@@ -2,7 +2,11 @@ package com.example.chatmemo.ui.phrase
 
 import android.content.Context
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,10 +17,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.ChangeBounds
+import androidx.transition.ChangeClipBounds
+import androidx.transition.ChangeTransform
+import androidx.transition.TransitionSet
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentFixedPhraseAddBinding
 import com.example.chatmemo.model.entity.Phrase
 import com.example.chatmemo.ui.adapter.PhraseListAdapter
+import com.example.chatmemo.ui.transition.FabTransform
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -27,13 +36,6 @@ class FixedPhraseAddFragment : Fragment() {
     private lateinit var binding: FragmentFixedPhraseAddBinding
     private val viewModel: FixedPhraseAddViewModel by viewModel()
     private val args: FixedPhraseAddFragmentArgs by navArgs()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().window.setSoftInputMode(
-            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
-        )
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -48,6 +50,29 @@ class FixedPhraseAddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_offset_300_anim)
+        val anim2 = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_offset_400_anim)
+        val endTransition = TransitionSet().apply {
+            addTransition(ChangeTransform())
+        }
+        val startTransition = if (args.data != null) {
+            TransitionSet().apply {
+                addTransition(ChangeBounds())
+                addTransition(ChangeTransform())
+                addTransition(ChangeClipBounds())
+            }
+        } else {
+            FabTransform(
+                resources.getColor(R.color.bg_color_accent, null), R.drawable.btn_circle_brown
+            )
+        }
+        sharedElementEnterTransition = startTransition
+        sharedElementReturnTransition = endTransition
+        binding.layoutInput.startAnimation(anim1)
+        binding.txtList.startAnimation(anim2)
+        binding.recyclerView.startAnimation(anim2)
+
         (activity as AppCompatActivity).supportActionBar?.title = "定型文作成"
 
         viewModel.init(args.data)
@@ -73,8 +98,10 @@ class FixedPhraseAddFragment : Fragment() {
         val adapter = PhraseListAdapter(arrayListOf())
         val layoutManager = LinearLayoutManager(requireContext())
         val itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+        val controller = AnimationUtils.loadLayoutAnimation(context, R.anim.fall_down)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.layoutAnimation = controller
         binding.recyclerView.addItemDecoration(itemDecoration)
         adapter.setOnItemClickListener(object : PhraseListAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, position: Int, items: ArrayList<Phrase>) {
