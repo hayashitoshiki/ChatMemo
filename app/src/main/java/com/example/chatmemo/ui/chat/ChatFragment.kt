@@ -17,6 +17,7 @@ import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentChatBinding
 import com.example.chatmemo.model.entity.Comment
 import com.example.chatmemo.ui.adapter.ChatRecyclerAdapter
+import com.example.chatmemo.ui.transition.PlayTransition
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -50,6 +51,9 @@ class ChatFragment : Fragment(), CoroutineScope {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val trans = PlayTransition(resources.getColor(R.color.white, null))
+        sharedElementEnterTransition = trans
+        sharedElementReturnTransition = trans
         val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
         binding.layoutInput.startAnimation(anim1)
 

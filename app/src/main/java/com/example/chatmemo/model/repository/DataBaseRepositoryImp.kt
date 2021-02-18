@@ -2,6 +2,7 @@ package com.example.chatmemo.model.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import com.example.chatmemo.model.entity.ChatRoom
 import com.example.chatmemo.model.entity.Comment
 import com.example.chatmemo.model.entity.Phrase
@@ -196,7 +197,9 @@ class DataBaseRepositoryImp : DataBaseRepository {
 
     // ルーム全取得
     override fun getRoomAll(): LiveData<List<ChatRoom>> {
-        return roomDao.getAll()
+        return roomDao.getAll().map { it ->
+            it.sortedByDescending { it.commentTime }
+        }
     }
 
     // 指定したテンプレートが使用されているルーム取得

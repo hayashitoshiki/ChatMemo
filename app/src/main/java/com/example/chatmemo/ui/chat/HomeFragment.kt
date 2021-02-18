@@ -5,6 +5,7 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -16,7 +17,10 @@ import com.example.chatmemo.databinding.FragmentHomeBinding
 import com.example.chatmemo.model.entity.ChatRoom
 import com.example.chatmemo.ui.MainActivity
 import com.example.chatmemo.ui.adapter.RoomListAdapter
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import kotlin.coroutines.CoroutineContext
 
@@ -62,14 +66,11 @@ class HomeFragment : Fragment(), CoroutineScope {
                         binding.recyclerView.startAnimation(anim1)
                         binding.fab.startAnimation(anim1)
                         binding.fab.visibility = View.GONE
-                        launch {
-                            delay(resources.getInteger(R.integer.fade_out_time).toLong())
-                            binding.recyclerView.visibility = View.GONE
-                            val action = HomeFragmentDirections.actionHomeFragmentToChatFragment(
-                                item
-                            )
-                            findNavController().navigate(action)
-                        }
+                        val data = bundleOf("data" to item)
+                        val extras = FragmentNavigatorExtras(view to "end_fab_transition")
+                        findNavController().navigate(
+                            R.id.action_homeFragment_to_chatFragment, data, null, extras
+                        )
                     }
                     R.id.btn_delete     -> {
                         AlertDialog.Builder(requireActivity()).setTitle("ルーム削除")

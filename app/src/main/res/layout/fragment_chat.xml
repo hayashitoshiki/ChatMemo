@@ -17,7 +17,8 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray_300">
+        android:background="@color/gray_300"
+        android:transitionName="end_fab_transition">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
