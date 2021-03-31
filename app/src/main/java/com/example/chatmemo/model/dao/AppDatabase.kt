@@ -2,16 +2,16 @@ package com.example.chatmemo.model.dao
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.chatmemo.model.entity.ChatRoom
-import com.example.chatmemo.model.entity.Comment
-import com.example.chatmemo.model.entity.Phrase
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.model.entity.CommentEntity
+import com.example.chatmemo.model.entity.PhraseEntity
+import com.example.chatmemo.model.entity.TemplateEntity
 
 /**
  * DB定義
  */
 @Database(
-    entities = [Comment::class, Phrase::class, ChatRoom::class, Template::class],
+    entities = [CommentEntity::class, PhraseEntity::class, ChatRoomEntity::class, TemplateEntity::class],
     version = 1,
     exportSchema = false
 )

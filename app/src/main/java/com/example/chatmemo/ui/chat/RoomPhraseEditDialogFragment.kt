@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.DialogRoomPhraseEditBinding
-import com.example.chatmemo.model.entity.ChatRoom
+import com.example.chatmemo.model.entity.ChatRoomEntity
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
@@ -28,7 +28,7 @@ class RoomPhraseEditDialogFragment : DialogFragment() {
         parametersOf(
             requireArguments().getSerializable(
                 "room"
-            ) as ChatRoom, modeList
+            ) as ChatRoomEntity, modeList
         )
     }
     private lateinit var binding: DialogRoomPhraseEditBinding

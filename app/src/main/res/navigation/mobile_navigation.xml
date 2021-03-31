@@ -28,7 +28,7 @@
         tools:layout="@layout/fragment_chat">
         <argument
             android:name="data"
-            app:argType="com.example.chatmemo.model.entity.ChatRoom" />
+            app:argType="com.example.chatmemo.model.entity.ChatRoomEntity" />
     </fragment>
 
     <fragment
@@ -47,7 +47,7 @@
         android:label="FixedPhraseAddFragment">
         <argument
             android:name="data"
-            app:argType="com.example.chatmemo.model.entity.Template"
+            app:argType="com.example.chatmemo.model.entity.TemplateEntity"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>

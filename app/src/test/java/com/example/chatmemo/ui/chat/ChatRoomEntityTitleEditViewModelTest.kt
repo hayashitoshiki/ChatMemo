@@ -2,8 +2,8 @@ package com.example.chatmemo.ui.chat
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.example.chatmemo.model.entity.ChatRoom
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.model.entity.TemplateEntity
 import com.example.chatmemo.model.repository.DataBaseRepository
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
@@ -24,7 +24,7 @@ import org.junit.rules.TestRule
 /**
  * ルーム名変更ダイアログ　ロジック仕様
  */
-class ChatRoomTitleEditViewModelTest {
+class ChatRoomEntityTitleEditViewModelTest {
 
     // LiveData用
     @Rule
@@ -43,8 +43,8 @@ class ChatRoomTitleEditViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
-        val room = ChatRoom(null, "test", 0, 0, "", "", "")
-        val template = Template(null, "test")
+        val room = ChatRoomEntity(null, "test", 0, 0, "", "", "")
+        val template = TemplateEntity(null, "test")
         databaseRepository = mockk<DataBaseRepository>().also {
             coEvery { it.createRoom(any()) } returns Unit
             coEvery { it.getRoomByTitle("") } returns room

@@ -9,14 +9,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.example.chatmemo.databinding.ItemPhraseBinding
-import com.example.chatmemo.model.entity.Phrase
+import com.example.chatmemo.model.entity.PhraseEntity
 import java.util.*
 
 /**
  * 定型文作成画面用のリストビューアダプター
  * @property items 定型文リスト
  */
-class PhraseListAdapter(private var items: ArrayList<Phrase>) : RecyclerView.Adapter<PhraseListAdapter.ViewHolder>() {
+class PhraseListAdapter(private var items: ArrayList<PhraseEntity>) : RecyclerView.Adapter<PhraseListAdapter.ViewHolder>() {
 
     private lateinit var listener: OnItemClickListener
 
@@ -57,13 +57,13 @@ class PhraseListAdapter(private var items: ArrayList<Phrase>) : RecyclerView.Ada
         }
     }
 
-    fun setData(items: ArrayList<Phrase>) {
+    fun setData(items: ArrayList<PhraseEntity>) {
         this.items = items
     }
 
     //インターフェースの作成
     interface OnItemClickListener {
-        fun onItemClickListener(view: View, position: Int, items: ArrayList<Phrase>)
+        fun onItemClickListener(view: View, position: Int, items: ArrayList<PhraseEntity>)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

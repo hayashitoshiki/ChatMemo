@@ -3,7 +3,7 @@ package com.example.chatmemo.ui.chat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chatmemo.model.entity.ChatRoom
+import com.example.chatmemo.model.entity.ChatRoomEntity
 import com.example.chatmemo.model.repository.DataBaseRepository
 import kotlinx.coroutines.launch
 
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
  */
 class HomeViewModel(private val dataBaseRepository: DataBaseRepository) : ViewModel() {
 
-    val chatRoomList: LiveData<List<ChatRoom>> = dataBaseRepository.getRoomAll()
+    val chatRoomEntityList: LiveData<List<ChatRoomEntity>> = dataBaseRepository.getRoomAll()
 
     // ルーム削除
     fun deleteRoom(roomId: Long) {

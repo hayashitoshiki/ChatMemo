@@ -15,7 +15,7 @@ import androidx.room.PrimaryKey
  * @property commentTime 最新コメント時間：一言もコメントしていない場合はnull
  */
 @Entity(tableName = "room")
-data class ChatRoom(
+data class ChatRoomEntity(
     @PrimaryKey(autoGenerate = true) val id: Long?,
     var title: String,
     @ColumnInfo(name = "template_id") var templateId: Long?,

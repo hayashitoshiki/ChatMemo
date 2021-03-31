@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.chatmemo.databinding.ItemPhraseTitleBinding
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.entity.TemplateEntity
 
 /**
  * 定型文リスト画面用のリサイクルビューアダプター
  * @property items 定型文のタイトルリスト
  */
-class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.Adapter<PhraseTitleListAdapter.ViewHolder>() {
+class PhraseTitleListAdapter(private var items: List<TemplateEntity>) : RecyclerView.Adapter<PhraseTitleListAdapter.ViewHolder>() {
 
     private lateinit var listener: OnItemClickListener
     private var viewBinderHelper: ViewBinderHelper = ViewBinderHelper()
@@ -71,13 +71,13 @@ class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.A
         }
     }
 
-    fun setData(items: List<Template>) {
+    fun setData(items: List<TemplateEntity>) {
         this.items = items
     }
 
     //インターフェースの作成
     interface OnItemClickListener {
-        fun onItemClickListener(view: View, position: Int, item: Template)
+        fun onItemClickListener(view: View, position: Int, item: TemplateEntity)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

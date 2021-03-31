@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.room.Room
 import com.example.chatmemo.model.dao.AppDatabase
-import com.example.chatmemo.model.entity.ChatRoom
+import com.example.chatmemo.model.entity.ChatRoomEntity
 import com.example.chatmemo.model.repository.DataBaseRepository
 import com.example.chatmemo.model.repository.DataBaseRepositoryImp
 import com.example.chatmemo.ui.chat.*
@@ -49,12 +49,12 @@ class MyApplication : Application() {
         viewModel { HomeViewModel(get()) }
         viewModel { (id: Long) -> ChatViewModel(id, get()) }
         viewModel { (modeList: List<String>) -> RoomAddViewModel(modeList, get()) }
-        viewModel { (room: ChatRoom, modeList: List<String>) ->
+        viewModel { (roomEntity: ChatRoomEntity, modeList: List<String>) ->
             RoomPhraseEditViewModel(
-                room, modeList, get()
+                roomEntity, modeList, get()
             )
         }
-        viewModel { (room: ChatRoom) -> RoomTitleEditViewModel(room, get()) }
+        viewModel { (roomEntity: ChatRoomEntity) -> RoomTitleEditViewModel(roomEntity, get()) }
         viewModel { FixedPhraseAddViewModel(get()) }
         viewModel { FixedPhraseListViewModel(get()) }
 

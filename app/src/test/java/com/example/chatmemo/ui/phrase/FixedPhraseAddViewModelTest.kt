@@ -2,9 +2,9 @@ package com.example.chatmemo.ui.phrase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.example.chatmemo.model.entity.ChatRoom
-import com.example.chatmemo.model.entity.Phrase
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.model.entity.PhraseEntity
+import com.example.chatmemo.model.entity.TemplateEntity
 import com.example.chatmemo.model.repository.DataBaseRepository
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
@@ -34,23 +34,23 @@ class FixedPhraseAddViewModelTest {
     // observer
     private val observerBoolean = mock<Observer<Boolean>>()
     private val observerString = mock<Observer<String>>()
-    private val observerPhrase = mock<Observer<ArrayList<Phrase>>>()
+    private val observerPhrase = mock<Observer<ArrayList<PhraseEntity>>>()
 
     // mock
     private lateinit var viewModel: FixedPhraseAddViewModel
     private lateinit var databaseRepository: DataBaseRepository
 
-    private val template1 = Template(1, "test")
-    private val template2 = Template(2, "test")
+    private val template1 = TemplateEntity(1, "test")
+    private val template2 = TemplateEntity(2, "test")
 
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
-        val phrase1 = Phrase(1, "first", 1)
-        val phrase2 = Phrase(2, "second", 1)
-        val room1 = ChatRoom(1, "test", null, null, null, null, "")
-        val room2 = ChatRoom(1, "test", 1, 1, "", "", "")
+        val phrase1 = PhraseEntity(1, "first", 1)
+        val phrase2 = PhraseEntity(2, "second", 1)
+        val room1 = ChatRoomEntity(1, "test", null, null, null, null, "")
+        val room2 = ChatRoomEntity(1, "test", 1, 1, "", "", "")
         databaseRepository = mockk<DataBaseRepository>().also {
             coEvery { it.createTemplate(any()) } returns true
             coEvery { it.updateTemplate(any()) } returns true

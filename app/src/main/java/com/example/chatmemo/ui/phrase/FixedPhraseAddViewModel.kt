@@ -1,8 +1,8 @@
 package com.example.chatmemo.ui.phrase
 
 import androidx.lifecycle.*
-import com.example.chatmemo.model.entity.Phrase
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.entity.PhraseEntity
+import com.example.chatmemo.model.entity.TemplateEntity
 import com.example.chatmemo.model.repository.DataBaseRepository
 import kotlinx.coroutines.launch
 
@@ -13,15 +13,15 @@ import kotlinx.coroutines.launch
  */
 class FixedPhraseAddViewModel(private val dataBaseRepository: DataBaseRepository) : ViewModel() {
 
-    private var mTemplate = Template(null, "")
+    private var mTemplate = TemplateEntity(null, "")
     val titleText = MutableLiveData("")
     val phraseText = MutableLiveData("")
     private val _isEnablePhraseSubmitButton = MediatorLiveData<Boolean>()
     val isPhraseEnableSubmitButton: LiveData<Boolean> = _isEnablePhraseSubmitButton
     private val _isEnableSubmitButton = MediatorLiveData<Boolean>()
     val isEnableSubmitButton: LiveData<Boolean> = _isEnableSubmitButton
-    private val _phraseList = MutableLiveData<ArrayList<Phrase>>(arrayListOf())
-    val phraseList: LiveData<ArrayList<Phrase>> = _phraseList
+    private val _phraseList = MutableLiveData<ArrayList<PhraseEntity>>(arrayListOf())
+    val phraseList: LiveData<ArrayList<PhraseEntity>> = _phraseList
     private val _submitState = MutableLiveData<Boolean>()
     val submitState: LiveData<Boolean> = _submitState
     private val _submitText = MutableLiveData<String>()
@@ -33,10 +33,10 @@ class FixedPhraseAddViewModel(private val dataBaseRepository: DataBaseRepository
     }
 
     // 初期化
-    fun init(template: Template?) {
+    fun init(template: TemplateEntity?) {
         if (template != null) {
             viewModelScope.launch {
-                val list = arrayListOf<Phrase>()
+                val list = arrayListOf<PhraseEntity>()
                 dataBaseRepository.getPhraseByTitle(template.id!!).forEach { list.add(it) }
                 mTemplate = dataBaseRepository.getTemplateById(template.id)
                 _phraseList.postValue(list)
@@ -78,7 +78,7 @@ class FixedPhraseAddViewModel(private val dataBaseRepository: DataBaseRepository
         } else {
             0
         }
-        val phrase = Phrase(null, phraseText.value!!, templateId)
+        val phrase = PhraseEntity(null, phraseText.value!!, templateId)
         val list = phraseList.value!!
         list.add(phrase)
         _phraseList.postValue(list)
@@ -87,7 +87,7 @@ class FixedPhraseAddViewModel(private val dataBaseRepository: DataBaseRepository
     }
 
     // リスト更新
-    fun updatePhraseList(items: ArrayList<Phrase>) {
+    fun updatePhraseList(items: ArrayList<PhraseEntity>) {
         _phraseList.value = items
     }
 

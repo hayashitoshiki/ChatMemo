@@ -23,7 +23,7 @@ import androidx.transition.ChangeTransform
 import androidx.transition.TransitionSet
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentFixedPhraseAddBinding
-import com.example.chatmemo.model.entity.Phrase
+import com.example.chatmemo.model.entity.PhraseEntity
 import com.example.chatmemo.ui.adapter.PhraseListAdapter
 import com.example.chatmemo.ui.transition.FabTransform
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -104,7 +104,11 @@ class FixedPhraseAddFragment : Fragment() {
         binding.recyclerView.layoutAnimation = controller
         binding.recyclerView.addItemDecoration(itemDecoration)
         adapter.setOnItemClickListener(object : PhraseListAdapter.OnItemClickListener {
-            override fun onItemClickListener(view: View, position: Int, items: ArrayList<Phrase>) {
+            override fun onItemClickListener(
+                view: View,
+                position: Int,
+                items: ArrayList<PhraseEntity>
+            ) {
                 when (view.id) {
                     R.id.btn_delete -> {
                         viewModel.updatePhraseList(items)
@@ -136,7 +140,7 @@ class FixedPhraseAddFragment : Fragment() {
     }
 
     // データ追加
-    private fun viewUpDate(data: ArrayList<Phrase>) {
+    private fun viewUpDate(data: ArrayList<PhraseEntity>) {
         val adapter = binding.recyclerView.adapter as PhraseListAdapter
         if (adapter.itemCount < data.size) {
             adapter.setData(data)
@@ -147,7 +151,7 @@ class FixedPhraseAddFragment : Fragment() {
     // 設定画面へ画面戻る
     private fun back(result: Boolean) {
         when (result) {
-            true  -> findNavController().popBackStack()
+            true -> findNavController().popBackStack()
             false -> {
                 Toast.makeText(
                     requireContext(), R.string.error_phrase_title, Toast.LENGTH_SHORT

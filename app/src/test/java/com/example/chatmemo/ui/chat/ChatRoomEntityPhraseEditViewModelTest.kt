@@ -2,8 +2,8 @@ package com.example.chatmemo.ui.chat
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.example.chatmemo.model.entity.ChatRoom
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.model.entity.TemplateEntity
 import com.example.chatmemo.model.repository.DataBaseRepository
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
@@ -24,7 +24,7 @@ import org.junit.rules.TestRule
 /**
  * ルーム定型文設定画面　ロジック仕様
  */
-class ChatRoomPhraseEditViewModelTest {
+class ChatRoomEntityPhraseEditViewModelTest {
 
     // LiveData用
     @Rule
@@ -41,13 +41,13 @@ class ChatRoomPhraseEditViewModelTest {
     private lateinit var databaseRepository: DataBaseRepository
 
     // 非選択
-    private val room1 = ChatRoom(1, "test", null, null, null, null, "")
+    private val room1 = ChatRoomEntity(1, "test", null, null, null, null, "")
 
     // 選択
-    private val room2 = ChatRoom(1, "test", 1, 1, "", "", "")
+    private val room2 = ChatRoomEntity(1, "test", 1, 1, "", "", "")
     private val modeList = listOf("順番", "ランダム")
-    private val template1 = Template(1, "test1")
-    private val template2 = Template(2, "test2")
+    private val template1 = TemplateEntity(1, "test1")
+    private val template2 = TemplateEntity(2, "test2")
 
     @ExperimentalCoroutinesApi
     @Before

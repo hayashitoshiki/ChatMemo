@@ -19,7 +19,7 @@ import androidx.transition.ChangeTransform
 import androidx.transition.TransitionSet
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentRoomAddBinding
-import com.example.chatmemo.model.entity.ChatRoom
+import com.example.chatmemo.model.entity.ChatRoomEntity
 import com.example.chatmemo.ui.MainActivity
 import com.example.chatmemo.ui.transition.FabTransform
 import kotlinx.coroutines.delay
@@ -91,8 +91,10 @@ class RoomAddFragment : Fragment() {
                 binding.container.startAnimation(anim1)
                 binding.container.visibility = View.GONE
                 delay(resources.getInteger(R.integer.fade_out_time).toLong())
-                val chatRoom: ChatRoom = viewModel.createRoom()
-                val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(chatRoom)
+                val chatRoomEntity: ChatRoomEntity = viewModel.createRoom()
+                val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(
+                    chatRoomEntity
+                )
                 findNavController().navigate(action)
 
             }

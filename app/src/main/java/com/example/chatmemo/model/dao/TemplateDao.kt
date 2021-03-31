@@ -1,7 +1,7 @@
 package com.example.chatmemo.model.dao
 
 import androidx.room.*
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.entity.TemplateEntity
 
 /**
  * 定型文用クエリ管理
@@ -10,20 +10,20 @@ import com.example.chatmemo.model.entity.Template
 interface TemplateDao {
 
     @Insert
-    suspend fun insert(template: Template)
+    suspend fun insert(template: TemplateEntity)
 
     @Update
-    suspend fun update(template: Template)
+    suspend fun update(template: TemplateEntity)
 
     @Delete
-    suspend fun delete(template: Template)
+    suspend fun delete(template: TemplateEntity)
 
     @Query("SELECT * FROM template")
-    fun getAll(): List<Template>
+    fun getAll(): List<TemplateEntity>
 
     @Query("SELECT * FROM template WHERE id = :id")
-    suspend fun getTemplateById(id: Long): Template
+    suspend fun getTemplateById(id: Long): TemplateEntity
 
     @Query("SELECT * FROM template WHERE title = :title")
-    suspend fun getAllByTitle(title: String): List<Template>
+    suspend fun getAllByTitle(title: String): List<TemplateEntity>
 }

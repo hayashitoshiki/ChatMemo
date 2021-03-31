@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.chatmemo.databinding.ItemRoomListBinding
-import com.example.chatmemo.model.entity.ChatRoom
+import com.example.chatmemo.model.entity.ChatRoomEntity
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,7 +21,7 @@ import java.util.*
 /**
  * ルームリスト用アダプター
  */
-class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<RoomListAdapter.ViewHolder>() {
+class RoomListAdapter(private var items: List<ChatRoomEntity>) : RecyclerView.Adapter<RoomListAdapter.ViewHolder>() {
 
     private lateinit var listener: OnItemClickListener
     private var viewBinderHelper: ViewBinderHelper = ViewBinderHelper()
@@ -108,13 +108,13 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
     }
 
     // データ更新
-    fun setData(items: List<ChatRoom>) {
+    fun setData(items: List<ChatRoomEntity>) {
         this.items = items
     }
 
     //インターフェースの作成
     interface OnItemClickListener {
-        fun onItemClickListener(view: View, position: Int, item: ChatRoom)
+        fun onItemClickListener(view: View, position: Int, item: ChatRoomEntity)
     }
 
     // リスナー設定

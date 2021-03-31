@@ -1,8 +1,8 @@
 package com.example.chatmemo.ui.chat
 
 import androidx.lifecycle.*
-import com.example.chatmemo.model.entity.ChatRoom
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.model.entity.TemplateEntity
 import com.example.chatmemo.model.repository.DataBaseRepository
 import kotlinx.coroutines.launch
 
@@ -15,7 +15,7 @@ class RoomAddViewModel(
 ) : ViewModel() {
 
     val titleText = MutableLiveData("")
-    private var mTemplateList = listOf<Template>()
+    private var mTemplateList = listOf<TemplateEntity>()
     private val _templateTitleList = MutableLiveData<List<String>>()
     val templateTitleList: LiveData<List<String>> = _templateTitleList
     val templateTitleValue = MutableLiveData<String>()
@@ -36,8 +36,8 @@ class RoomAddViewModel(
     }
 
     // 新規ルーム作成
-    suspend fun createRoom(): ChatRoom {
-        val room = ChatRoom(null, titleText.value!!, null, 0, null, null, null)
+    suspend fun createRoom(): ChatRoomEntity {
+        val room = ChatRoomEntity(null, titleText.value!!, null, 0, null, null, null)
         if (templateTitleValue.value!! != templateTitleList.value!![0]) {
             val templateId = mTemplateList[templateTitleList.value!!.indexOf(templateTitleValue.value!!) - 1].id
             val mode = modelist.indexOf(modeValue.value!!) + 1

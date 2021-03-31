@@ -3,10 +3,10 @@ package com.example.chatmemo.model.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import com.example.chatmemo.model.entity.ChatRoom
-import com.example.chatmemo.model.entity.Comment
-import com.example.chatmemo.model.entity.Phrase
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.model.entity.CommentEntity
+import com.example.chatmemo.model.entity.PhraseEntity
+import com.example.chatmemo.model.entity.TemplateEntity
 import com.example.chatmemo.ui.MyApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -26,7 +26,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     // region コメント
 
     // コメント登録
-    override suspend fun addComment(comment: Comment) {
+    override suspend fun addComment(comment: CommentEntity) {
         return withContext(Dispatchers.IO) {
             return@withContext commentDao.insert(comment)
         }
@@ -40,7 +40,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // コメント更新
-    override suspend fun updateComment(comments: List<Comment>) {
+    override suspend fun updateComment(comments: List<CommentEntity>) {
         withContext(Dispatchers.IO) {
             comments.forEach {
                 commentDao.update(it)
@@ -49,7 +49,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // 全コメント取得
-    override suspend fun getCommentAll(roomId: Long): List<Comment> {
+    override suspend fun getCommentAll(roomId: Long): List<CommentEntity> {
         return withContext(Dispatchers.IO) {
             return@withContext commentDao.getAllCommentByRoom(roomId)
         }
@@ -60,7 +60,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     // region 定型文
 
     // テンプレートタイトル登録
-    override suspend fun createTemplate(templateTitle: Template): Boolean {
+    override suspend fun createTemplate(templateTitle: TemplateEntity): Boolean {
         return withContext(Dispatchers.IO) {
             var flg = true
             val list = templateDao.getAllByTitle(templateTitle.title)
@@ -77,7 +77,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // テンプレートタイトル登録
-    override suspend fun updateTemplate(templateTitle: Template): Boolean {
+    override suspend fun updateTemplate(templateTitle: TemplateEntity): Boolean {
         return withContext(Dispatchers.IO) {
             templateDao.update(templateTitle)
             return@withContext true
@@ -85,35 +85,35 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // テンプレート削除
-    override suspend fun deleteTemplateTitle(template: Template) {
+    override suspend fun deleteTemplateTitle(template: TemplateEntity) {
         withContext(Dispatchers.IO) {
             templateDao.delete(template)
         }
     }
 
     // タイトルに紐づくテンプレートタイトル取得
-    override suspend fun getTemplateByTitle(title: String): Template {
+    override suspend fun getTemplateByTitle(title: String): TemplateEntity {
         return withContext(Dispatchers.IO) {
             return@withContext templateDao.getAllByTitle(title)[0]
         }
     }
 
     // タイトルに紐づくテンプレートタイトル取得
-    override suspend fun getTemplateById(id: Long): Template {
+    override suspend fun getTemplateById(id: Long): TemplateEntity {
         return withContext(Dispatchers.IO) {
             return@withContext templateDao.getTemplateById(id)
         }
     }
 
     // テンプレートタイトル全取得
-    override suspend fun getPhraseTitle(): List<Template> {
+    override suspend fun getPhraseTitle(): List<TemplateEntity> {
         return withContext(Dispatchers.IO) {
             return@withContext templateDao.getAll()
         }
     }
 
     // 定型文登録
-    override suspend fun addPhrase(phraseList: ArrayList<Phrase>): Boolean {
+    override suspend fun addPhrase(phraseList: ArrayList<PhraseEntity>): Boolean {
         return withContext(Dispatchers.IO) {
             phraseDao.getAll().forEach { p ->
                 if (p.templateId == phraseList.first().templateId) {
@@ -128,7 +128,10 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // コメント更新
-    override suspend fun updatePhrase(phraseList: ArrayList<Phrase>, templateId: Long): Boolean {
+    override suspend fun updatePhrase(
+        phraseList: ArrayList<PhraseEntity>,
+        templateId: Long
+    ): Boolean {
         return withContext(Dispatchers.IO) {
             phraseDao.deleteById(templateId)
             phraseList.forEach {
@@ -151,7 +154,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // タイトルに紐づいた定型文取得
-    override suspend fun getPhraseByTitle(templateId: Long): List<Phrase> {
+    override suspend fun getPhraseByTitle(templateId: Long): List<PhraseEntity> {
         return withContext(Dispatchers.IO) {
             return@withContext phraseDao.getAllByTitle(templateId)
         }
@@ -162,16 +165,16 @@ class DataBaseRepositoryImp : DataBaseRepository {
     // region ルーム
 
     // ルーム作成
-    override suspend fun createRoom(chatRoom: ChatRoom) {
+    override suspend fun createRoom(chatRoomEntity: ChatRoomEntity) {
         return withContext(Dispatchers.IO) {
-            roomDao.insert(chatRoom)
+            roomDao.insert(chatRoomEntity)
         }
     }
 
     // ルーム更新
-    override suspend fun updateRoom(chatRoom: ChatRoom) {
+    override suspend fun updateRoom(chatRoomEntity: ChatRoomEntity) {
         return withContext(Dispatchers.IO) {
-            return@withContext roomDao.update(chatRoom)
+            return@withContext roomDao.update(chatRoomEntity)
         }
     }
 
@@ -183,7 +186,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // ルーム取得
-    override suspend fun getRoomByTitle(title: String): ChatRoom {
+    override suspend fun getRoomByTitle(title: String): ChatRoomEntity {
         return withContext(Dispatchers.IO) {
             val rooms = roomDao.getRoomByTitle(title)
             return@withContext rooms[0]
@@ -191,19 +194,19 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // Idに紐づくルーム取得
-    override fun getRoomById(id: Long): LiveData<ChatRoom> {
+    override fun getRoomById(id: Long): LiveData<ChatRoomEntity> {
         return roomDao.getRoomById(id)
     }
 
     // ルーム全取得
-    override fun getRoomAll(): LiveData<List<ChatRoom>> {
+    override fun getRoomAll(): LiveData<List<ChatRoomEntity>> {
         return roomDao.getAll().map { it ->
             it.sortedByDescending { it.commentTime }
         }
     }
 
     // 指定したテンプレートが使用されているルーム取得
-    override suspend fun getRoomByTemplateId(templateId: Long): List<ChatRoom> {
+    override suspend fun getRoomByTemplateId(templateId: Long): List<ChatRoomEntity> {
         return withContext(Dispatchers.IO) {
             return@withContext roomDao.getRoomByTemplateId(templateId)
         }

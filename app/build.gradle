@@ -89,3 +89,8 @@ dependencies {
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.2.0'
     testImplementation 'io.mockk:mockk:1.10.3-jdk8'
 }
+kotlin {
+    sourceSets.all {
+        languageSettings.enableLanguageFeature('InlineClasses')
+    }
+}

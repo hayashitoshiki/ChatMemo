@@ -2,9 +2,9 @@ package com.example.chatmemo.ui.chat
 
 import androidx.lifecycle.*
 import com.example.chatmemo.model.Const
-import com.example.chatmemo.model.entity.ChatRoom
-import com.example.chatmemo.model.entity.Comment
-import com.example.chatmemo.model.entity.Phrase
+import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.model.entity.CommentEntity
+import com.example.chatmemo.model.entity.PhraseEntity
 import com.example.chatmemo.model.repository.DataBaseRepository
 import kotlinx.coroutines.launch
 import java.text.DateFormat
@@ -20,14 +20,14 @@ class ChatViewModel(
     id: Long, private val dataBaseRepository: DataBaseRepository
 ) : ViewModel() {
 
-    val chatRoom: LiveData<ChatRoom> = dataBaseRepository.getRoomById(id)
+    val chatRoomEntity: LiveData<ChatRoomEntity> = dataBaseRepository.getRoomById(id)
     val commentText = MutableLiveData("")
-    private val _commentList = MutableLiveData<List<Comment>>(listOf())
-    val commentList: LiveData<List<Comment>> = _commentList
+    private val _commentList = MutableLiveData<List<CommentEntity>>(listOf())
+    val commentList: LiveData<List<CommentEntity>> = _commentList
     private val _isEnableSubmitButton = MediatorLiveData<Boolean>()
     val isEnableSubmitButton: LiveData<Boolean> = _isEnableSubmitButton
 
-    private var phraseList = listOf<Phrase>()
+    private var phraseList = listOf<PhraseEntity>()
     private var isFirst = true
 
     init {
@@ -35,14 +35,14 @@ class ChatViewModel(
     }
 
     // ルーム更新
-    fun updateRoom(chatRoom: ChatRoom) {
+    fun updateRoom(chatRoomEntity: ChatRoomEntity) {
         viewModelScope.launch {
             if (isFirst) {
-                _commentList.postValue(dataBaseRepository.getCommentAll(chatRoom.id!!))
+                _commentList.postValue(dataBaseRepository.getCommentAll(chatRoomEntity.id!!))
                 isFirst = false
             }
             // 定型文設定あり
-            chatRoom.templateId?.also {
+            chatRoomEntity.templateId?.also {
                 phraseList = dataBaseRepository.getPhraseByTitle(it)
             }
         }
@@ -51,8 +51,8 @@ class ChatViewModel(
     // 送信
     fun submit() {
         viewModelScope.launch {
-            chatRoom.value?.also { room ->
-                val comment = Comment(
+            chatRoomEntity.value?.also { room ->
+                val comment = CommentEntity(
                     null, commentText.value!!, Const.BLACK, getDataNow(), room.id!!
                 )
                 dataBaseRepository.addComment(comment)
@@ -70,7 +70,7 @@ class ChatViewModel(
                             } else {
                                 0
                             }
-                            val comment2 = Comment(
+                            val comment2 = CommentEntity(
                                 null, phraseList[index].text, Const.WHITE, getDataNow(), room.id
                             )
                             dataBaseRepository.addComment(comment2)
@@ -81,7 +81,7 @@ class ChatViewModel(
                         }
                         // ランダム出力
                         Const.RANDOM -> {
-                            var phraseList2 = arrayOf<Phrase>()
+                            var phraseList2 = arrayOf<PhraseEntity>()
                             if (room.phrasePoint != null) {
                                 val list = room.phrasePoint!!.split(",")
                                 phraseList.forEachIndexed { index, phrase ->
@@ -95,7 +95,7 @@ class ChatViewModel(
                                 room.phrasePoint = null
                             }
                             val whiteComment = phraseList2.random()
-                            val comment2 = Comment(
+                            val comment2 = CommentEntity(
                                 null, whiteComment.text, Const.WHITE, getDataNow(), room.id
                             )
                             dataBaseRepository.addComment(comment2)
@@ -130,8 +130,8 @@ class ChatViewModel(
     // ルーム削除
     fun deleteRoom() {
         viewModelScope.launch {
-            dataBaseRepository.deleteRoom(chatRoom.value!!.id!!)
-            dataBaseRepository.deleteCommentByRoomId(chatRoom.value!!.id!!)
+            dataBaseRepository.deleteRoom(chatRoomEntity.value!!.id!!)
+            dataBaseRepository.deleteCommentByRoomId(chatRoomEntity.value!!.id!!)
         }
     }
 
@@ -146,7 +146,7 @@ class ChatViewModel(
             }
             viewModelScope.launch {
                 dataBaseRepository.updateComment(it)
-                _commentList.postValue(dataBaseRepository.getCommentAll(chatRoom.value!!.id!!))
+                _commentList.postValue(dataBaseRepository.getCommentAll(chatRoomEntity.value!!.id!!))
             }
         }
     }

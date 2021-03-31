@@ -17,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentFixedPhraseListBinding
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.entity.TemplateEntity
 import com.example.chatmemo.ui.adapter.PhraseTitleListAdapter
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -45,8 +45,7 @@ class FixedPhraseListFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.title = "定型文一覧"
         viewModel.getList()
         viewModel.phraseList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
-        viewModel.status.observe(
-            viewLifecycleOwner,
+        viewModel.status.observe(viewLifecycleOwner,
             Observer { if (it != null && !it) showErrorToast() })
 
         val adapter = PhraseTitleListAdapter(listOf())
@@ -57,7 +56,7 @@ class FixedPhraseListFragment : Fragment() {
         binding.recyclerView.layoutAnimation = controller
         // リストビューの各項目タップ
         adapter.setOnItemClickListener(object : PhraseTitleListAdapter.OnItemClickListener {
-            override fun onItemClickListener(view: View, position: Int, item: Template) {
+            override fun onItemClickListener(view: View, position: Int, item: TemplateEntity) {
                 when (view.id) {
                     R.id.txt_name -> {
                         val extras = FragmentNavigatorExtras(view to "end_title_transition")
@@ -88,7 +87,7 @@ class FixedPhraseListFragment : Fragment() {
     }
 
     // データ反映
-    private fun viewUpDate(data: List<Template>) {
+    private fun viewUpDate(data: List<TemplateEntity>) {
         binding.progressBar.visibility = View.GONE
         if (data.isNotEmpty()) {
             binding.recyclerView.visibility = View.VISIBLE

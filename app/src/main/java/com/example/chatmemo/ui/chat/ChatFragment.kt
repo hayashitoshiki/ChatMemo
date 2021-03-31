@@ -15,7 +15,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentChatBinding
-import com.example.chatmemo.model.entity.Comment
+import com.example.chatmemo.model.entity.CommentEntity
 import com.example.chatmemo.ui.adapter.ChatRecyclerAdapter
 import com.example.chatmemo.ui.transition.PlayTransition
 import kotlinx.coroutines.CoroutineScope
@@ -61,7 +61,7 @@ class ChatFragment : Fragment(), CoroutineScope {
         setHasOptionsMenu(true)
 
         viewModel.commentList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
-        viewModel.chatRoom.observe(viewLifecycleOwner, Observer {
+        viewModel.chatRoomEntity.observe(viewLifecycleOwner, Observer {
             (activity as AppCompatActivity).supportActionBar?.title = it.title
             viewModel.updateRoom(it)
         })
@@ -142,7 +142,7 @@ class ChatFragment : Fragment(), CoroutineScope {
             R.id.menu_edit_room_phrase -> {
                 val dialogFragment = RoomPhraseEditDialogFragment()
                 val bundle = Bundle()
-                bundle.putSerializable("room", viewModel.chatRoom.value!!)
+                bundle.putSerializable("room", viewModel.chatRoomEntity.value!!)
                 dialogFragment.arguments = bundle
                 dialogFragment.show(requireActivity().supportFragmentManager, null)
             }
@@ -150,7 +150,7 @@ class ChatFragment : Fragment(), CoroutineScope {
             R.id.menu_edit_room        -> {
                 val dialogFragment = RoomTitleEditDialogFragment()
                 val bundle = Bundle()
-                bundle.putSerializable("room", viewModel.chatRoom.value!!)
+                bundle.putSerializable("room", viewModel.chatRoomEntity.value!!)
                 dialogFragment.arguments = bundle
                 dialogFragment.show(requireActivity().supportFragmentManager, null)
             }
@@ -168,7 +168,7 @@ class ChatFragment : Fragment(), CoroutineScope {
     }
 
     // データ反映
-    private fun viewUpDate(data: List<Comment>) {
+    private fun viewUpDate(data: List<CommentEntity>) {
         launch {
             val adapter = binding.recyclerView.adapter as ChatRecyclerAdapter
             adapter.setData(data)

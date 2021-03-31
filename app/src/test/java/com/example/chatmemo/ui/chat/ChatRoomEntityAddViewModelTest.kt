@@ -2,8 +2,8 @@ package com.example.chatmemo.ui.chat
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.example.chatmemo.model.entity.ChatRoom
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.model.entity.TemplateEntity
 import com.example.chatmemo.model.repository.DataBaseRepository
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
@@ -25,7 +25,7 @@ import org.junit.rules.TestRule
 /**
  * ルーム作成顔面 ロジック仕様
  */
-class ChatRoomAddViewModelTest {
+class ChatRoomEntityAddViewModelTest {
 
     // LiveData用
     @Rule
@@ -40,13 +40,13 @@ class ChatRoomAddViewModelTest {
     private lateinit var databaseRepository: DataBaseRepository
 
     private val modeList = listOf("順番", "ランダム")
-    private val template = Template(null, "test")
+    private val template = TemplateEntity(null, "test")
 
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
-        val room = ChatRoom(null, "test", 0, 0, "", "", "")
+        val room = ChatRoomEntity(null, "test", 0, 0, "", "", "")
         databaseRepository = mockk<DataBaseRepository>().also {
             coEvery { it.createRoom(any()) } returns Unit
             coEvery { it.getRoomByTitle("") } returns room

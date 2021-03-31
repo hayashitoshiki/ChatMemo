@@ -1,10 +1,10 @@
 package com.example.chatmemo.model.repository
 
 import androidx.lifecycle.LiveData
-import com.example.chatmemo.model.entity.ChatRoom
-import com.example.chatmemo.model.entity.Comment
-import com.example.chatmemo.model.entity.Phrase
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.model.entity.CommentEntity
+import com.example.chatmemo.model.entity.PhraseEntity
+import com.example.chatmemo.model.entity.TemplateEntity
 
 /**
  * ローカルDBへのアーティスト情報関連のRepository
@@ -18,14 +18,14 @@ interface DataBaseRepository {
      *
      * @param comment 追加するコメント
      */
-    suspend fun addComment(comment: Comment)
+    suspend fun addComment(comment: CommentEntity)
 
     /**
      * コメント更新
      *
      * @param comments 更新するコメント
      */
-    suspend fun updateComment(comments: List<Comment>)
+    suspend fun updateComment(comments: List<CommentEntity>)
 
     /**
      * roomIdに関連するコメント削除
@@ -37,7 +37,7 @@ interface DataBaseRepository {
      * @param roomId ルームID
      * @return 指定したルームのチャットリスト
      */
-    suspend fun getCommentAll(roomId: Long): List<Comment>
+    suspend fun getCommentAll(roomId: Long): List<CommentEntity>
 
     // endregion
 
@@ -47,37 +47,37 @@ interface DataBaseRepository {
      * @param templateTitle 追加する定型文リスト
      * return 正常登録できたか
      */
-    suspend fun createTemplate(templateTitle: Template): Boolean
+    suspend fun createTemplate(templateTitle: TemplateEntity): Boolean
 
     /**
      * 定型文更新
      * @param templateTitle 追加する定型文リスト
      * return 正常登録できたか
      */
-    suspend fun updateTemplate(templateTitle: Template): Boolean
+    suspend fun updateTemplate(templateTitle: TemplateEntity): Boolean
 
     /**
      * 指定の定型文削除
      * @param template 消したい定型文リストのタイトル
      * return 正常に削除できたか
      */
-    suspend fun deleteTemplateTitle(template: Template)
+    suspend fun deleteTemplateTitle(template: TemplateEntity)
 
     /**
      * 定型文のタイトル一覧取得
      * return 定型文のタイトル一覧
      */
-    suspend fun getPhraseTitle(): List<Template>
+    suspend fun getPhraseTitle(): List<TemplateEntity>
 
     /**
      * タイトルに紐づいた定型文取得
      */
-    suspend fun getTemplateByTitle(title: String): Template
+    suspend fun getTemplateByTitle(title: String): TemplateEntity
 
     /**
      * Idに紐づく定型文取得
      */
-    suspend fun getTemplateById(id: Long): Template
+    suspend fun getTemplateById(id: Long): TemplateEntity
     // endregion
 
     // region 定型文
@@ -86,14 +86,14 @@ interface DataBaseRepository {
      * @param phraseList 追加する定型文リスト
      * return 正常登録できたか
      */
-    suspend fun addPhrase(phraseList: ArrayList<Phrase>): Boolean
+    suspend fun addPhrase(phraseList: ArrayList<PhraseEntity>): Boolean
 
     /**
      * 定型文更新
      * @param phraseList 追加する定型文リスト
      * return 正常登録できたか
      */
-    suspend fun updatePhrase(phraseList: ArrayList<Phrase>, templateId: Long): Boolean
+    suspend fun updatePhrase(phraseList: ArrayList<PhraseEntity>, templateId: Long): Boolean
 
     /**
      * 指定の定型文削除
@@ -105,16 +105,16 @@ interface DataBaseRepository {
     /**
      * タイトルに紐づいた定型文リスト取得
      */
-    suspend fun getPhraseByTitle(templateId: Long): List<Phrase>
+    suspend fun getPhraseByTitle(templateId: Long): List<PhraseEntity>
 
     // endregion
 
     // region ルーム
     /**
      * 新規ルーム作成
-     * @param chatRoom 追加するルーム
+     * @param chatRoomEntity 追加するルーム
      */
-    suspend fun createRoom(chatRoom: ChatRoom)
+    suspend fun createRoom(chatRoomEntity: ChatRoomEntity)
 
     /**
      * チャットルーム削除
@@ -124,31 +124,31 @@ interface DataBaseRepository {
 
     /**
      * チャットルーム更新
-     * @param chatRoom 更新するルーム
+     * @param chatRoomEntity 更新するルーム
      */
-    suspend fun updateRoom(chatRoom: ChatRoom)
+    suspend fun updateRoom(chatRoomEntity: ChatRoomEntity)
 
     /**
      * ルーム取得
      * @param title 取得するルームのタイトル
      * @return タイトルに紐づいたルーム
      */
-    suspend fun getRoomByTitle(title: String): ChatRoom
+    suspend fun getRoomByTitle(title: String): ChatRoomEntity
 
-    fun getRoomById(id: Long): LiveData<ChatRoom>
+    fun getRoomById(id: Long): LiveData<ChatRoomEntity>
 
     /**
      * 指定したテンプレートが使用されているルーム取得
      * @param templateId テンプレートID
      * @return 指定したテンプレートが使用されているルーム
      */
-    suspend fun getRoomByTemplateId(templateId: Long): List<ChatRoom>
+    suspend fun getRoomByTemplateId(templateId: Long): List<ChatRoomEntity>
 
     /**
      * チャットルームリスト取得
      * @return 全ルームリスト
      */
-    fun getRoomAll(): LiveData<List<ChatRoom>>
+    fun getRoomAll(): LiveData<List<ChatRoomEntity>>
     // endregion
 
 }

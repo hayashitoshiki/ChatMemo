@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentHomeBinding
-import com.example.chatmemo.model.entity.ChatRoom
+import com.example.chatmemo.model.entity.ChatRoomEntity
 import com.example.chatmemo.ui.MainActivity
 import com.example.chatmemo.ui.adapter.RoomListAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -47,7 +47,7 @@ class HomeFragment : Fragment(), CoroutineScope {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.title = "ルーム一覧"
         (activity as MainActivity).showNavigationBottom()
-        viewModel.chatRoomList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
+        viewModel.chatRoomEntityList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
 
         val adapter = RoomListAdapter(listOf())
         val layoutManager = LinearLayoutManager(requireContext())
@@ -58,7 +58,7 @@ class HomeFragment : Fragment(), CoroutineScope {
 
         // リストビューの各項目タップ
         adapter.setOnItemClickListener(object : RoomListAdapter.OnItemClickListener {
-            override fun onItemClickListener(view: View, position: Int, item: ChatRoom) {
+            override fun onItemClickListener(view: View, position: Int, item: ChatRoomEntity) {
                 when (view.id) {
                     R.id.container_main -> {
                         (requireActivity() as MainActivity).hideNavigationBottom()
@@ -102,7 +102,7 @@ class HomeFragment : Fragment(), CoroutineScope {
     }
 
     // データ反映
-    private fun viewUpDate(data: List<ChatRoom>) {
+    private fun viewUpDate(data: List<ChatRoomEntity>) {
         launch {
             val adapter = binding.recyclerView.adapter as RoomListAdapter
             adapter.setData(data)

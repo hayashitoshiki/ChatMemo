@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chatmemo.R
 import com.example.chatmemo.model.Const
-import com.example.chatmemo.model.entity.Comment
+import com.example.chatmemo.model.entity.CommentEntity
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,7 +25,7 @@ import java.util.*
  * @property commentList 取得したコメント情報
  */
 class ChatRecyclerAdapter(
-    private val context: Context, private var commentList: List<Comment>
+    private val context: Context, private var commentList: List<CommentEntity>
 ) : RecyclerView.Adapter<ChatRecyclerAdapter.ViewHolder>() {
 
     // 参照するviewの定義
@@ -106,7 +106,7 @@ class ChatRecyclerAdapter(
         return df.format(date)
     }
 
-    fun setData(items: List<Comment>) {
+    fun setData(items: List<CommentEntity>) {
         this.commentList = items
     }
 }

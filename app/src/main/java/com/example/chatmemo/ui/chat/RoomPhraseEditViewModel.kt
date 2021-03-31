@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chatmemo.model.entity.ChatRoom
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.model.entity.TemplateEntity
 import com.example.chatmemo.model.repository.DataBaseRepository
 import kotlinx.coroutines.launch
 
@@ -14,12 +14,12 @@ import kotlinx.coroutines.launch
  * @property dataBaseRepository DB取得リポジトリ
  */
 class RoomPhraseEditViewModel(
-    private var chatRoom: ChatRoom,
+    private var chatRoomEntity: ChatRoomEntity,
     private val modelist: List<String>,
     private val dataBaseRepository: DataBaseRepository
 ) : ViewModel() {
 
-    private var mTemplateList = listOf<Template?>()
+    private var mTemplateList = listOf<TemplateEntity?>()
     private val _templateTitleList = MutableLiveData<List<String>>()
     val templateTitleList: LiveData<List<String>> = _templateTitleList
     val templateTitleValue = MutableLiveData<String>()
@@ -34,7 +34,7 @@ class RoomPhraseEditViewModel(
             templateList.forEach { list.add(it.title) }
             mTemplateList = templateList
             _templateTitleList.postValue(list)
-            chatRoom.templateId?.also {
+            chatRoomEntity.templateId?.also {
                 var templateTitle: String? = null
                 templateList.forEach { template ->
                     if (template.id!! == it) {
@@ -48,7 +48,7 @@ class RoomPhraseEditViewModel(
                     }
                 }
             }
-            chatRoom.templateMode?.also {
+            chatRoomEntity.templateMode?.also {
                 modeValue.postValue(modelist[it - 1])
             }
         }
@@ -65,9 +65,9 @@ class RoomPhraseEditViewModel(
 
             _isEnableSubmitButton.value = if (titleIndex != 0) {
                 val templateId = mTemplateList[titleIndex - 1]!!.id
-                (templateId != chatRoom.templateId || modeId != chatRoom.templateMode)
+                (templateId != chatRoomEntity.templateId || modeId != chatRoomEntity.templateMode)
             } else {
-                chatRoom.templateId != null
+                chatRoomEntity.templateId != null
             }
         }
     }
@@ -75,14 +75,16 @@ class RoomPhraseEditViewModel(
     // 送信
     suspend fun submit() {
         if (templateTitleValue.value!! != "選択なし") {
-            chatRoom.templateId = mTemplateList[templateTitleList.value!!.indexOf(templateTitleValue.value!!) - 1]!!.id
-            chatRoom.templateMode = modelist.indexOf(modeValue.value!!)
-            chatRoom.phrasePoint = null
+            chatRoomEntity.templateId = mTemplateList[templateTitleList.value!!.indexOf(
+                templateTitleValue.value!!
+            ) - 1]!!.id
+            chatRoomEntity.templateMode = modelist.indexOf(modeValue.value!!)
+            chatRoomEntity.phrasePoint = null
         } else {
-            chatRoom.templateId = null
-            chatRoom.templateMode = null
-            chatRoom.phrasePoint = null
+            chatRoomEntity.templateId = null
+            chatRoomEntity.templateMode = null
+            chatRoomEntity.phrasePoint = null
         }
-        dataBaseRepository.updateRoom(chatRoom)
+        dataBaseRepository.updateRoom(chatRoomEntity)
     }
 }
