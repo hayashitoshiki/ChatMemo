@@ -2,6 +2,7 @@
     <string name="app_name">ChatMemo</string>
 
     <!-- Title -->
+    <string name="title_home">ルーム一覧</string>
     <string name="title_room_add">ルーム名</string>
     <string name="title_room_name_edit">ルーム名変更</string>
     <string name="title_room_phrase_edit">定型文設定</string>
@@ -34,8 +35,8 @@
     <string name="hint_message">メッセージを入力..</string>
 
     <!-- Navigation Bottom -->
-    <string name="title_home">ホーム</string>
-    <string name="title_phrase">定型文</string>
+    <string name="bottom_home">ホーム</string>
+    <string name="bottom_phrase">定型文</string>
 
     <!-- Error Message -->
     <string name="error_nothing_room">新しくチャットルームを作成しよう!</string>

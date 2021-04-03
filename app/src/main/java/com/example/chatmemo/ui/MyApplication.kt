@@ -59,7 +59,7 @@ class MyApplication : Application() {
         viewModel { FixedPhraseAddViewModel(get()) }
         viewModel { FixedPhraseListViewModel(get()) }
 
-        factory<ChatUseCase> { ChatUseCaseImp() }
+        factory<ChatUseCase> { ChatUseCaseImp(get()) }
         factory<TemplateUseCase> { TemplateUseCaseImp() }
         factory<DataBaseRepository> { DataBaseRepositoryImp() }
     }

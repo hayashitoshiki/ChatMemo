@@ -57,8 +57,7 @@
             <AutoCompleteTextView
                 android:id="@+id/spinner_title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@={viewModel.templateTitleValue}" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -76,9 +75,7 @@
             <AutoCompleteTextView
                 android:id="@+id/spinner_mode"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onItemSelected="@{(parent, view, position, id) -> viewModel.modeValue"
-                android:text="@={viewModel.modeValue}" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton

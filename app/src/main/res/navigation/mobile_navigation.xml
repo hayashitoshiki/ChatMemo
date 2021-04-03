@@ -28,7 +28,7 @@
         tools:layout="@layout/fragment_chat">
         <argument
             android:name="data"
-            app:argType="com.example.chatmemo.model.entity.ChatRoomEntity" />
+            app:argType="com.example.chatmemo.domain.model.ChatRoom" />
     </fragment>
 
     <fragment

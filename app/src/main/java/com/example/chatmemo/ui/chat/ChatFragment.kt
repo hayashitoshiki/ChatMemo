@@ -35,7 +35,7 @@ class ChatFragment : Fragment(), CoroutineScope {
     private var isKeyboardShowing = false
     private val args: ChatFragmentArgs by navArgs()
     private lateinit var binding: FragmentChatBinding
-    private val viewModel: ChatViewModel by inject { parametersOf(args.data.id) }
+    private val viewModel: ChatViewModel by inject { parametersOf(args.data.roomId) }
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext = Dispatchers.Main + job
 
