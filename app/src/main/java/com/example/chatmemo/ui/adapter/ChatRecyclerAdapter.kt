@@ -11,8 +11,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chatmemo.R
-import com.example.chatmemo.model.Const
-import com.example.chatmemo.model.entity.CommentEntity
+import com.example.chatmemo.domain.value.Comment
+import com.example.chatmemo.domain.value.User
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,7 +25,7 @@ import java.util.*
  * @property commentList 取得したコメント情報
  */
 class ChatRecyclerAdapter(
-    private val context: Context, private var commentList: List<CommentEntity>
+    private val context: Context, private var commentList: List<Comment>
 ) : RecyclerView.Adapter<ChatRecyclerAdapter.ViewHolder>() {
 
     // 参照するviewの定義
@@ -51,11 +51,10 @@ class ChatRecyclerAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val comment = commentList[position]
-        if (position == 0 || (position > 0 && commentList[position - 1].createdAt.substring(
-                0, 10
-            ) != commentList[position].createdAt.substring(0, 10))
-        ) {
-            comment.createdAt.substring(0, 10).let {
+        val commentDate = toStringByTime2(comment.time)
+        val beforCcommentDate = toStringByTime2(commentList[position - 1].time)
+        if (position == 0 || (position > 0 && beforCcommentDate != commentDate)) {
+            commentDate.let {
                 holder.dataTextView.visibility = View.VISIBLE
                 holder.dataTextView.text = if (it == getDataNow()) {
                     "今日"
@@ -66,12 +65,14 @@ class ChatRecyclerAdapter(
         } else {
             holder.dataTextView.visibility = View.GONE
         }
+        val message = comment.message
+        val time = toStringByTime(comment.time)
         when (comment.user) {
-            Const.BLACK -> {
+            User.BLACK -> {
                 holder.commentBlackLayout.visibility = View.VISIBLE
                 holder.commentWhiteLayout.visibility = View.GONE
-                holder.dateBlackTextView.text = comment.createdAt.substring(11, 16)
-                holder.commentBlackTextView.text = comment.text
+                holder.dateBlackTextView.text = time
+                holder.commentBlackTextView.text = message
                 holder.commentBlackTextView.setOnLongClickListener {
                     val clipboard: ClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                     val clip = ClipData.newPlainText(
@@ -81,11 +82,11 @@ class ChatRecyclerAdapter(
                     true
                 }
             }
-            Const.WHITE -> {
+            User.WHITE -> {
                 holder.commentBlackLayout.visibility = View.GONE
                 holder.commentWhiteLayout.visibility = View.VISIBLE
-                holder.dateWhiteTextView.text = comment.createdAt.substring(11, 16)
-                holder.commentWhiteTextView.text = comment.text
+                holder.dateWhiteTextView.text = time
+                holder.commentWhiteTextView.text = message
                 holder.commentWhiteTextView.setOnLongClickListener {
                     val clipboard: ClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                     val clip = ClipData.newPlainText(
@@ -106,7 +107,19 @@ class ChatRecyclerAdapter(
         return df.format(date)
     }
 
-    fun setData(items: List<CommentEntity>) {
+    fun setData(items: List<Comment>) {
         this.commentList = items
+    }
+
+    // 日付取得(メッセージ用)
+    private fun toStringByTime(date: Date): String {
+        val df: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
+        return df.format(date).substring(11, 16)
+    }
+
+    // 日付取得(セクション用)
+    private fun toStringByTime2(date: Date): String {
+        val df: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
+        return df.format(date).substring(0, 10)
     }
 }

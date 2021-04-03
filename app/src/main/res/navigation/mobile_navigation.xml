@@ -47,9 +47,8 @@
         android:label="FixedPhraseAddFragment">
         <argument
             android:name="data"
-            app:argType="com.example.chatmemo.model.entity.TemplateEntity"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:argType="com.example.chatmemo.domain.model.Template"
+            app:nullable="true" />
     </fragment>
 
     <fragment

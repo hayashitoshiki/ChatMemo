@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.chatmemo.databinding.ItemRoomListBinding
-import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.domain.model.ChatRoom
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,7 +21,7 @@ import java.util.*
 /**
  * ルームリスト用アダプター
  */
-class RoomListAdapter(private var items: List<ChatRoomEntity>) : RecyclerView.Adapter<RoomListAdapter.ViewHolder>() {
+class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<RoomListAdapter.ViewHolder>() {
 
     private lateinit var listener: OnItemClickListener
     private var viewBinderHelper: ViewBinderHelper = ViewBinderHelper()
@@ -56,27 +56,19 @@ class RoomListAdapter(private var items: List<ChatRoomEntity>) : RecyclerView.Ad
         // ルーム名
         holder.roomNameTextView.text = room.title
         // 最新コメント
-        room.commentLast?.also {
-            holder.commentTextView.text = it
+        if (room.commentList.size != 0) {
+            val comment = room.commentList.last()
             holder.commentTextView.visibility = View.VISIBLE
-        } ?: run {
+            holder.commentTextView.text = comment.message
+            holder.timeTextView.visibility = View.VISIBLE
+            holder.timeTextView.text = comment.time.toString()
+        } else {
             holder.commentTextView.visibility = View.GONE
-        }
-        // 最新コメント時間
-        room.commentTime?.also { commentTime ->
-            commentTime.substring(0, 10).let {
-                holder.timeTextView.visibility = View.VISIBLE
-                holder.timeTextView.text = if (it == getDataNow()) {
-                    commentTime.substring(11, 16)
-                } else {
-                    it
-                }
-            }
-        } ?: run {
             holder.timeTextView.visibility = View.GONE
         }
+
         // カードタップ
-        holder.container.transitionName = room.id.toString()
+        holder.container.transitionName = room.roomId.toString()
         holder.container.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -108,13 +100,13 @@ class RoomListAdapter(private var items: List<ChatRoomEntity>) : RecyclerView.Ad
     }
 
     // データ更新
-    fun setData(items: List<ChatRoomEntity>) {
+    fun setData(items: List<ChatRoom>) {
         this.items = items
     }
 
     //インターフェースの作成
     interface OnItemClickListener {
-        fun onItemClickListener(view: View, position: Int, item: ChatRoomEntity)
+        fun onItemClickListener(view: View, position: Int, item: ChatRoom)
     }
 
     // リスナー設定

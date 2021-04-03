@@ -1,6 +1,6 @@
 package com.example.chatmemo.domain.value
 
-class TempalateMessage(
+class TemplateMessage(
     // テンプレート文
     val massage: String
 )

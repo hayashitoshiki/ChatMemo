@@ -9,14 +9,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.example.chatmemo.databinding.ItemPhraseBinding
-import com.example.chatmemo.model.entity.PhraseEntity
-import java.util.*
+import com.example.chatmemo.domain.value.TemplateMessage
 
 /**
  * 定型文作成画面用のリストビューアダプター
  * @property items 定型文リスト
  */
-class PhraseListAdapter(private var items: ArrayList<PhraseEntity>) : RecyclerView.Adapter<PhraseListAdapter.ViewHolder>() {
+class PhraseListAdapter(private var items: MutableList<TemplateMessage>) : RecyclerView.Adapter<PhraseListAdapter.ViewHolder>() {
 
     private lateinit var listener: OnItemClickListener
 
@@ -44,7 +43,7 @@ class PhraseListAdapter(private var items: ArrayList<PhraseEntity>) : RecyclerVi
 
         // 値代入
         holder.indexText.text = (position + 1).toString() + ". "
-        holder.phraseText.text = item.text
+        holder.phraseText.text = item.massage
 
         // 削除ボタン
         holder.deleteButton.setOnClickListener {
@@ -57,13 +56,13 @@ class PhraseListAdapter(private var items: ArrayList<PhraseEntity>) : RecyclerVi
         }
     }
 
-    fun setData(items: ArrayList<PhraseEntity>) {
+    fun setData(items: MutableList<TemplateMessage>) {
         this.items = items
     }
 
     //インターフェースの作成
     interface OnItemClickListener {
-        fun onItemClickListener(view: View, position: Int, items: ArrayList<PhraseEntity>)
+        fun onItemClickListener(view: View, position: Int, items: MutableList<TemplateMessage>)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

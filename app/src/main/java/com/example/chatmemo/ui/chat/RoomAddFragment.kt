@@ -19,7 +19,7 @@ import androidx.transition.ChangeTransform
 import androidx.transition.TransitionSet
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentRoomAddBinding
-import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.ui.MainActivity
 import com.example.chatmemo.ui.transition.FabTransform
 import kotlinx.coroutines.delay
@@ -32,10 +32,8 @@ import org.koin.core.parameter.parametersOf
  */
 class RoomAddFragment : Fragment() {
 
-    private val modeList = listOf("順番", "ランダム")
-
     private lateinit var binding: FragmentRoomAddBinding
-    private val viewModel: RoomAddViewModel by inject { parametersOf(modeList) }
+    private val viewModel: RoomAddViewModel by inject { parametersOf() }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -61,9 +59,17 @@ class RoomAddFragment : Fragment() {
 
         (activity as AppCompatActivity).supportActionBar?.title = "ルーム作成"
 
-        viewModel.templateTitleList.observe(viewLifecycleOwner, Observer {
+        viewModel.templateTitleList.observe(viewLifecycleOwner, Observer { templateList ->
+            val templateTitleList = templateList.map { it.title }
             val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                requireActivity(), android.R.layout.simple_dropdown_item_1line, it
+                requireActivity(), android.R.layout.simple_dropdown_item_1line, templateTitleList
+            )
+            binding.spinnerTitle.setAdapter(arrayAdapter)
+        })
+        viewModel.tempalteModeList.observe(viewLifecycleOwner, Observer { modeList ->
+            val modeTitleList = modeList.map { it.massage }
+            val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                requireActivity(), android.R.layout.simple_dropdown_item_1line, modeTitleList
             )
             binding.spinnerTitle.setAdapter(arrayAdapter)
         })
@@ -78,7 +84,7 @@ class RoomAddFragment : Fragment() {
         }
         binding.spinnerMode.let { spinner ->
             val arrayAdapter = ArrayAdapter(
-                requireActivity(), android.R.layout.simple_dropdown_item_1line, modeList
+                requireActivity(), android.R.layout.simple_dropdown_item_1line, listOf("")
             )
             spinner.setAdapter(arrayAdapter)
             spinner.keyListener = null
@@ -91,7 +97,7 @@ class RoomAddFragment : Fragment() {
                 binding.container.startAnimation(anim1)
                 binding.container.visibility = View.GONE
                 delay(resources.getInteger(R.integer.fade_out_time).toLong())
-                val chatRoomEntity: ChatRoomEntity = viewModel.createRoom()
+                val chatRoomEntity: ChatRoom = viewModel.createRoom()
                 val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(
                     chatRoomEntity
                 )

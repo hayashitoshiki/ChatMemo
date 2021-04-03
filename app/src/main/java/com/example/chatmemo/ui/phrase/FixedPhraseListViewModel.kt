@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chatmemo.model.entity.TemplateEntity
-import com.example.chatmemo.model.repository.DataBaseRepository
+import com.example.chatmemo.domain.model.Template
+import com.example.chatmemo.domain.usecase.TemplateUseCase
 import kotlinx.coroutines.launch
 
 /**
@@ -13,27 +13,26 @@ import kotlinx.coroutines.launch
  *
  * @property dataBaseRepository DBアクセス用repository
  */
-class FixedPhraseListViewModel(private val dataBaseRepository: DataBaseRepository) : ViewModel() {
+class FixedPhraseListViewModel(
+    private val templateUseCase: TemplateUseCase
+) : ViewModel() {
 
-    private val _phraseList = MutableLiveData<List<TemplateEntity>>()
-    val phraseList: LiveData<List<TemplateEntity>> = _phraseList
+    private val _phraseList = MutableLiveData<List<Template>>()
+    val phraseList: LiveData<List<Template>> = _phraseList
     val status = MutableLiveData<Boolean>()
 
     // リスト取得
     fun getList() {
         viewModelScope.launch {
-            _phraseList.postValue(dataBaseRepository.getPhraseTitle())
+            _phraseList.postValue(templateUseCase.getTemplateAll())
         }
     }
 
     // 定型文リスト削除
-    fun deletePhrase(template: TemplateEntity) {
+    fun deletePhrase(template: Template) {
         viewModelScope.launch {
             status.postValue(null)
-            if (dataBaseRepository.getRoomByTemplateId(template.id!!).isEmpty()) {
-                dataBaseRepository.deletePhraseByTitle(template.id)
-                dataBaseRepository.deleteTemplateTitle(template)
-                _phraseList.postValue(dataBaseRepository.getPhraseTitle())
+            if (templateUseCase.deleteTemplate(template)) {
                 status.postValue(true)
             } else {
                 status.postValue(false)

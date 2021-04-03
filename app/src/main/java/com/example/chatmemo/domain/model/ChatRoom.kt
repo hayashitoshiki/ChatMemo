@@ -3,16 +3,17 @@ package com.example.chatmemo.domain.model
 import com.example.chatmemo.domain.value.Comment
 import com.example.chatmemo.domain.value.RoomId
 import com.example.chatmemo.domain.value.TemplateMode
+import java.io.Serializable
 
 class ChatRoom(
     // 部屋のID
     val roomId: RoomId,
     // 部屋名
-    val title: String,
+    var title: String,
     // テンプレート
-    val template: Template?,
+    var template: Template?,
     // テンプレート表示モード
-    val templateMode: TemplateMode,
+    var templateMode: TemplateMode?,
     // コメントリスト
-    val commentList: List<Comment>
-)
+    var commentList: MutableList<Comment>
+) : Serializable

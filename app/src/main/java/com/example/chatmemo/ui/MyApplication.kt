@@ -3,8 +3,13 @@ package com.example.chatmemo.ui
 import android.app.Application
 import android.util.Log
 import androidx.room.Room
+import com.example.chatmemo.domain.model.ChatRoom
+import com.example.chatmemo.domain.usecase.ChatUseCase
+import com.example.chatmemo.domain.usecase.ChatUseCaseImp
+import com.example.chatmemo.domain.usecase.TemplateUseCase
+import com.example.chatmemo.domain.usecase.TemplateUseCaseImp
+import com.example.chatmemo.domain.value.RoomId
 import com.example.chatmemo.model.dao.AppDatabase
-import com.example.chatmemo.model.entity.ChatRoomEntity
 import com.example.chatmemo.model.repository.DataBaseRepository
 import com.example.chatmemo.model.repository.DataBaseRepositoryImp
 import com.example.chatmemo.ui.chat.*
@@ -47,17 +52,15 @@ class MyApplication : Application() {
     // Koinモジュール
     private val module: Module = module {
         viewModel { HomeViewModel(get()) }
-        viewModel { (id: Long) -> ChatViewModel(id, get()) }
-        viewModel { (modeList: List<String>) -> RoomAddViewModel(modeList, get()) }
-        viewModel { (roomEntity: ChatRoomEntity, modeList: List<String>) ->
-            RoomPhraseEditViewModel(
-                roomEntity, modeList, get()
-            )
-        }
-        viewModel { (roomEntity: ChatRoomEntity) -> RoomTitleEditViewModel(roomEntity, get()) }
+        viewModel { (id: RoomId) -> ChatViewModel(id, get()) }
+        viewModel { RoomAddViewModel(get(), get()) }
+        viewModel { (roomEntity: ChatRoom) -> RoomPhraseEditViewModel(roomEntity, get(), get()) }
+        viewModel { (roomEntity: ChatRoom) -> RoomTitleEditViewModel(roomEntity, get()) }
         viewModel { FixedPhraseAddViewModel(get()) }
         viewModel { FixedPhraseListViewModel(get()) }
 
+        factory<ChatUseCase> { ChatUseCaseImp() }
+        factory<TemplateUseCase> { TemplateUseCaseImp() }
         factory<DataBaseRepository> { DataBaseRepositoryImp() }
     }
 }

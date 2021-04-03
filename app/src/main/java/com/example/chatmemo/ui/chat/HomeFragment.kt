@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentHomeBinding
-import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.ui.MainActivity
 import com.example.chatmemo.ui.adapter.RoomListAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -58,7 +58,7 @@ class HomeFragment : Fragment(), CoroutineScope {
 
         // リストビューの各項目タップ
         adapter.setOnItemClickListener(object : RoomListAdapter.OnItemClickListener {
-            override fun onItemClickListener(view: View, position: Int, item: ChatRoomEntity) {
+            override fun onItemClickListener(view: View, position: Int, item: ChatRoom) {
                 when (view.id) {
                     R.id.container_main -> {
                         (requireActivity() as MainActivity).hideNavigationBottom()
@@ -75,7 +75,7 @@ class HomeFragment : Fragment(), CoroutineScope {
                     R.id.btn_delete     -> {
                         AlertDialog.Builder(requireActivity()).setTitle("ルーム削除")
                             .setMessage("削除しますか？").setPositiveButton("はい") { _, _ ->
-                                viewModel.deleteRoom(item.id!!)
+                                viewModel.deleteRoom(item.roomId)
                             }.setNegativeButton("いいえ", null).show()
                     }
                 }
@@ -102,7 +102,7 @@ class HomeFragment : Fragment(), CoroutineScope {
     }
 
     // データ反映
-    private fun viewUpDate(data: List<ChatRoomEntity>) {
+    private fun viewUpDate(data: List<ChatRoom>) {
         launch {
             val adapter = binding.recyclerView.adapter as RoomListAdapter
             adapter.setData(data)

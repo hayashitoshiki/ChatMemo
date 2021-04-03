@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.DialogRoomTitleEditBinding
-import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.domain.model.ChatRoom
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
@@ -25,7 +25,7 @@ class RoomTitleEditDialogFragment : DialogFragment() {
         parametersOf(
             requireArguments().getSerializable(
                 "room"
-            ) as ChatRoomEntity
+            ) as ChatRoom
         )
     }
     private lateinit var binding: DialogRoomTitleEditBinding

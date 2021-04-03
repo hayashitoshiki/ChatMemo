@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.DialogRoomPhraseEditBinding
-import com.example.chatmemo.model.entity.ChatRoomEntity
+import com.example.chatmemo.domain.model.ChatRoom
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
@@ -22,13 +22,11 @@ import org.koin.core.parameter.parametersOf
  */
 class RoomPhraseEditDialogFragment : DialogFragment() {
 
-    private val modeList = listOf("順番", "ランダム")
-
     private val viewModel: RoomPhraseEditViewModel by inject {
         parametersOf(
             requireArguments().getSerializable(
                 "room"
-            ) as ChatRoomEntity, modeList
+            ) as ChatRoom
         )
     }
     private lateinit var binding: DialogRoomPhraseEditBinding
@@ -49,9 +47,21 @@ class RoomPhraseEditDialogFragment : DialogFragment() {
 
         viewModel.templateTitleValue.observe(viewLifecycleOwner, Observer { viewModel.validate() })
         viewModel.modeValue.observe(viewLifecycleOwner, Observer { viewModel.validate() })
-        viewModel.templateTitleList.observe(viewLifecycleOwner, Observer {
+        viewModel.templateTitleList.observe(viewLifecycleOwner, Observer { templateList ->
+            val titleList = templateList.map { it.title }
             val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                requireActivity(), android.R.layout.simple_dropdown_item_1line, it
+                requireActivity(),
+                android.R.layout.simple_dropdown_item_1line,
+                titleList
+            )
+            binding.spinnerTitle.setAdapter(arrayAdapter)
+        })
+        viewModel.tempalteModeList.observe(viewLifecycleOwner, Observer { templateModeList ->
+            val modeList = templateModeList.map { it.massage }
+            val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                requireActivity(),
+                android.R.layout.simple_dropdown_item_1line,
+                modeList
             )
             binding.spinnerTitle.setAdapter(arrayAdapter)
         })
@@ -66,7 +76,9 @@ class RoomPhraseEditDialogFragment : DialogFragment() {
         }
         binding.spinnerMode.let { spinner ->
             val arrayAdapter = ArrayAdapter(
-                requireActivity(), android.R.layout.simple_dropdown_item_1line, modeList
+                requireActivity(),
+                android.R.layout.simple_dropdown_item_1line,
+                listOf("")
             )
             spinner.setAdapter(arrayAdapter)
             spinner.keyListener = null

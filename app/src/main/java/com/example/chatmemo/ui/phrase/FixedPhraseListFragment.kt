@@ -17,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentFixedPhraseListBinding
-import com.example.chatmemo.model.entity.TemplateEntity
+import com.example.chatmemo.domain.model.Template
 import com.example.chatmemo.ui.adapter.PhraseTitleListAdapter
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -56,7 +56,7 @@ class FixedPhraseListFragment : Fragment() {
         binding.recyclerView.layoutAnimation = controller
         // リストビューの各項目タップ
         adapter.setOnItemClickListener(object : PhraseTitleListAdapter.OnItemClickListener {
-            override fun onItemClickListener(view: View, position: Int, item: TemplateEntity) {
+            override fun onItemClickListener(view: View, position: Int, item: Template) {
                 when (view.id) {
                     R.id.txt_name -> {
                         val extras = FragmentNavigatorExtras(view to "end_title_transition")
@@ -87,7 +87,7 @@ class FixedPhraseListFragment : Fragment() {
     }
 
     // データ反映
-    private fun viewUpDate(data: List<TemplateEntity>) {
+    private fun viewUpDate(data: List<Template>) {
         binding.progressBar.visibility = View.GONE
         if (data.isNotEmpty()) {
             binding.recyclerView.visibility = View.VISIBLE

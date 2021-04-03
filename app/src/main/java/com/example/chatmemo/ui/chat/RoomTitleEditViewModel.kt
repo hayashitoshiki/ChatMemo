@@ -4,15 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.chatmemo.model.entity.ChatRoomEntity
-import com.example.chatmemo.model.repository.DataBaseRepository
+import com.example.chatmemo.domain.model.ChatRoom
+import com.example.chatmemo.domain.usecase.ChatUseCase
 
 /**
  * ルーム名変更ダイアログ_ロジック
- * @property dataBaseRepository DB取得リポジトリ
+ * @property chatRoomEntity chatRoom
+ * @property chatRoomUseCase Chatに関するUseCase
  */
 class RoomTitleEditViewModel(
-    private var chatRoomEntity: ChatRoomEntity, private val dataBaseRepository: DataBaseRepository
+    private var chatRoomEntity: ChatRoom, private val chatRoomUseCase: ChatUseCase
 ) : ViewModel() {
 
     val newRoomTitle = MutableLiveData("")
@@ -30,7 +31,7 @@ class RoomTitleEditViewModel(
     // ルーム名変更
     suspend fun changeRoomName(roomName: String) {
         chatRoomEntity.title = roomName
-        dataBaseRepository.updateRoom(chatRoomEntity)
+        chatRoomUseCase.updateRoom(chatRoomEntity)
     }
 
     // 変更ボタン活性・非活性制御

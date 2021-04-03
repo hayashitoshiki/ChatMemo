@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.chatmemo.databinding.ItemPhraseTitleBinding
-import com.example.chatmemo.model.entity.TemplateEntity
+import com.example.chatmemo.domain.model.Template
 
 /**
  * 定型文リスト画面用のリサイクルビューアダプター
  * @property items 定型文のタイトルリスト
  */
-class PhraseTitleListAdapter(private var items: List<TemplateEntity>) : RecyclerView.Adapter<PhraseTitleListAdapter.ViewHolder>() {
+class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.Adapter<PhraseTitleListAdapter.ViewHolder>() {
 
     private lateinit var listener: OnItemClickListener
     private var viewBinderHelper: ViewBinderHelper = ViewBinderHelper()
@@ -48,7 +48,7 @@ class PhraseTitleListAdapter(private var items: List<TemplateEntity>) : Recycler
 
         // 値代入
         holder.textView.text = template.title
-        holder.textView.transitionName = template.id.toString()
+        holder.textView.transitionName = template.templateId.toString()
         holder.textView.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -71,13 +71,13 @@ class PhraseTitleListAdapter(private var items: List<TemplateEntity>) : Recycler
         }
     }
 
-    fun setData(items: List<TemplateEntity>) {
+    fun setData(items: List<Template>) {
         this.items = items
     }
 
     //インターフェースの作成
     interface OnItemClickListener {
-        fun onItemClickListener(view: View, position: Int, item: TemplateEntity)
+        fun onItemClickListener(view: View, position: Int, item: Template)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

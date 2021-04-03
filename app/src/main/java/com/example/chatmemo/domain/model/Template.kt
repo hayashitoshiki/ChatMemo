@@ -1,13 +1,14 @@
 package com.example.chatmemo.domain.model
 
-import com.example.chatmemo.domain.value.TempalateMessage
 import com.example.chatmemo.domain.value.TemplateId
+import com.example.chatmemo.domain.value.TemplateMessage
+import java.io.Serializable
 
 class Template(
     // テンプレートID
     val templateId: TemplateId,
     // タイトル
-    val title: String,
+    var title: String,
     // テンプレートメッセージリスト
-    val templateMessageList: List<TempalateMessage>
-)
+    var templateMessageList: List<TemplateMessage>
+) : Serializable

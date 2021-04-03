@@ -1,49 +1,44 @@
 package com.example.chatmemo.ui.chat
 
 import androidx.lifecycle.*
-import com.example.chatmemo.model.Const
-import com.example.chatmemo.model.entity.ChatRoomEntity
-import com.example.chatmemo.model.entity.CommentEntity
-import com.example.chatmemo.model.entity.PhraseEntity
-import com.example.chatmemo.model.repository.DataBaseRepository
+import com.example.chatmemo.domain.model.ChatRoom
+import com.example.chatmemo.domain.usecase.ChatUseCase
+import com.example.chatmemo.domain.value.Comment
+import com.example.chatmemo.domain.value.RoomId
+import com.example.chatmemo.domain.value.TemplateMode
+import com.example.chatmemo.domain.value.User
 import kotlinx.coroutines.launch
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
  * チャット画面_UIロジック
  *
- * @property dataBaseRepository DBアクセス用repository
+ * @property chatUseCase Chatに関するUseCase
  */
 class ChatViewModel(
-    id: Long, private val dataBaseRepository: DataBaseRepository
+    id: RoomId, private val chatUseCase: ChatUseCase
 ) : ViewModel() {
 
-    val chatRoomEntity: LiveData<ChatRoomEntity> = dataBaseRepository.getRoomById(id)
+    val chatRoomEntity: LiveData<ChatRoom> = chatUseCase.getChatRoomByRoomById(id)
     val commentText = MutableLiveData("")
-    private val _commentList = MutableLiveData<List<CommentEntity>>(listOf())
-    val commentList: LiveData<List<CommentEntity>> = _commentList
+    private val _commentList = MutableLiveData<List<Comment>>(listOf())
+    val commentList: LiveData<List<Comment>> = _commentList
     private val _isEnableSubmitButton = MediatorLiveData<Boolean>()
     val isEnableSubmitButton: LiveData<Boolean> = _isEnableSubmitButton
 
-    private var phraseList = listOf<PhraseEntity>()
     private var isFirst = true
 
     init {
+        _commentList.postValue(chatRoomEntity.value!!.commentList)
         _isEnableSubmitButton.addSource(commentText) { changeSubmitButton(it) }
     }
 
     // ルーム更新
-    fun updateRoom(chatRoomEntity: ChatRoomEntity) {
+    fun updateRoom(chatRoomEntity: ChatRoom) {
         viewModelScope.launch {
             if (isFirst) {
-                _commentList.postValue(dataBaseRepository.getCommentAll(chatRoomEntity.id!!))
+                _commentList.postValue(chatUseCase.getCommentAll(chatRoomEntity.roomId))
                 isFirst = false
-            }
-            // 定型文設定あり
-            chatRoomEntity.templateId?.also {
-                phraseList = dataBaseRepository.getPhraseByTitle(it)
             }
         }
     }
@@ -52,101 +47,71 @@ class ChatViewModel(
     fun submit() {
         viewModelScope.launch {
             chatRoomEntity.value?.also { room ->
-                val comment = CommentEntity(
-                    null, commentText.value!!, Const.BLACK, getDataNow(), room.id!!
-                )
-                dataBaseRepository.addComment(comment)
-                room.commentLast = comment.text
-                room.commentTime = comment.createdAt
-                dataBaseRepository.updateRoom(room)
+                val comment = Comment(commentText.value!!, User.BLACK, getDataNow())
+                room.commentList.add(comment)
+
 
                 // 定型文がある場合は定型文も送信
-                if (room.templateId != null) {
-                    when (room.templateMode) {
-                        // 順番出力
-                        Const.ORDER  -> {
-                            val index = if (room.phrasePoint != null && phraseList.size - 1 != room.phrasePoint!!.toInt()) {
-                                room.phrasePoint!!.toInt() + 1
+                if (room.template != null) {
+                    when (val mode = room.templateMode) {
+                        is TemplateMode.Order  -> {
+                            val message = room.template!!.templateMessageList[mode.position].massage
+                            val templateComment = Comment(message, User.WHITE, getDataNow())
+                            room.commentList.add(templateComment)
+                            if (mode.position >= room.template!!.templateMessageList.size) {
+                                mode.position = 0
                             } else {
-                                0
+                                mode.position++
                             }
-                            val comment2 = CommentEntity(
-                                null, phraseList[index].text, Const.WHITE, getDataNow(), room.id
-                            )
-                            dataBaseRepository.addComment(comment2)
-                            room.commentLast = comment2.text
-                            room.commentTime = comment2.createdAt
-                            room.phrasePoint = index.toString()
-                            dataBaseRepository.updateRoom(room)
                         }
-                        // ランダム出力
-                        Const.RANDOM -> {
-                            var phraseList2 = arrayOf<PhraseEntity>()
-                            if (room.phrasePoint != null) {
-                                val list = room.phrasePoint!!.split(",")
-                                phraseList.forEachIndexed { index, phrase ->
-                                    if (!list.contains(index.toString())) {
-                                        phraseList2 += phrase
-                                    }
-                                }
+                        is TemplateMode.Randam -> {
+                            val randomList = room.template!!.templateMessageList.filterIndexed { idx, _ ->
+                                !mode.position.contains(idx)
                             }
-                            if (phraseList2.isEmpty()) {
-                                phraseList2 += phraseList
-                                room.phrasePoint = null
-                            }
-                            val whiteComment = phraseList2.random()
-                            val comment2 = CommentEntity(
-                                null, whiteComment.text, Const.WHITE, getDataNow(), room.id
-                            )
-                            dataBaseRepository.addComment(comment2)
-                            if (room.phrasePoint == null) {
-                                room.phrasePoint = phraseList.indexOf(whiteComment).toString() + ","
+                            val message = randomList.random()
+                            val templateComment = Comment(message.massage, User.WHITE, getDataNow())
+                            room.commentList.add(templateComment)
+                            if (randomList.size <= 1) {
+                                mode.position.clear()
                             } else {
-                                room.phrasePoint += phraseList.indexOf(whiteComment)
-                                    .toString() + ","
+                                val position = room.template!!.templateMessageList.indexOf(message)
+                                mode.position.add(position)
                             }
-                            room.commentLast = comment2.text
-                            room.commentTime = comment2.createdAt
-                            dataBaseRepository.updateRoom(room)
                         }
                     }
-
                 }
-
-                _commentList.postValue(dataBaseRepository.getCommentAll(room.id))
-                commentText.postValue("")
+                chatUseCase.updateRoom(room)
             }
         }
+        _commentList.postValue(chatRoomEntity.value!!.commentList)
+        commentText.postValue("")
+
     }
 
     // 日付取得
-    @Suppress("SimpleDateFormat")
-    private fun getDataNow(): String {
-        val df: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
-        val date = Date(System.currentTimeMillis())
-        return df.format(date)
+    private fun getDataNow(): Date {
+        return Date(System.currentTimeMillis())
     }
 
     // ルーム削除
     fun deleteRoom() {
         viewModelScope.launch {
-            dataBaseRepository.deleteRoom(chatRoomEntity.value!!.id!!)
-            dataBaseRepository.deleteCommentByRoomId(chatRoomEntity.value!!.id!!)
+            chatUseCase.deleteRoom(chatRoomEntity.value!!.roomId)
         }
     }
 
     // 立場変更
     fun changeUser() {
-        commentList.value?.let {
-            it.forEach { comments ->
-                when (comments.user) {
-                    Const.WHITE -> comments.user = Const.BLACK
-                    Const.BLACK -> comments.user = Const.WHITE
+        chatRoomEntity.value?.commentList?.let { commentList ->
+            commentList.forEachIndexed { index, comment ->
+                commentList[index] = when (comment.user) {
+                    User.WHITE -> Comment(comment.message, User.BLACK, comment.time)
+                    User.BLACK -> Comment(comment.message, User.WHITE, comment.time)
                 }
             }
             viewModelScope.launch {
-                dataBaseRepository.updateComment(it)
-                _commentList.postValue(dataBaseRepository.getCommentAll(chatRoomEntity.value!!.id!!))
+                chatUseCase.updateComment(commentList)
+                _commentList.postValue(commentList)
             }
         }
     }

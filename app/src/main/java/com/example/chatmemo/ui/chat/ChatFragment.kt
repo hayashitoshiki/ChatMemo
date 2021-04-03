@@ -15,7 +15,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentChatBinding
-import com.example.chatmemo.model.entity.CommentEntity
+import com.example.chatmemo.domain.value.Comment
 import com.example.chatmemo.ui.adapter.ChatRecyclerAdapter
 import com.example.chatmemo.ui.transition.PlayTransition
 import kotlinx.coroutines.CoroutineScope
@@ -168,7 +168,7 @@ class ChatFragment : Fragment(), CoroutineScope {
     }
 
     // データ反映
-    private fun viewUpDate(data: List<CommentEntity>) {
+    private fun viewUpDate(data: List<Comment>) {
         launch {
             val adapter = binding.recyclerView.adapter as ChatRecyclerAdapter
             adapter.setData(data)
