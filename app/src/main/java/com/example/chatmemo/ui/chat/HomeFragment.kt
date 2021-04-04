@@ -120,7 +120,7 @@ class HomeFragment : Fragment(), CoroutineScope {
                     val comment = Comment(it.commentLast ?: "", User.BLACK, commentDate!!)
                     commentList.add(comment)
                 }
-                val chatRoom = ChatRoom(roomId, title, null, null, commentList)
+                val chatRoom = ChatRoom(roomId, title, null, commentList)
                 chatRoomList.add(chatRoom)
             }
             val adapter = binding.recyclerView.adapter as RoomListAdapter

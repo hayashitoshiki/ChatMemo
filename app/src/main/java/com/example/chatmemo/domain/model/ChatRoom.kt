@@ -2,7 +2,7 @@ package com.example.chatmemo.domain.model
 
 import com.example.chatmemo.domain.value.Comment
 import com.example.chatmemo.domain.value.RoomId
-import com.example.chatmemo.domain.value.TemplateMode
+import com.example.chatmemo.domain.value.TemplateConfiguration
 import java.io.Serializable
 
 class ChatRoom(
@@ -11,9 +11,11 @@ class ChatRoom(
     // 部屋名
     var title: String,
     // テンプレート
-    var template: Template?,
-    // テンプレート表示モード
-    var templateMode: TemplateMode?,
+    var templateConfiguration: TemplateConfiguration?,
+    //    // テンプレート
+    //    var template: Template?,
+    //    // テンプレート表示モード
+    //    var templateMode: TemplateMode?,
     // コメントリスト
     var commentList: MutableList<Comment>
 ) : Serializable

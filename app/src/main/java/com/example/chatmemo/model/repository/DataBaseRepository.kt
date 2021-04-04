@@ -1,6 +1,9 @@
 package com.example.chatmemo.model.repository
 
 import androidx.lifecycle.LiveData
+import com.example.chatmemo.domain.model.ChatRoom
+import com.example.chatmemo.domain.model.Template
+import com.example.chatmemo.domain.value.RoomId
 import com.example.chatmemo.model.entity.ChatRoomEntity
 import com.example.chatmemo.model.entity.CommentEntity
 import com.example.chatmemo.model.entity.PhraseEntity
@@ -67,7 +70,7 @@ interface DataBaseRepository {
      * 定型文のタイトル一覧取得
      * return 定型文のタイトル一覧
      */
-    suspend fun getPhraseTitle(): List<TemplateEntity>
+    suspend fun getPhraseTitle(): List<Template>
 
     /**
      * タイトルに紐づいた定型文取得
@@ -111,10 +114,16 @@ interface DataBaseRepository {
 
     // region ルーム
     /**
-     * 新規ルーム作成
-     * @param chatRoomEntity 追加するルーム
+     * 次のID連番の値を返す
+     * @return チャットルームDBのの次の連番
      */
-    suspend fun createRoom(chatRoomEntity: ChatRoomEntity)
+    suspend fun getNextId(): RoomId
+
+    /**
+     * 新規ルーム作成
+     * @param chatRoom 追加するルーム
+     */
+    suspend fun createRoom(chatRoom: ChatRoom)
 
     /**
      * チャットルーム削除

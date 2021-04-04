@@ -13,9 +13,9 @@ interface ChatUseCase {
 
     suspend fun deleteRoom(roomId: RoomId)
 
-    fun createRoom(chatRoom: ChatRoom): ChatRoom
+    suspend fun createRoom(chatRoom: ChatRoom)
 
-    fun getNextRoomId(): RoomId
+    suspend fun getNextRoomId(): RoomId
 
     fun getChatRoomByRoomById(roomId: RoomId): LiveData<ChatRoom>
 

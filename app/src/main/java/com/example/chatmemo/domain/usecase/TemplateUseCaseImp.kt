@@ -3,14 +3,15 @@ package com.example.chatmemo.domain.usecase
 import com.example.chatmemo.domain.model.Template
 import com.example.chatmemo.domain.value.TemplateId
 import com.example.chatmemo.domain.value.TemplateMessage
+import com.example.chatmemo.model.repository.DataBaseRepository
 
-class TemplateUseCaseImp : TemplateUseCase {
+class TemplateUseCaseImp(private val dataBaseRepository: DataBaseRepository) : TemplateUseCase {
     override suspend fun deleteTemplate(template: Template): Boolean {
         TODO("Not yet implemented")
     }
 
     override suspend fun getTemplateAll(): List<Template> {
-        TODO("Not yet implemented")
+        return dataBaseRepository.getPhraseTitle()
     }
 
     override suspend fun getPhraseByTemplateId(templateId: TemplateId): List<TemplateMessage> {

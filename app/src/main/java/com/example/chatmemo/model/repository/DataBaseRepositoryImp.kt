@@ -3,6 +3,11 @@ package com.example.chatmemo.model.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
+import com.example.chatmemo.domain.model.ChatRoom
+import com.example.chatmemo.domain.model.Template
+import com.example.chatmemo.domain.value.RoomId
+import com.example.chatmemo.domain.value.TemplateId
+import com.example.chatmemo.domain.value.TemplateMode
 import com.example.chatmemo.model.entity.ChatRoomEntity
 import com.example.chatmemo.model.entity.CommentEntity
 import com.example.chatmemo.model.entity.PhraseEntity
@@ -106,9 +111,10 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // テンプレートタイトル全取得
-    override suspend fun getPhraseTitle(): List<TemplateEntity> {
+    override suspend fun getPhraseTitle(): List<Template> {
         return withContext(Dispatchers.IO) {
             return@withContext templateDao.getAll()
+                .map { Template(TemplateId(it.id!!.toInt()), it.title, listOf()) }
         }
     }
 
@@ -129,8 +135,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
 
     // コメント更新
     override suspend fun updatePhrase(
-        phraseList: ArrayList<PhraseEntity>,
-        templateId: Long
+        phraseList: ArrayList<PhraseEntity>, templateId: Long
     ): Boolean {
         return withContext(Dispatchers.IO) {
             phraseDao.deleteById(templateId)
@@ -164,9 +169,38 @@ class DataBaseRepositoryImp : DataBaseRepository {
 
     // region ルーム
 
+    // 次の連番を返す
+    override suspend fun getNextId(): RoomId {
+        val id = roomDao.getNextId() ?: 0
+        return RoomId(id.toInt() + 1)
+    }
+
     // ルーム作成
-    override suspend fun createRoom(chatRoomEntity: ChatRoomEntity) {
-        return withContext(Dispatchers.IO) {
+    override suspend fun createRoom(chatRoom: ChatRoom) {
+        val id = chatRoom.roomId.value.toLong()
+        val title = chatRoom.title
+        val templateId: Long?
+        val point: String?
+        val mode: Int?
+        val templateConfiguration = chatRoom.templateConfiguration
+        if (templateConfiguration != null) {
+            templateId = templateConfiguration.template.templateId.value.toLong()
+            point = when (val templateMode = templateConfiguration.templateMode) {
+                is TemplateMode.Order  -> {
+                    templateMode.position.toString()
+                }
+                is TemplateMode.Randam -> {
+                    templateMode.position.joinToString()
+                }
+            }
+            mode = templateConfiguration.templateMode.getInt()
+        } else {
+            templateId = null
+            point = null
+            mode = null
+        }
+        val chatRoomEntity = ChatRoomEntity(id, title, templateId, mode, point, null, null)
+        withContext(Dispatchers.IO) {
             roomDao.insert(chatRoomEntity)
         }
     }

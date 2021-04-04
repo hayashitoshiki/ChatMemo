@@ -20,12 +20,12 @@ class ChatUseCaseImp(private val dataBaseRepository: DataBaseRepository) : ChatU
         TODO("Not yet implemented")
     }
 
-    override fun createRoom(chatRoom: ChatRoom): ChatRoom {
-        TODO("Not yet implemented")
+    override suspend fun createRoom(chatRoom: ChatRoom) {
+        dataBaseRepository.createRoom(chatRoom)
     }
 
-    override fun getNextRoomId(): RoomId {
-        TODO("Not yet implemented")
+    override suspend fun getNextRoomId(): RoomId {
+        return dataBaseRepository.getNextId()
     }
 
     override fun getChatRoomByRoomById(roomId: RoomId): LiveData<ChatRoom> {

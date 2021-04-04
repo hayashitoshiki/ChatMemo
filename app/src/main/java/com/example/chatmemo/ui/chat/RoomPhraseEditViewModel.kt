@@ -8,6 +8,7 @@ import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.model.Template
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.example.chatmemo.domain.usecase.TemplateUseCase
+import com.example.chatmemo.domain.value.TemplateConfiguration
 import com.example.chatmemo.domain.value.TemplateId
 import com.example.chatmemo.domain.value.TemplateMode
 import kotlinx.coroutines.launch
@@ -38,21 +39,16 @@ class RoomPhraseEditViewModel(
         viewModelScope.launch {
             TemplateMode::class.sealedSubclasses
 
-            val modeList = listOf(
-                TemplateMode.None("選択なし"), TemplateMode.Order("順番"), TemplateMode.Randam("ランダム")
-            )
+            val modeList = listOf(TemplateMode.Order("順番"), TemplateMode.Randam("ランダム"))
             _tempalteModeList.postValue(modeList)
             val list = arrayListOf(Template(TemplateId(0), "選択なし", listOf()))
             val templateList = templateUseCase.getTemplateAll()
             list.addAll(templateList)
             _templateTitleList.postValue(list)
-            chatRoomEntity.template?.also { chatRoom ->
-                val templateIndex = templateList.indexOfFirst { it.templateId == chatRoom.templateId }
+            chatRoomEntity.templateConfiguration?.also { templateConfiguration ->
+                val templateIndex = templateList.indexOfFirst { it.templateId == templateConfiguration.template.templateId }
                 templateIndexValue.postValue(templateIndex + 1)
-            }
-            chatRoomEntity.javaClass
-            chatRoomEntity.templateMode?.also { templateMode ->
-                val modeIndex = modeList.indexOfFirst { it.javaClass == templateMode.javaClass }
+                val modeIndex = modeList.indexOfFirst { it.javaClass == templateConfiguration.templateMode.javaClass }
                 modeValue.postValue(modeIndex)
             }
         }
@@ -64,13 +60,13 @@ class RoomPhraseEditViewModel(
             val titleIndex = templateIndexValue.value!!
             val modeId = modeValue.value!!
             // TODO : 今と違うかつ、しっかり入力されているか
-            _isEnableSubmitButton.value = if (chatRoomEntity.template == null || chatRoomEntity.templateMode == null) {
+            _isEnableSubmitButton.value = if (chatRoomEntity.templateConfiguration == null) {
                 // 現在、テンプレートが設定されていない場合
                 titleIndex != 0 && modeId != 0
             } else {
                 // 現在、テンプレートが設定されている場合
-                val templateIndexOld = _templateTitleList.value!!.indexOfFirst { it.templateId == chatRoomEntity.template!!.templateId } + 1
-                val modeIndex = tempalteModeList.value!!.indexOfFirst { it.javaClass == chatRoomEntity.templateMode!!.javaClass }
+                val templateIndexOld = _templateTitleList.value!!.indexOfFirst { it.templateId == chatRoomEntity.templateConfiguration!!.template.templateId } + 1
+                val modeIndex = tempalteModeList.value!!.indexOfFirst { it.javaClass == chatRoomEntity.templateConfiguration!!.templateMode.javaClass }
                 titleIndex == 0 || !(titleIndex == templateIndexOld && modeId == modeIndex)
             }
         }
@@ -79,11 +75,12 @@ class RoomPhraseEditViewModel(
     // 送信
     suspend fun submit() {
         if (templateTitleValue.value!! != "選択なし") {
-            chatRoomEntity.template = templateTitleList.value!![templateIndexValue.value!!]
-            chatRoomEntity.templateMode = tempalteModeList.value!![modeValue.value!!]
+            val template = templateTitleList.value!![templateIndexValue.value!!]
+            val templateMode = tempalteModeList.value!![modeValue.value!!]
+            val templateConfiguration = TemplateConfiguration(template, templateMode)
+            chatRoomEntity.templateConfiguration = templateConfiguration
         } else {
-            chatRoomEntity.template = null
-            chatRoomEntity.templateMode = null
+            chatRoomEntity.templateConfiguration = null
         }
         chatUseCase.updateRoom(chatRoomEntity)
     }

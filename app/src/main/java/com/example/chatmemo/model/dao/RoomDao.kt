@@ -15,10 +15,13 @@ import com.example.chatmemo.model.entity.ChatRoomEntity
 interface RoomDao {
 
     @Insert
-    suspend fun insert(chatRoomEntity: ChatRoomEntity)
+    suspend fun insert(chatRoomEntity: ChatRoomEntity): Long
 
     @Update
     suspend fun update(chatRoomEntity: ChatRoomEntity)
+
+    @Query("SELECT MAX(id) FROM room")
+    suspend fun getNextId(): Long?
 
     @Query("SELECT * FROM room")
     fun getAll(): LiveData<List<ChatRoomEntity>>

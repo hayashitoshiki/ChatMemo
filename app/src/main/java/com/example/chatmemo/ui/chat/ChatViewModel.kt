@@ -52,20 +52,20 @@ class ChatViewModel(
 
 
                 // 定型文がある場合は定型文も送信
-                if (room.template != null) {
-                    when (val mode = room.templateMode) {
+                if (room.templateConfiguration != null) {
+                    when (val mode = room.templateConfiguration!!.templateMode) {
                         is TemplateMode.Order  -> {
-                            val message = room.template!!.templateMessageList[mode.position].massage
+                            val message = room.templateConfiguration!!.template.templateMessageList[mode.position].massage
                             val templateComment = Comment(message, User.WHITE, getDataNow())
                             room.commentList.add(templateComment)
-                            if (mode.position >= room.template!!.templateMessageList.size) {
+                            if (mode.position >= room.templateConfiguration!!.template.templateMessageList.size) {
                                 mode.position = 0
                             } else {
                                 mode.position++
                             }
                         }
                         is TemplateMode.Randam -> {
-                            val randomList = room.template!!.templateMessageList.filterIndexed { idx, _ ->
+                            val randomList = room.templateConfiguration!!.template.templateMessageList.filterIndexed { idx, _ ->
                                 !mode.position.contains(idx)
                             }
                             val message = randomList.random()
@@ -74,7 +74,9 @@ class ChatViewModel(
                             if (randomList.size <= 1) {
                                 mode.position.clear()
                             } else {
-                                val position = room.template!!.templateMessageList.indexOf(message)
+                                val position = room.templateConfiguration!!.template.templateMessageList.indexOf(
+                                    message
+                                )
                                 mode.position.add(position)
                             }
                         }

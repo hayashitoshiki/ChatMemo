@@ -71,7 +71,7 @@ class RoomAddFragment : Fragment() {
             val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
                 requireActivity(), android.R.layout.simple_dropdown_item_1line, modeTitleList
             )
-            binding.spinnerTitle.setAdapter(arrayAdapter)
+            binding.spinnerMode.setAdapter(arrayAdapter)
         })
 
         // spinner 設定
@@ -97,10 +97,8 @@ class RoomAddFragment : Fragment() {
                 binding.container.startAnimation(anim1)
                 binding.container.visibility = View.GONE
                 delay(resources.getInteger(R.integer.fade_out_time).toLong())
-                val chatRoomEntity: ChatRoom = viewModel.createRoom()
-                val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(
-                    chatRoomEntity
-                )
+                val chatRoom: ChatRoom = viewModel.createRoom()
+                val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(chatRoom)
                 findNavController().navigate(action)
 
             }
