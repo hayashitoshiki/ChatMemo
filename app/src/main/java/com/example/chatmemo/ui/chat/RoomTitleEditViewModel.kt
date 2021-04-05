@@ -3,9 +3,10 @@ package com.example.chatmemo.ui.chat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.usecase.ChatUseCase
+import com.example.chatmemo.ui.utils.BaseViewModel
+import com.example.chatmemo.ui.utils.ViewModelLiveData
 
 /**
  * ルーム名変更ダイアログ_ロジック
@@ -14,17 +15,16 @@ import com.example.chatmemo.domain.usecase.ChatUseCase
  */
 class RoomTitleEditViewModel(
     private var chatRoomEntity: ChatRoom, private val chatRoomUseCase: ChatUseCase
-) : ViewModel() {
+) : BaseViewModel() {
 
     val newRoomTitle = MutableLiveData("")
-    private val _oldRoomTitle = MutableLiveData<String>()
-    val oldRoomTitle: LiveData<String> = _oldRoomTitle
+    val oldRoomTitle: ViewModelLiveData<String> = ViewModelLiveData<String>()
     private val _isEnableSubmitButton = MediatorLiveData<Boolean>()
     val isEnableSubmitButton: LiveData<Boolean> = _isEnableSubmitButton
 
     // 初期化
     init {
-        _oldRoomTitle.value = chatRoomEntity.title
+        oldRoomTitle.setValue(chatRoomEntity.title)
         _isEnableSubmitButton.addSource(newRoomTitle) { changeSubmitButton(it) }
     }
 
