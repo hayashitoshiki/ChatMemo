@@ -3,6 +3,7 @@ package com.example.chatmemo.model.repository
 import androidx.lifecycle.LiveData
 import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.model.Template
+import com.example.chatmemo.domain.value.Comment
 import com.example.chatmemo.domain.value.RoomId
 import com.example.chatmemo.model.entity.ChatRoomEntity
 import com.example.chatmemo.model.entity.CommentEntity
@@ -21,14 +22,14 @@ interface DataBaseRepository {
      *
      * @param comment 追加するコメント
      */
-    suspend fun addComment(comment: CommentEntity)
+    suspend fun addComment(comment: Comment, roomId: RoomId)
 
     /**
      * コメント更新
      *
      * @param comments 更新するコメント
      */
-    suspend fun updateComment(comments: List<CommentEntity>)
+    suspend fun updateComment(comments: List<Comment>, roomId: RoomId)
 
     /**
      * roomIdに関連するコメント削除
@@ -135,7 +136,7 @@ interface DataBaseRepository {
      * チャットルーム更新
      * @param chatRoomEntity 更新するルーム
      */
-    suspend fun updateRoom(chatRoomEntity: ChatRoomEntity)
+    suspend fun updateRoom(chatRoomEntity: ChatRoom)
 
     /**
      * ルーム取得
@@ -144,7 +145,12 @@ interface DataBaseRepository {
      */
     suspend fun getRoomByTitle(title: String): ChatRoomEntity
 
-    fun getRoomById(id: Long): LiveData<ChatRoomEntity>
+    /**
+     * RoomIdに一致するルーム取得
+     * @param roomId 取得するルームID
+     * @return RoomIdに紐づいたルーム
+     */
+    fun getRoomById(roomId: RoomId): LiveData<ChatRoom>
 
     /**
      * 指定したテンプレートが使用されているルーム取得
@@ -157,7 +163,7 @@ interface DataBaseRepository {
      * チャットルームリスト取得
      * @return 全ルームリスト
      */
-    fun getRoomAll(): LiveData<List<ChatRoomEntity>>
+    fun getRoomAll(): LiveData<List<ChatRoom>>
     // endregion
 
 }

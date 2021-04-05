@@ -1,5 +1,22 @@
 package com.example.chatmemo.domain.value
 
 enum class User {
-    BLACK, WHITE
+    BLACK, WHITE;
+
+    fun chageInt(): Int {
+        return when (this) {
+            BLACK -> 1
+            WHITE -> 2
+        }
+    }
+
+    companion object {
+        fun getUser(index: Int): User {
+            return when (index) {
+                1    -> BLACK
+                2    -> WHITE
+                else -> BLACK
+            }
+        }
+    }
 }

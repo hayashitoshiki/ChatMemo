@@ -4,15 +4,15 @@ import androidx.lifecycle.LiveData
 import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.value.Comment
 import com.example.chatmemo.domain.value.RoomId
-import com.example.chatmemo.model.entity.ChatRoomEntity
 import com.example.chatmemo.model.repository.DataBaseRepository
 
 class ChatUseCaseImp(private val dataBaseRepository: DataBaseRepository) : ChatUseCase {
-    override fun updateRoom(chatRoom: ChatRoom) {
-        TODO("Not yet implemented")
+
+    override suspend fun updateRoom(chatRoom: ChatRoom) {
+        dataBaseRepository.updateRoom(chatRoom)
     }
 
-    override fun getRoomAll(): LiveData<List<ChatRoomEntity>> {
+    override fun getRoomAll(): LiveData<List<ChatRoom>> {
         return dataBaseRepository.getRoomAll()
     }
 
@@ -29,11 +29,15 @@ class ChatUseCaseImp(private val dataBaseRepository: DataBaseRepository) : ChatU
     }
 
     override fun getChatRoomByRoomById(roomId: RoomId): LiveData<ChatRoom> {
-        TODO("Not yet implemented")
+        return dataBaseRepository.getRoomById(roomId)
     }
 
-    override fun updateComment(CommentList: List<Comment>) {
-        TODO("Not yet implemented")
+    override suspend fun updateComment(commentList: List<Comment>, roomId: RoomId) {
+        dataBaseRepository.updateComment(commentList, roomId)
+    }
+
+    override suspend fun addComment(comment: Comment, roomId: RoomId) {
+        dataBaseRepository.addComment(comment, roomId)
     }
 
     override fun getCommentAll(roomId: RoomId): List<Comment> {

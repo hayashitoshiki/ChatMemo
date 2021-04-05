@@ -12,10 +12,6 @@ class ChatRoom(
     var title: String,
     // テンプレート
     var templateConfiguration: TemplateConfiguration?,
-    //    // テンプレート
-    //    var template: Template?,
-    //    // テンプレート表示モード
-    //    var templateMode: TemplateMode?,
     // コメントリスト
     var commentList: MutableList<Comment>
 ) : Serializable

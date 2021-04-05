@@ -2,18 +2,18 @@ package com.example.chatmemo.model.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
+import androidx.lifecycle.MutableLiveData
 import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.model.Template
-import com.example.chatmemo.domain.value.RoomId
-import com.example.chatmemo.domain.value.TemplateId
-import com.example.chatmemo.domain.value.TemplateMode
+import com.example.chatmemo.domain.value.*
 import com.example.chatmemo.model.entity.ChatRoomEntity
 import com.example.chatmemo.model.entity.CommentEntity
 import com.example.chatmemo.model.entity.PhraseEntity
 import com.example.chatmemo.model.entity.TemplateEntity
 import com.example.chatmemo.ui.MyApplication
+import com.example.chatmemo.ui.utils.toLocalDateTime
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class DataBaseRepositoryImp : DataBaseRepository {
@@ -31,9 +31,14 @@ class DataBaseRepositoryImp : DataBaseRepository {
     // region コメント
 
     // コメント登録
-    override suspend fun addComment(comment: CommentEntity) {
+    override suspend fun addComment(comment: Comment, roomId: RoomId) {
         return withContext(Dispatchers.IO) {
-            return@withContext commentDao.insert(comment)
+            val message = comment.message
+            val user = comment.user.chageInt()
+            val date = comment.time.toDataBaseDate()
+            val roomIdLong = roomId.value.toLong()
+            val commentEntity = CommentEntity(null, message, user, date, roomIdLong)
+            return@withContext commentDao.insert(commentEntity)
         }
     }
 
@@ -45,10 +50,12 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // コメント更新
-    override suspend fun updateComment(comments: List<CommentEntity>) {
+    override suspend fun updateComment(comments: List<Comment>, roomId: RoomId) {
         withContext(Dispatchers.IO) {
             comments.forEach {
-                commentDao.update(it)
+                val user = it.user.chageInt()
+                val commentDate = it.time.toDataBaseDate()
+                commentDao.updateUserBy(user, commentDate)
             }
         }
     }
@@ -206,8 +213,43 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // ルーム更新
-    override suspend fun updateRoom(chatRoomEntity: ChatRoomEntity) {
+    override suspend fun updateRoom(chatRoom: ChatRoom) {
         return withContext(Dispatchers.IO) {
+            val id = chatRoom.roomId.value.toLong()
+            val title = chatRoom.title
+            val templateId: Long?
+            val point: String?
+            val mode: Int?
+            val templateConfiguration = chatRoom.templateConfiguration
+            if (templateConfiguration != null) {
+                templateId = templateConfiguration.template.templateId.value.toLong()
+                point = when (val templateMode = templateConfiguration.templateMode) {
+                    is TemplateMode.Order  -> {
+                        templateMode.position.toString()
+                    }
+                    is TemplateMode.Randam -> {
+                        templateMode.position.joinToString()
+                    }
+                }
+                mode = templateConfiguration.templateMode.getInt()
+            } else {
+                templateId = null
+                point = null
+                mode = null
+            }
+            val commentLast: String?
+            val commentLastTime: String?
+            if (chatRoom.commentList.size != 0) {
+                commentLast = chatRoom.commentList.last().message
+                commentLastTime = chatRoom.commentList.last().time.toDataBaseDate()
+            } else {
+                commentLast = null
+                commentLastTime = null
+            }
+
+            val chatRoomEntity = ChatRoomEntity(
+                id, title, templateId, mode, point, commentLast, commentLastTime
+            )
             return@withContext roomDao.update(chatRoomEntity)
         }
     }
@@ -228,15 +270,55 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // Idに紐づくルーム取得
-    override fun getRoomById(id: Long): LiveData<ChatRoomEntity> {
-        return roomDao.getRoomById(id)
+    override fun getRoomById(roomId: RoomId): LiveData<ChatRoom> {
+        val chatRoomEntity = roomDao.getRoomById(roomId.value.toLong())
+        val chatRoom = MutableLiveData<ChatRoom>()
+        chatRoomEntity.observeForever {
+            val roomTitle = it.title
+            val commentList: MutableList<Comment> = runBlocking { commentDao.getAllCommentByRoom(it.id!!) }.map { commentEntity ->
+                val message = commentEntity.text
+                val user = User.getUser(commentEntity.user)
+                val commentDate = CommentDateTime(commentEntity.createdAt.toLocalDateTime())
+                return@map Comment(message, user, commentDate)
+            }.toMutableList()
+            val templateConfiguration = if (it.templateId != null) {
+                val templateHeader = runBlocking { templateDao.getTemplateById(it.templateId!!) }
+                val templatePhrase = runBlocking {
+                    phraseDao.getAllByTitle(templateHeader.id!!).map { TemplateMessage(it.text) }
+                }
+                val template = Template(
+                    TemplateId(templateHeader.id!!.toInt()), templateHeader.title, templatePhrase
+                )
+                val templateMode = TemplateMode.toStatus(it.templateMode!!)
+                TemplateConfiguration(template, templateMode)
+            } else {
+                null
+            }
+            chatRoom.postValue(ChatRoom(roomId, roomTitle, templateConfiguration, commentList))
+        }
+        return chatRoom
     }
 
     // ルーム全取得
-    override fun getRoomAll(): LiveData<List<ChatRoomEntity>> {
-        return roomDao.getAll().map { it ->
-            it.sortedByDescending { it.commentTime }
+    override fun getRoomAll(): LiveData<List<ChatRoom>> {
+        val chatRoomEntityList = roomDao.getAll()
+        val chatRoom = MutableLiveData<List<ChatRoom>>()
+        chatRoomEntityList.observeForever {
+            val list = it.map { chatRoomEntity ->
+                val roomId = RoomId(chatRoomEntity.id!!.toInt())
+                val title = chatRoomEntity.title
+                val commentList = mutableListOf<Comment>()
+                chatRoomEntity.commentTime?.let { date ->
+                    val message = chatRoomEntity.commentLast ?: ""
+                    val commentDate = CommentDateTime(date.toLocalDateTime())
+                    val comment = Comment(message, User.BLACK, commentDate)
+                    commentList.add(comment)
+                }
+                ChatRoom(roomId, title, null, commentList)
+            }
+            chatRoom.postValue(list)
         }
+        return chatRoom
     }
 
     // 指定したテンプレートが使用されているルーム取得

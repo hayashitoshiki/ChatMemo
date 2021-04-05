@@ -51,9 +51,13 @@ class ChatRecyclerAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val comment = commentList[position]
-        val commentDate = toStringByTime2(comment.time)
-        val beforCcommentDate = toStringByTime2(commentList[position - 1].time)
-        if (position == 0 || (position > 0 && beforCcommentDate != commentDate)) {
+        val commentDate = comment.time.toSectionDate()
+        val beforCcommentDate = if (position - 1 >= 0) {
+            commentList[position - 1].time.toSectionDate()
+        } else {
+            null
+        }
+        if (beforCcommentDate == null || beforCcommentDate != commentDate) {
             commentDate.let {
                 holder.dataTextView.visibility = View.VISIBLE
                 holder.dataTextView.text = if (it == getDataNow()) {
@@ -66,7 +70,7 @@ class ChatRecyclerAdapter(
             holder.dataTextView.visibility = View.GONE
         }
         val message = comment.message
-        val time = toStringByTime(comment.time)
+        val time = comment.time.toMessageDate()
         when (comment.user) {
             User.BLACK -> {
                 holder.commentBlackLayout.visibility = View.VISIBLE
@@ -109,17 +113,5 @@ class ChatRecyclerAdapter(
 
     fun setData(items: List<Comment>) {
         this.commentList = items
-    }
-
-    // 日付取得(メッセージ用)
-    private fun toStringByTime(date: Date): String {
-        val df: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
-        return df.format(date).substring(11, 16)
-    }
-
-    // 日付取得(セクション用)
-    private fun toStringByTime2(date: Date): String {
-        val df: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
-        return df.format(date).substring(0, 10)
     }
 }

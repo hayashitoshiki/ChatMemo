@@ -61,7 +61,7 @@ class ChatFragment : Fragment(), CoroutineScope {
         setHasOptionsMenu(true)
 
         viewModel.commentList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
-        viewModel.chatRoomEntity.observe(viewLifecycleOwner, Observer {
+        viewModel.chatRoom.observe(viewLifecycleOwner, Observer {
             (activity as AppCompatActivity).supportActionBar?.title = it.title
             viewModel.updateRoom(it)
         })
@@ -142,7 +142,7 @@ class ChatFragment : Fragment(), CoroutineScope {
             R.id.menu_edit_room_phrase -> {
                 val dialogFragment = RoomPhraseEditDialogFragment()
                 val bundle = Bundle()
-                bundle.putSerializable("room", viewModel.chatRoomEntity.value!!)
+                bundle.putSerializable("room", viewModel.chatRoom.value!!)
                 dialogFragment.arguments = bundle
                 dialogFragment.show(requireActivity().supportFragmentManager, null)
             }
@@ -150,7 +150,7 @@ class ChatFragment : Fragment(), CoroutineScope {
             R.id.menu_edit_room        -> {
                 val dialogFragment = RoomTitleEditDialogFragment()
                 val bundle = Bundle()
-                bundle.putSerializable("room", viewModel.chatRoomEntity.value!!)
+                bundle.putSerializable("room", viewModel.chatRoom.value!!)
                 dialogFragment.arguments = bundle
                 dialogFragment.show(requireActivity().supportFragmentManager, null)
             }

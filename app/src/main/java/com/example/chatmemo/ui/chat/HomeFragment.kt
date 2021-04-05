@@ -15,10 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentHomeBinding
 import com.example.chatmemo.domain.model.ChatRoom
-import com.example.chatmemo.domain.value.Comment
-import com.example.chatmemo.domain.value.RoomId
-import com.example.chatmemo.domain.value.User
-import com.example.chatmemo.model.entity.ChatRoomEntity
 import com.example.chatmemo.ui.MainActivity
 import com.example.chatmemo.ui.adapter.RoomListAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +22,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.text.SimpleDateFormat
 import kotlin.coroutines.CoroutineContext
 
 
@@ -107,24 +102,10 @@ class HomeFragment : Fragment(), CoroutineScope {
     }
 
     // データ反映
-    private fun viewUpDate(data: List<ChatRoomEntity>) {
+    private fun viewUpDate(data: List<ChatRoom>) {
         launch {
-            val chatRoomList = mutableListOf<ChatRoom>()
-            data.forEach {
-                val roomId = RoomId(it.id!!.toInt())
-                val title = it.title
-                val commentList = mutableListOf<Comment>()
-                it.commentTime?.let { date ->
-                    val df = SimpleDateFormat("yyyy/MM/dd HH:mm")
-                    val commentDate = df.parse(date)
-                    val comment = Comment(it.commentLast ?: "", User.BLACK, commentDate!!)
-                    commentList.add(comment)
-                }
-                val chatRoom = ChatRoom(roomId, title, null, commentList)
-                chatRoomList.add(chatRoom)
-            }
             val adapter = binding.recyclerView.adapter as RoomListAdapter
-            adapter.setData(chatRoomList)
+            adapter.setData(data)
             adapter.notifyDataSetChanged()
             if (data.isEmpty()) {
                 binding.noDataText.visibility = View.VISIBLE

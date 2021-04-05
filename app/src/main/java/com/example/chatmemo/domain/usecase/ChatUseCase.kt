@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.value.Comment
 import com.example.chatmemo.domain.value.RoomId
-import com.example.chatmemo.model.entity.ChatRoomEntity
 
 interface ChatUseCase {
-    fun updateRoom(chatRoom: ChatRoom)
 
-    fun getRoomAll(): LiveData<List<ChatRoomEntity>>
+    suspend fun updateRoom(chatRoom: ChatRoom)
+
+    fun getRoomAll(): LiveData<List<ChatRoom>>
 
     suspend fun deleteRoom(roomId: RoomId)
 
@@ -19,7 +19,9 @@ interface ChatUseCase {
 
     fun getChatRoomByRoomById(roomId: RoomId): LiveData<ChatRoom>
 
-    fun updateComment(CommentList: List<Comment>)
+    suspend fun updateComment(commentList: List<Comment>, roomId: RoomId)
 
     fun getCommentAll(roomId: RoomId): List<Comment>
+
+    suspend fun addComment(comment: Comment, roomId: RoomId)
 }

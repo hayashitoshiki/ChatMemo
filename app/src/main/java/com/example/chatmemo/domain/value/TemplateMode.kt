@@ -12,4 +12,15 @@ sealed class TemplateMode(val massage: String) {
             is Randam -> 2
         }
     }
+
+    companion object {
+        fun toStatus(index: Int): TemplateMode {
+            return when (index) {
+                1    -> Order()
+                2    -> Randam()
+                else -> Order()
+            }
+        }
+    }
+
 }

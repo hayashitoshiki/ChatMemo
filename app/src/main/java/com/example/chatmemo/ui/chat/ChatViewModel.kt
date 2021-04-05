@@ -1,14 +1,17 @@
 package com.example.chatmemo.ui.chat
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.usecase.ChatUseCase
-import com.example.chatmemo.domain.value.Comment
-import com.example.chatmemo.domain.value.RoomId
-import com.example.chatmemo.domain.value.TemplateMode
-import com.example.chatmemo.domain.value.User
+import com.example.chatmemo.domain.value.*
+import com.example.chatmemo.ui.utils.BaseViewModel
+import com.example.chatmemo.ui.utils.ViewModelLiveData
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
+import java.time.LocalDateTime
 
 /**
  * チャット画面_UIロジック
@@ -17,60 +20,52 @@ import java.util.*
  */
 class ChatViewModel(
     id: RoomId, private val chatUseCase: ChatUseCase
-) : ViewModel() {
+) : BaseViewModel() {
 
-    val chatRoomEntity: LiveData<ChatRoom> = chatUseCase.getChatRoomByRoomById(id)
+    val chatRoom: LiveData<ChatRoom> = chatUseCase.getChatRoomByRoomById(id)
     val commentText = MutableLiveData("")
-    private val _commentList = MutableLiveData<List<Comment>>(listOf())
-    val commentList: LiveData<List<Comment>> = _commentList
+    val commentList: ViewModelLiveData<List<Comment>> = ViewModelLiveData<List<Comment>>()
     private val _isEnableSubmitButton = MediatorLiveData<Boolean>()
     val isEnableSubmitButton: LiveData<Boolean> = _isEnableSubmitButton
 
-    private var isFirst = true
-
     init {
-        _commentList.postValue(chatRoomEntity.value!!.commentList)
         _isEnableSubmitButton.addSource(commentText) { changeSubmitButton(it) }
     }
 
     // ルーム更新
-    fun updateRoom(chatRoomEntity: ChatRoom) {
-        viewModelScope.launch {
-            if (isFirst) {
-                _commentList.postValue(chatUseCase.getCommentAll(chatRoomEntity.roomId))
-                isFirst = false
-            }
-        }
+    fun updateRoom(chatRoom: ChatRoom) {
+        commentList.postValue(chatRoom.commentList)
     }
 
     // 送信
     fun submit() {
         viewModelScope.launch {
-            chatRoomEntity.value?.also { room ->
-                val comment = Comment(commentText.value!!, User.BLACK, getDataNow())
+            chatRoom.value?.also { room ->
+                val message = commentText.value!!
+                val date = CommentDateTime(LocalDateTime.now())
+                val comment = Comment(message, User.BLACK, date)
                 room.commentList.add(comment)
-
+                chatUseCase.addComment(comment, room.roomId)
 
                 // 定型文がある場合は定型文も送信
                 if (room.templateConfiguration != null) {
-                    when (val mode = room.templateConfiguration!!.templateMode) {
+                    val templateComment = when (val mode = room.templateConfiguration!!.templateMode) {
                         is TemplateMode.Order  -> {
-                            val message = room.templateConfiguration!!.template.templateMessageList[mode.position].massage
-                            val templateComment = Comment(message, User.WHITE, getDataNow())
-                            room.commentList.add(templateComment)
-                            if (mode.position >= room.templateConfiguration!!.template.templateMessageList.size) {
+                            val templateMessage = room.templateConfiguration!!.template.templateMessageList[mode.position].massage
+                            val templateMessageDate = CommentDateTime(LocalDateTime.now())
+                            if (mode.position + 1 >= room.templateConfiguration!!.template.templateMessageList.size) {
                                 mode.position = 0
                             } else {
                                 mode.position++
                             }
+                            Comment(templateMessage, User.WHITE, templateMessageDate)
                         }
                         is TemplateMode.Randam -> {
                             val randomList = room.templateConfiguration!!.template.templateMessageList.filterIndexed { idx, _ ->
                                 !mode.position.contains(idx)
                             }
-                            val message = randomList.random()
-                            val templateComment = Comment(message.massage, User.WHITE, getDataNow())
-                            room.commentList.add(templateComment)
+                            val templateMessage = randomList.random().massage
+                            val templateMessageDate = CommentDateTime(LocalDateTime.now())
                             if (randomList.size <= 1) {
                                 mode.position.clear()
                             } else {
@@ -79,41 +74,38 @@ class ChatViewModel(
                                 )
                                 mode.position.add(position)
                             }
+                            Comment(templateMessage, User.WHITE, templateMessageDate)
                         }
                     }
+                    room.commentList.add(templateComment)
+                    chatUseCase.addComment(templateComment, room.roomId)
                 }
                 chatUseCase.updateRoom(room)
             }
         }
-        _commentList.postValue(chatRoomEntity.value!!.commentList)
+        commentList.postValue(chatRoom.value!!.commentList)
         commentText.postValue("")
-
-    }
-
-    // 日付取得
-    private fun getDataNow(): Date {
-        return Date(System.currentTimeMillis())
     }
 
     // ルーム削除
     fun deleteRoom() {
-        viewModelScope.launch {
-            chatUseCase.deleteRoom(chatRoomEntity.value!!.roomId)
+        GlobalScope.launch {
+            chatUseCase.deleteRoom(chatRoom.value!!.roomId)
         }
     }
 
     // 立場変更
     fun changeUser() {
-        chatRoomEntity.value?.commentList?.let { commentList ->
-            commentList.forEachIndexed { index, comment ->
-                commentList[index] = when (comment.user) {
+        chatRoom.value?.commentList?.let { comments ->
+            comments.forEachIndexed { index, comment ->
+                comments[index] = when (comment.user) {
                     User.WHITE -> Comment(comment.message, User.BLACK, comment.time)
                     User.BLACK -> Comment(comment.message, User.WHITE, comment.time)
                 }
             }
-            viewModelScope.launch {
-                chatUseCase.updateComment(commentList)
-                _commentList.postValue(commentList)
+            GlobalScope.launch {
+                chatUseCase.updateComment(comments, chatRoom.value!!.roomId)
+                commentList.postValue(comments)
             }
         }
     }

@@ -19,9 +19,12 @@ interface CommentDao {
     fun update(comment: CommentEntity)
 
     @Query("SELECT * FROM comments WHERE room_id = :roomId")
-    fun getAllCommentByRoom(roomId: Long): List<CommentEntity>
+    suspend fun getAllCommentByRoom(roomId: Long): List<CommentEntity>
 
     @Query("delete from comments WHERE room_id = :roomId")
     fun deleteById(roomId: Long)
+
+    @Query("update comments SET user = :user WHERE created_at = :createAt")
+    fun updateUserBy(user: Int, createAt: String)
 
 }

@@ -13,9 +13,6 @@ import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.chatmemo.databinding.ItemRoomListBinding
 import com.example.chatmemo.domain.model.ChatRoom
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 /**
@@ -61,7 +58,7 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
             holder.commentTextView.visibility = View.VISIBLE
             holder.commentTextView.text = comment.message
             holder.timeTextView.visibility = View.VISIBLE
-            holder.timeTextView.text = comment.time.toString()
+            holder.timeTextView.text = comment.time.toSectionDate()
         } else {
             holder.commentTextView.visibility = View.GONE
             holder.timeTextView.visibility = View.GONE
@@ -89,14 +86,6 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
                 listener.onItemClickListener(it, position, items[position])
             }
         }
-    }
-
-    // 日付取得
-    @SuppressLint("SimpleDateFormat")
-    private fun getDataNow(): String {
-        val df: DateFormat = SimpleDateFormat("yyyy/MM/dd")
-        val date = Date(System.currentTimeMillis())
-        return df.format(date)
     }
 
     // データ更新

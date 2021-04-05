@@ -3,9 +3,9 @@ package com.example.chatmemo.ui.chat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.example.chatmemo.domain.value.RoomId
-import com.example.chatmemo.model.entity.ChatRoomEntity
 import kotlinx.coroutines.launch
 
 /**
@@ -16,7 +16,7 @@ class HomeViewModel(
     private val chatUseCase: ChatUseCase
 ) : ViewModel() {
 
-    val chatRoomEntityList: LiveData<List<ChatRoomEntity>> = chatUseCase.getRoomAll()
+    val chatRoomEntityList: LiveData<List<ChatRoom>> = chatUseCase.getRoomAll()
 
     // ルーム削除
     fun deleteRoom(roomId: RoomId) {
