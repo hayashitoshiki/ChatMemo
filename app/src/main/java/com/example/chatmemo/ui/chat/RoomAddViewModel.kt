@@ -28,23 +28,23 @@ class RoomAddViewModel(
     val titleText = MutableLiveData("")
     val templateTitleList = ViewModelLiveData<List<Template>>()
     val templateTitleValue = MutableLiveData<String>()
-    val tempalteModeList = ViewModelLiveData<List<TemplateMode>>()
-    val tempalteModeValue = MediatorLiveData<String>()
+    val templateModeList = ViewModelLiveData<List<TemplateMode>>()
+    val templateModeValue = MediatorLiveData<String>()
     private val _isEnableTemplateMode = MediatorLiveData<Boolean>()
     val isEnableTemplateMode: LiveData<Boolean> = _isEnableTemplateMode
     private val _isEnableSubmitButton = MediatorLiveData<Boolean>()
     val isEnableSubmitButton: LiveData<Boolean> = _isEnableSubmitButton
 
     init {
-        tempalteModeValue.addSource(templateTitleValue) { changedTemplateTitleValue(it) }
+        templateModeValue.addSource(templateTitleValue) { changedTemplateTitleValue(it) }
         _isEnableTemplateMode.addSource(templateTitleValue) { changeModeEnable(it) }
         _isEnableSubmitButton.addSource(titleText) { changeSubmitButton() }
         _isEnableSubmitButton.addSource(templateTitleValue) { changeSubmitButton() }
-        _isEnableSubmitButton.addSource(tempalteModeValue) { changeSubmitButton() }
+        _isEnableSubmitButton.addSource(templateModeValue) { changeSubmitButton() }
 
         viewModelScope.launch {
             val modeList = listOf(TemplateMode.Order("順番"), TemplateMode.Randam("ランダム"))
-            tempalteModeList.setValue(modeList)
+            templateModeList.setValue(modeList)
             val list = arrayListOf(Template(TemplateId(0), "選択なし", listOf()))
             list.addAll(templateUseCase.getTemplateAll())
             templateTitleList.setValue(list)
@@ -60,7 +60,7 @@ class RoomAddViewModel(
 
         templateConfiguration = if (!templateTitleValue.value.isNullOrEmpty()) {
             val template = templateTitleList.value!!.first { it.title == templateTitleValue.value!! }
-            val templateMode = tempalteModeList.value!!.first { it.massage == tempalteModeValue.value!! }
+            val templateMode = templateModeList.value!!.first { it.massage == templateModeValue.value!! }
             TemplateConfiguration(template, templateMode)
         } else {
             null
@@ -75,7 +75,7 @@ class RoomAddViewModel(
     fun changeSubmitButton() {
         val title = titleText.value
         val templateTitle = templateTitleValue.value
-        val templateMode = tempalteModeValue.value
+        val templateMode = templateModeValue.value
         val templateModeNon = templateTitleList.value?.get(0)?.title
         val enable = if (title != null) {
             when {
@@ -92,7 +92,7 @@ class RoomAddViewModel(
     // テンプレート選択制御
     private fun changedTemplateTitleValue(text: String) {
         if (text.isEmpty() || text == templateTitleList.value!![0].title) {
-            tempalteModeValue.value = ""
+            templateModeValue.value = ""
         }
     }
 

@@ -45,23 +45,17 @@ class RoomPhraseEditDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.templateTitleValue.observe(viewLifecycleOwner, Observer { viewModel.validate() })
-        viewModel.modeValue.observe(viewLifecycleOwner, Observer { viewModel.validate() })
         viewModel.templateTitleList.observe(viewLifecycleOwner, Observer { templateList ->
             val titleList = templateList.map { it.title }
             val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                requireActivity(),
-                android.R.layout.simple_dropdown_item_1line,
-                titleList
+                requireActivity(), android.R.layout.simple_dropdown_item_1line, titleList
             )
             binding.spinnerTitle.setAdapter(arrayAdapter)
         })
-        viewModel.tempalteModeList.observe(viewLifecycleOwner, Observer { templateModeList ->
+        viewModel.templateModeList.observe(viewLifecycleOwner, Observer { templateModeList ->
             val modeList = templateModeList.map { it.massage }
             val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                requireActivity(),
-                android.R.layout.simple_dropdown_item_1line,
-                modeList
+                requireActivity(), android.R.layout.simple_dropdown_item_1line, modeList
             )
             binding.spinnerTitle.setAdapter(arrayAdapter)
         })
@@ -76,9 +70,7 @@ class RoomPhraseEditDialogFragment : DialogFragment() {
         }
         binding.spinnerMode.let { spinner ->
             val arrayAdapter = ArrayAdapter(
-                requireActivity(),
-                android.R.layout.simple_dropdown_item_1line,
-                listOf("")
+                requireActivity(), android.R.layout.simple_dropdown_item_1line, listOf("")
             )
             spinner.setAdapter(arrayAdapter)
             spinner.keyListener = null

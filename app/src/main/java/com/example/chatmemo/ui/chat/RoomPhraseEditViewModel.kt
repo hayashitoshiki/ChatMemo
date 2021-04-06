@@ -1,8 +1,8 @@
 package com.example.chatmemo.ui.chat
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.model.Template
@@ -11,6 +11,8 @@ import com.example.chatmemo.domain.usecase.TemplateUseCase
 import com.example.chatmemo.domain.value.TemplateConfiguration
 import com.example.chatmemo.domain.value.TemplateId
 import com.example.chatmemo.domain.value.TemplateMode
+import com.example.chatmemo.ui.utils.BaseViewModel
+import com.example.chatmemo.ui.utils.ViewModelLiveData
 import kotlinx.coroutines.launch
 
 /**
@@ -19,69 +21,78 @@ import kotlinx.coroutines.launch
  * @property chatUseCase Chatに関するUseCase
  */
 class RoomPhraseEditViewModel(
-    private var chatRoomEntity: ChatRoom,
+    private var chatRoom: ChatRoom,
     private val templateUseCase: TemplateUseCase,
     private val chatUseCase: ChatUseCase
-) : ViewModel() {
+) : BaseViewModel() {
 
-    private val _templateTitleList = MutableLiveData<List<Template>>()
-    val templateTitleList: LiveData<List<Template>> = _templateTitleList
+    val templateTitleList: ViewModelLiveData<List<Template>> = ViewModelLiveData<List<Template>>()
     val templateTitleValue = MutableLiveData<String>()
-    val templateIndexValue = MutableLiveData<Int>()
-    private val _tempalteModeList = MutableLiveData<List<TemplateMode>>()
-    val tempalteModeList: LiveData<List<TemplateMode>> = _tempalteModeList
-    val modeValue = MutableLiveData<Int>()
-
-    private val _isEnableSubmitButton = MutableLiveData(false)
+    val templateModeList: ViewModelLiveData<List<TemplateMode>> = ViewModelLiveData<List<TemplateMode>>()
+    val templateModeValue = MediatorLiveData<String>()
+    private val _isEnableTemplateMode = MediatorLiveData<Boolean>()
+    val isEnableTemplateMode: LiveData<Boolean> = _isEnableTemplateMode
+    private val _isEnableSubmitButton = MediatorLiveData<Boolean>()
     val isEnableSubmitButton: LiveData<Boolean> = _isEnableSubmitButton
 
     init {
+        templateModeValue.addSource(templateTitleValue) { changedTemplateTitleValue(it) }
+        _isEnableTemplateMode.addSource(templateTitleValue) { changeModeEnable(it) }
+        _isEnableSubmitButton.addSource(templateTitleValue) { changeSubmitButton() }
+        _isEnableSubmitButton.addSource(templateModeValue) { changeSubmitButton() }
         viewModelScope.launch {
-            TemplateMode::class.sealedSubclasses
-
             val modeList = listOf(TemplateMode.Order("順番"), TemplateMode.Randam("ランダム"))
-            _tempalteModeList.postValue(modeList)
+            templateModeList.postValue(modeList)
             val list = arrayListOf(Template(TemplateId(0), "選択なし", listOf()))
             val templateList = templateUseCase.getTemplateAll()
             list.addAll(templateList)
-            _templateTitleList.postValue(list)
-            chatRoomEntity.templateConfiguration?.also { templateConfiguration ->
-                val templateIndex = templateList.indexOfFirst { it.templateId == templateConfiguration.template.templateId }
-                templateIndexValue.postValue(templateIndex + 1)
-                val modeIndex = modeList.indexOfFirst { it.javaClass == templateConfiguration.templateMode.javaClass }
-                modeValue.postValue(modeIndex)
-            }
-        }
-    }
-
-    // 入力バリデート
-    fun validate() {
-        if (templateTitleList.value != null && templateTitleValue.value != null && modeValue.value != null) {
-            val titleIndex = templateIndexValue.value!!
-            val modeId = modeValue.value!!
-            // TODO : 今と違うかつ、しっかり入力されているか
-            _isEnableSubmitButton.value = if (chatRoomEntity.templateConfiguration == null) {
-                // 現在、テンプレートが設定されていない場合
-                titleIndex != 0 && modeId != 0
-            } else {
-                // 現在、テンプレートが設定されている場合
-                val templateIndexOld = _templateTitleList.value!!.indexOfFirst { it.templateId == chatRoomEntity.templateConfiguration!!.template.templateId } + 1
-                val modeIndex = tempalteModeList.value!!.indexOfFirst { it.javaClass == chatRoomEntity.templateConfiguration!!.templateMode.javaClass }
-                titleIndex == 0 || !(titleIndex == templateIndexOld && modeId == modeIndex)
+            templateTitleList.postValue(list)
+            chatRoom.templateConfiguration?.also { templateConfiguration ->
+                templateTitleValue.postValue(templateConfiguration.template.title)
+                templateModeValue.postValue(templateConfiguration.templateMode.massage)
             }
         }
     }
 
     // 送信
     suspend fun submit() {
-        if (templateTitleValue.value!! != "選択なし") {
-            val template = templateTitleList.value!![templateIndexValue.value!!]
-            val templateMode = tempalteModeList.value!![modeValue.value!!]
+        if (templateTitleValue.value!! != templateTitleList.value!![0].title) {
+            val template = templateTitleList.value!!.first { it.title == templateTitleValue.value!! }
+            val templateMode = templateModeList.value!!.first { it.massage == templateModeValue.value!! }
             val templateConfiguration = TemplateConfiguration(template, templateMode)
-            chatRoomEntity.templateConfiguration = templateConfiguration
+            chatRoom.templateConfiguration = templateConfiguration
         } else {
-            chatRoomEntity.templateConfiguration = null
+            chatRoom.templateConfiguration = null
         }
-        chatUseCase.updateRoom(chatRoomEntity)
+        chatUseCase.updateRoom(chatRoom)
+    }
+
+    // 変更ボタンのバリデート
+    private fun changeSubmitButton() {
+        val templateTitle = templateTitleValue.value
+        val templateMode = templateModeValue.value
+
+        _isEnableSubmitButton.value = if (chatRoom.templateConfiguration == null) {
+            // 現在、テンプレートが設定されていない場合
+            templateTitleList.value != null && templateTitle != templateTitleList.value!![0].title && templateMode != null
+        } else {
+            // 現在、テンプレートが設定されている場合
+            val oldTemplateTitle = chatRoom.templateConfiguration!!.template.title
+            val oldTemplateMode = chatRoom.templateConfiguration!!.templateMode.massage
+            templateTitle == null || (templateMode != null && !(templateTitle == oldTemplateTitle && templateMode == oldTemplateMode))
+        }
+    }
+
+    // テンプレート選択制御
+    private fun changedTemplateTitleValue(text: String) {
+        if (text.isEmpty() || text == templateTitleList.value!![0].title) {
+            templateModeValue.value = ""
+        }
+    }
+
+    // テンプレート表示形式選択欄のバリデート
+    private fun changeModeEnable(text: String) {
+        val result = text.isNotEmpty() && text != templateTitleList.value!![0].title
+        _isEnableTemplateMode.value = result
     }
 }

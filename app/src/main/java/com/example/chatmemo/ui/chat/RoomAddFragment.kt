@@ -66,7 +66,7 @@ class RoomAddFragment : Fragment() {
             )
             binding.spinnerTitle.setAdapter(arrayAdapter)
         })
-        viewModel.tempalteModeList.observe(viewLifecycleOwner, Observer { modeList ->
+        viewModel.templateModeList.observe(viewLifecycleOwner, Observer { modeList ->
             val modeTitleList = modeList.map { it.massage }
             val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
                 requireActivity(), android.R.layout.simple_dropdown_item_1line, modeTitleList

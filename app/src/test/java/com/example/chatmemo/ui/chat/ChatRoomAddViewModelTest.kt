@@ -53,7 +53,7 @@ class ChatRoomAddViewModelTest {
         viewModel = RoomAddViewModel(templateUseCase, chatUseCase)
         viewModel.templateTitleValue.observeForever(observerString)
         viewModel.titleText.observeForever(observerString)
-        viewModel.tempalteModeValue.observeForever(observerString)
+        viewModel.templateModeValue.observeForever(observerString)
         viewModel.isEnableTemplateMode.observeForever(observerBoolean)
         viewModel.isEnableSubmitButton.observeForever(observerBoolean)
     }
@@ -85,7 +85,7 @@ class ChatRoomAddViewModelTest {
     fun validateByTitleNull() {
         viewModel.titleText.value = ""
         viewModel.templateTitleValue.value = "testTemplate1"
-        viewModel.tempalteModeValue.value = "順番"
+        viewModel.templateModeValue.value = "順番"
         viewModel.changeSubmitButton()
         assertEquals(viewModel.isEnableSubmitButton.value!!, false)
     }
@@ -137,7 +137,7 @@ class ChatRoomAddViewModelTest {
     fun validateByTemplateNotNullAndTemplateModeNotNull() {
         viewModel.titleText.value = "test"
         viewModel.templateTitleValue.value = "testTemplate1"
-        viewModel.tempalteModeValue.value = "順番"
+        viewModel.templateModeValue.value = "順番"
         viewModel.changeSubmitButton()
         assertEquals(viewModel.isEnableSubmitButton.value!!, true)
     }
@@ -154,9 +154,9 @@ class ChatRoomAddViewModelTest {
     @Test
     fun changedTemplateTitleByNotNone() {
         viewModel.templateTitleValue.value = "testTemplate1"
-        viewModel.tempalteModeValue.value = "順番"
+        viewModel.templateModeValue.value = "順番"
         viewModel.templateTitleValue.value = "testTemplate2"
-        assertEquals(viewModel.tempalteModeValue.value!!, "順番")
+        assertEquals(viewModel.templateModeValue.value!!, "順番")
         assertEquals(viewModel.isEnableTemplateMode.value!!, true)
     }
 
@@ -168,9 +168,9 @@ class ChatRoomAddViewModelTest {
     @Test
     fun changedTemplateTitleValueByNonr() {
         viewModel.templateTitleValue.value = "testTemplate1"
-        viewModel.tempalteModeValue.value = "順番"
+        viewModel.templateModeValue.value = "順番"
         viewModel.templateTitleValue.value = templateNon.title
-        assertEquals(viewModel.tempalteModeValue.value!!, "")
+        assertEquals(viewModel.templateModeValue.value!!, "")
         assertEquals(viewModel.isEnableTemplateMode.value!!, false)
     }
 

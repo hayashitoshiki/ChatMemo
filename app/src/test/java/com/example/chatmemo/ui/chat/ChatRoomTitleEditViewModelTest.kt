@@ -25,7 +25,7 @@ import java.time.LocalDateTime
 /**
  * ルーム名変更ダイアログ　ロジック仕様
  */
-class ChatRoomEntityTitleEditViewModelTest {
+class ChatRoomTitleEditViewModelTest {
 
     // LiveData用
     @Rule
