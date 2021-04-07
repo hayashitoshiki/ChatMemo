@@ -3,18 +3,15 @@ package com.example.chatmemo.ui.chat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.model.Template
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.example.chatmemo.domain.usecase.TemplateUseCase
 import com.example.chatmemo.domain.value.Comment
 import com.example.chatmemo.domain.value.TemplateConfiguration
-import com.example.chatmemo.domain.value.TemplateId
 import com.example.chatmemo.domain.value.TemplateMode
 import com.example.chatmemo.ui.utils.BaseViewModel
 import com.example.chatmemo.ui.utils.ViewModelLiveData
-import kotlinx.coroutines.launch
 
 /**
  * 新規ルーム作成画面_ロジック
@@ -26,7 +23,7 @@ class RoomAddViewModel(
 ) : BaseViewModel() {
 
     val titleText = MutableLiveData("")
-    val templateTitleList = ViewModelLiveData<List<Template>>()
+    val templateTitleList: LiveData<List<Template>> = templateUseCase.getSpinnerTemplateAll()
     val templateTitleValue = MutableLiveData<String>()
     val templateModeList = ViewModelLiveData<List<TemplateMode>>()
     val templateModeValue = MediatorLiveData<String>()
@@ -42,13 +39,8 @@ class RoomAddViewModel(
         _isEnableSubmitButton.addSource(templateTitleValue) { changeSubmitButton() }
         _isEnableSubmitButton.addSource(templateModeValue) { changeSubmitButton() }
 
-        viewModelScope.launch {
-            val modeList = listOf(TemplateMode.Order("順番"), TemplateMode.Randam("ランダム"))
-            templateModeList.setValue(modeList)
-            val list = arrayListOf(Template(TemplateId(0), "選択なし", listOf()))
-            list.addAll(templateUseCase.getTemplateAll())
-            templateTitleList.setValue(list)
-        }
+        val modeList = listOf(TemplateMode.Order("順番"), TemplateMode.Randam("ランダム"))
+        templateModeList.setValue(modeList)
     }
 
     // 新規ルーム作成

@@ -17,7 +17,8 @@ class ChatUseCaseImp(private val dataBaseRepository: DataBaseRepository) : ChatU
     }
 
     override suspend fun deleteRoom(roomId: RoomId) {
-        TODO("Not yet implemented")
+        dataBaseRepository.deleteCommentByRoomId(roomId)
+        dataBaseRepository.deleteRoom(roomId)
     }
 
     override suspend fun createRoom(chatRoom: ChatRoom) {
@@ -39,10 +40,5 @@ class ChatUseCaseImp(private val dataBaseRepository: DataBaseRepository) : ChatU
     override suspend fun addComment(comment: Comment, roomId: RoomId) {
         dataBaseRepository.addComment(comment, roomId)
     }
-
-    override fun getCommentAll(roomId: RoomId): List<Comment> {
-        TODO("Not yet implemented")
-    }
-
 
 }

@@ -21,7 +21,5 @@ interface ChatUseCase {
 
     suspend fun updateComment(commentList: List<Comment>, roomId: RoomId)
 
-    fun getCommentAll(roomId: RoomId): List<Comment>
-
     suspend fun addComment(comment: Comment, roomId: RoomId)
 }

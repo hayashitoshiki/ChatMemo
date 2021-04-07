@@ -43,9 +43,9 @@ class FixedPhraseListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.title = "定型文一覧"
-        viewModel.getList()
-        viewModel.phraseList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
-        viewModel.status.observe(viewLifecycleOwner,
+        viewModel.templateList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
+        viewModel.status.observe(
+            viewLifecycleOwner,
             Observer { if (it != null && !it) showErrorToast() })
 
         val adapter = PhraseTitleListAdapter(listOf())

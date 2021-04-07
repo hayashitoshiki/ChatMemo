@@ -5,8 +5,8 @@ import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.model.Template
 import com.example.chatmemo.domain.value.Comment
 import com.example.chatmemo.domain.value.RoomId
+import com.example.chatmemo.domain.value.TemplateId
 import com.example.chatmemo.model.entity.ChatRoomEntity
-import com.example.chatmemo.model.entity.CommentEntity
 import com.example.chatmemo.model.entity.PhraseEntity
 import com.example.chatmemo.model.entity.TemplateEntity
 
@@ -34,14 +34,7 @@ interface DataBaseRepository {
     /**
      * roomIdに関連するコメント削除
      */
-    suspend fun deleteCommentByRoomId(roomId: Long)
-
-    /**
-     * ルームIDに関連するコメント全取得
-     * @param roomId ルームID
-     * @return 指定したルームのチャットリスト
-     */
-    suspend fun getCommentAll(roomId: Long): List<CommentEntity>
+    suspend fun deleteCommentByRoomId(roomId: RoomId)
 
     // endregion
 
@@ -63,15 +56,14 @@ interface DataBaseRepository {
     /**
      * 指定の定型文削除
      * @param template 消したい定型文リストのタイトル
-     * return 正常に削除できたか
      */
-    suspend fun deleteTemplateTitle(template: TemplateEntity)
+    suspend fun deleteTemplateTitle(template: Template)
 
     /**
      * 定型文のタイトル一覧取得
      * return 定型文のタイトル一覧
      */
-    suspend fun getPhraseTitle(): List<Template>
+    fun getPhraseTitle(): LiveData<List<Template>>
 
     /**
      * タイトルに紐づいた定型文取得
@@ -104,7 +96,7 @@ interface DataBaseRepository {
      * @param templateId 消したい定型文リストのタイトル
      * return 正常に削除できたか
      */
-    suspend fun deletePhraseByTitle(templateId: Long): Boolean
+    suspend fun deletePhraseByTitle(templateId: TemplateId): Boolean
 
     /**
      * タイトルに紐づいた定型文リスト取得
@@ -128,15 +120,15 @@ interface DataBaseRepository {
 
     /**
      * チャットルーム削除
-     * @param id 削除するルームID
+     * @param roomId 削除するルームID
      */
-    suspend fun deleteRoom(id: Long)
+    suspend fun deleteRoom(roomId: RoomId)
 
     /**
      * チャットルーム更新
-     * @param chatRoomEntity 更新するルーム
+     * @param chatRoom 更新するルーム
      */
-    suspend fun updateRoom(chatRoomEntity: ChatRoom)
+    suspend fun updateRoom(chatRoom: ChatRoom)
 
     /**
      * ルーム取得

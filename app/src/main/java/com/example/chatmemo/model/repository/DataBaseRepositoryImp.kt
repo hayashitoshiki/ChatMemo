@@ -43,9 +43,10 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // コメント削除
-    override suspend fun deleteCommentByRoomId(roomId: Long) {
+    override suspend fun deleteCommentByRoomId(roomId: RoomId) {
         withContext(Dispatchers.IO) {
-            commentDao.deleteById(roomId)
+            val id = roomId.value.toLong()
+            commentDao.deleteById(id)
         }
     }
 
@@ -57,13 +58,6 @@ class DataBaseRepositoryImp : DataBaseRepository {
                 val commentDate = it.time.toDataBaseDate()
                 commentDao.updateUserBy(user, commentDate)
             }
-        }
-    }
-
-    // 全コメント取得
-    override suspend fun getCommentAll(roomId: Long): List<CommentEntity> {
-        return withContext(Dispatchers.IO) {
-            return@withContext commentDao.getAllCommentByRoom(roomId)
         }
     }
 
@@ -97,9 +91,12 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // テンプレート削除
-    override suspend fun deleteTemplateTitle(template: TemplateEntity) {
+    override suspend fun deleteTemplateTitle(template: Template) {
         withContext(Dispatchers.IO) {
-            templateDao.delete(template)
+            val title = template.title
+            val id = template.templateId.value.toLong()
+            val templateEntity = TemplateEntity(id, title)
+            templateDao.delete(templateEntity)
         }
     }
 
@@ -118,11 +115,16 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // テンプレートタイトル全取得
-    override suspend fun getPhraseTitle(): List<Template> {
-        return withContext(Dispatchers.IO) {
-            return@withContext templateDao.getAll()
-                .map { Template(TemplateId(it.id!!.toInt()), it.title, listOf()) }
+    override fun getPhraseTitle(): LiveData<List<Template>> {
+        val templateListLiveData = templateDao.getAll()
+        val templateList = MutableLiveData<List<Template>>()
+        templateListLiveData.observeForever {
+            val list = it.map { templateEntity ->
+                Template(TemplateId(templateEntity.id!!.toInt()), templateEntity.title, listOf())
+            }
+            templateList.postValue(list)
         }
+        return templateList
     }
 
     // 定型文登録
@@ -153,10 +155,10 @@ class DataBaseRepositoryImp : DataBaseRepository {
         }
     }
 
-    override suspend fun deletePhraseByTitle(templateId: Long): Boolean {
+    override suspend fun deletePhraseByTitle(templateId: TemplateId): Boolean {
         return withContext(Dispatchers.IO) {
             try {
-                phraseDao.deleteById(templateId)
+                phraseDao.deleteById(templateId.value.toLong())
             } catch (e: Exception) {
                 Log.e(TAG, "Failure :$e")
                 return@withContext false
@@ -255,8 +257,9 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // ルーム削除
-    override suspend fun deleteRoom(id: Long) {
+    override suspend fun deleteRoom(roomId: RoomId) {
         withContext(Dispatchers.IO) {
+            val id = roomId.value.toLong()
             roomDao.deleteById(id)
         }
     }

@@ -3,20 +3,18 @@ package com.example.chatmemo.ui.chat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.model.Template
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.example.chatmemo.domain.usecase.TemplateUseCase
 import com.example.chatmemo.domain.value.TemplateConfiguration
-import com.example.chatmemo.domain.value.TemplateId
 import com.example.chatmemo.domain.value.TemplateMode
 import com.example.chatmemo.ui.utils.BaseViewModel
 import com.example.chatmemo.ui.utils.ViewModelLiveData
-import kotlinx.coroutines.launch
 
 /**
  * ルームの定型文設定変更ダイアログ_ロジック
+ * @property chatRoom 設定を変更するチャットルーム
  * @property templateUseCase templateに関するUseCase
  * @property chatUseCase Chatに関するUseCase
  */
@@ -26,7 +24,7 @@ class RoomPhraseEditViewModel(
     private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
 
-    val templateTitleList: ViewModelLiveData<List<Template>> = ViewModelLiveData<List<Template>>()
+    val templateTitleList: LiveData<List<Template>> = templateUseCase.getSpinnerTemplateAll()
     val templateTitleValue = MutableLiveData<String>()
     val templateModeList: ViewModelLiveData<List<TemplateMode>> = ViewModelLiveData<List<TemplateMode>>()
     val templateModeValue = MediatorLiveData<String>()
@@ -40,17 +38,12 @@ class RoomPhraseEditViewModel(
         _isEnableTemplateMode.addSource(templateTitleValue) { changeModeEnable(it) }
         _isEnableSubmitButton.addSource(templateTitleValue) { changeSubmitButton() }
         _isEnableSubmitButton.addSource(templateModeValue) { changeSubmitButton() }
-        viewModelScope.launch {
-            val modeList = listOf(TemplateMode.Order("順番"), TemplateMode.Randam("ランダム"))
-            templateModeList.postValue(modeList)
-            val list = arrayListOf(Template(TemplateId(0), "選択なし", listOf()))
-            val templateList = templateUseCase.getTemplateAll()
-            list.addAll(templateList)
-            templateTitleList.postValue(list)
-            chatRoom.templateConfiguration?.also { templateConfiguration ->
-                templateTitleValue.postValue(templateConfiguration.template.title)
-                templateModeValue.postValue(templateConfiguration.templateMode.massage)
-            }
+
+        val modeList = listOf(TemplateMode.Order("順番"), TemplateMode.Randam("ランダム"))
+        templateModeList.setValue(modeList)
+        chatRoom.templateConfiguration?.also { templateConfiguration ->
+            templateTitleValue.value = templateConfiguration.template.title
+            templateModeValue.value = templateConfiguration.templateMode.massage
         }
     }
 

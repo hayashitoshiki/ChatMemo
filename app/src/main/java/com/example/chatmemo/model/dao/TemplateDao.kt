@@ -1,5 +1,6 @@
 package com.example.chatmemo.model.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.chatmemo.model.entity.TemplateEntity
 
@@ -19,7 +20,7 @@ interface TemplateDao {
     suspend fun delete(template: TemplateEntity)
 
     @Query("SELECT * FROM template")
-    fun getAll(): List<TemplateEntity>
+    fun getAll(): LiveData<List<TemplateEntity>>
 
     @Query("SELECT * FROM template WHERE id = :id")
     suspend fun getTemplateById(id: Long): TemplateEntity
