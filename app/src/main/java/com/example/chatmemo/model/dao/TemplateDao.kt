@@ -10,6 +10,9 @@ import com.example.chatmemo.model.entity.TemplateEntity
 @Dao
 interface TemplateDao {
 
+    @Query("SELECT MAX(id) FROM template")
+    suspend fun getNextId(): Long?
+
     @Insert
     suspend fun insert(template: TemplateEntity)
 

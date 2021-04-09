@@ -6,8 +6,8 @@ import com.example.chatmemo.domain.model.Template
 import com.example.chatmemo.domain.value.Comment
 import com.example.chatmemo.domain.value.RoomId
 import com.example.chatmemo.domain.value.TemplateId
+import com.example.chatmemo.domain.value.TemplateMessage
 import com.example.chatmemo.model.entity.ChatRoomEntity
-import com.example.chatmemo.model.entity.PhraseEntity
 import com.example.chatmemo.model.entity.TemplateEntity
 
 /**
@@ -39,19 +39,26 @@ interface DataBaseRepository {
     // endregion
 
     // region 定型文タイトル
+
+    /**
+     * 次のID連番の値を返す
+     * @return テンプレートタイトルの次の連番
+     */
+    suspend fun getNextTemplateId(): TemplateId
+
     /**
      * 定型文登録
-     * @param templateTitle 追加する定型文リスト
+     * @param template 追加する定型文リスト
      * return 正常登録できたか
      */
-    suspend fun createTemplate(templateTitle: TemplateEntity): Boolean
+    suspend fun createTemplate(template: Template): Boolean
 
     /**
      * 定型文更新
-     * @param templateTitle 追加する定型文リスト
+     * @param template 追加する定型文リスト
      * return 正常登録できたか
      */
-    suspend fun updateTemplate(templateTitle: TemplateEntity): Boolean
+    suspend fun updateTemplate(template: Template): Boolean
 
     /**
      * 指定の定型文削除
@@ -73,23 +80,10 @@ interface DataBaseRepository {
     /**
      * Idに紐づく定型文取得
      */
-    suspend fun getTemplateById(id: Long): TemplateEntity
+    suspend fun getTemplateById(templateId: TemplateId): TemplateEntity
     // endregion
 
     // region 定型文
-    /**
-     * 定型文登録
-     * @param phraseList 追加する定型文リスト
-     * return 正常登録できたか
-     */
-    suspend fun addPhrase(phraseList: ArrayList<PhraseEntity>): Boolean
-
-    /**
-     * 定型文更新
-     * @param phraseList 追加する定型文リスト
-     * return 正常登録できたか
-     */
-    suspend fun updatePhrase(phraseList: ArrayList<PhraseEntity>, templateId: Long): Boolean
 
     /**
      * 指定の定型文削除
@@ -101,7 +95,7 @@ interface DataBaseRepository {
     /**
      * タイトルに紐づいた定型文リスト取得
      */
-    suspend fun getPhraseByTitle(templateId: Long): List<PhraseEntity>
+    suspend fun getPhraseByTitle(templateId: TemplateId): List<TemplateMessage>
 
     // endregion
 
@@ -110,7 +104,7 @@ interface DataBaseRepository {
      * 次のID連番の値を返す
      * @return チャットルームDBのの次の連番
      */
-    suspend fun getNextId(): RoomId
+    suspend fun getNextRoomId(): RoomId
 
     /**
      * 新規ルーム作成

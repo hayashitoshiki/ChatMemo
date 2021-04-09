@@ -57,7 +57,7 @@ class RoomPhraseEditDialogFragment : DialogFragment() {
             val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
                 requireActivity(), android.R.layout.simple_dropdown_item_1line, modeList
             )
-            binding.spinnerTitle.setAdapter(arrayAdapter)
+            binding.spinnerMode.setAdapter(arrayAdapter)
         })
 
         // spinner 設定

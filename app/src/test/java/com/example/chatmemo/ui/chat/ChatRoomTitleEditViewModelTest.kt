@@ -73,7 +73,7 @@ class ChatRoomTitleEditViewModelTest {
      */
     @Test
     fun changeSubmitButtonByInit() {
-        assertEquals(viewModel.isEnableSubmitButton.value, false)
+        assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -84,7 +84,7 @@ class ChatRoomTitleEditViewModelTest {
     @Test
     fun changeSubmitButtonByTitleNone() {
         viewModel.newRoomTitle.value = ""
-        assertEquals(viewModel.isEnableSubmitButton.value, false)
+        assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -95,7 +95,7 @@ class ChatRoomTitleEditViewModelTest {
     @Test
     fun changeSubmitButtonByTitleEqual() {
         viewModel.newRoomTitle.value = "testRoom"
-        assertEquals(viewModel.isEnableSubmitButton.value, false)
+        assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -106,7 +106,7 @@ class ChatRoomTitleEditViewModelTest {
     @Test
     fun changeSubmitButtonTitleNotEqual() {
         viewModel.newRoomTitle.value = "testRoom2"
-        assertEquals(viewModel.isEnableSubmitButton.value, true)
+        assertEquals(true, viewModel.isEnableSubmitButton.value)
     }
 
     // endregion

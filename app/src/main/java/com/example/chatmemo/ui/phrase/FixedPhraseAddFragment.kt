@@ -26,7 +26,8 @@ import com.example.chatmemo.databinding.FragmentFixedPhraseAddBinding
 import com.example.chatmemo.domain.value.TemplateMessage
 import com.example.chatmemo.ui.adapter.PhraseListAdapter
 import com.example.chatmemo.ui.transition.FabTransform
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 /**
  * 定型文作成画面
@@ -34,8 +35,9 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class FixedPhraseAddFragment : Fragment() {
 
     private lateinit var binding: FragmentFixedPhraseAddBinding
-    private val viewModel: FixedPhraseAddViewModel by viewModel()
     private val args: FixedPhraseAddFragmentArgs by navArgs()
+    private val viewModel: FixedPhraseAddViewModel by inject { parametersOf(args.data) }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -75,7 +77,6 @@ class FixedPhraseAddFragment : Fragment() {
 
         (activity as AppCompatActivity).supportActionBar?.title = "定型文作成"
 
-        viewModel.init(args.data)
         viewModel.submitState.observe(viewLifecycleOwner, Observer { back(it) })
         viewModel.phraseList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
 

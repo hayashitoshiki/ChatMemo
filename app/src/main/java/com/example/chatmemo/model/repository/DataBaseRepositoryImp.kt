@@ -65,27 +65,40 @@ class DataBaseRepositoryImp : DataBaseRepository {
 
     // region 定型文
 
-    // テンプレートタイトル登録
-    override suspend fun createTemplate(templateTitle: TemplateEntity): Boolean {
+    override suspend fun getNextTemplateId(): TemplateId {
+        val id = templateDao.getNextId() ?: 0
+        return TemplateId(id.toInt() + 1)
+    }
+
+    // テンプレート登録
+    override suspend fun createTemplate(template: Template): Boolean {
         return withContext(Dispatchers.IO) {
-            var flg = true
-            val list = templateDao.getAllByTitle(templateTitle.title)
-            list.forEach {
-                if (it.title == templateTitle.title) {
-                    flg = false
-                }
+            val templateId = template.templateId.value.toLong()
+            val templateTitle = template.title
+            val templateEntity = TemplateEntity(null, templateTitle)
+            templateDao.insert(templateEntity)
+            template.templateMessageList.forEach {
+                val phraseTitle = it.massage
+                val phrase = PhraseEntity(null, phraseTitle, templateId)
+                phraseDao.insert(phrase)
             }
-            if (flg) {
-                templateDao.insert(templateTitle)
-            }
-            return@withContext flg
+            return@withContext true
         }
     }
 
-    // テンプレートタイトル登録
-    override suspend fun updateTemplate(templateTitle: TemplateEntity): Boolean {
+    // テンプレート更新
+    override suspend fun updateTemplate(template: Template): Boolean {
         return withContext(Dispatchers.IO) {
-            templateDao.update(templateTitle)
+            val templateId = template.templateId.value.toLong()
+            val templateTitle = template.title
+            val templateEntity = TemplateEntity(templateId, templateTitle)
+            templateDao.update(templateEntity)
+            phraseDao.deleteAllByTemplateId(templateId)
+            template.templateMessageList.forEach {
+                val phraseTitle = it.massage
+                val phrase = PhraseEntity(null, phraseTitle, templateId)
+                phraseDao.insert(phrase)
+            }
             return@withContext true
         }
     }
@@ -108,8 +121,9 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // タイトルに紐づくテンプレートタイトル取得
-    override suspend fun getTemplateById(id: Long): TemplateEntity {
+    override suspend fun getTemplateById(templateId: TemplateId): TemplateEntity {
         return withContext(Dispatchers.IO) {
+            val id = templateId.value.toLong()
             return@withContext templateDao.getTemplateById(id)
         }
     }
@@ -127,34 +141,6 @@ class DataBaseRepositoryImp : DataBaseRepository {
         return templateList
     }
 
-    // 定型文登録
-    override suspend fun addPhrase(phraseList: ArrayList<PhraseEntity>): Boolean {
-        return withContext(Dispatchers.IO) {
-            phraseDao.getAll().forEach { p ->
-                if (p.templateId == phraseList.first().templateId) {
-                    return@withContext false
-                }
-            }
-            phraseList.forEach {
-                phraseDao.insert(it)
-            }
-            return@withContext true
-        }
-    }
-
-    // コメント更新
-    override suspend fun updatePhrase(
-        phraseList: ArrayList<PhraseEntity>, templateId: Long
-    ): Boolean {
-        return withContext(Dispatchers.IO) {
-            phraseDao.deleteById(templateId)
-            phraseList.forEach {
-                phraseDao.insert(it)
-            }
-            return@withContext true
-        }
-    }
-
     override suspend fun deletePhraseByTitle(templateId: TemplateId): Boolean {
         return withContext(Dispatchers.IO) {
             try {
@@ -168,9 +154,13 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // タイトルに紐づいた定型文取得
-    override suspend fun getPhraseByTitle(templateId: Long): List<PhraseEntity> {
+    override suspend fun getPhraseByTitle(templateId: TemplateId): List<TemplateMessage> {
         return withContext(Dispatchers.IO) {
-            return@withContext phraseDao.getAllByTitle(templateId)
+            val id = templateId.value.toLong()
+            return@withContext phraseDao.getAllByTitle(id).map {
+                val message = it.text
+                TemplateMessage(message)
+            }
         }
     }
 
@@ -179,7 +169,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     // region ルーム
 
     // 次の連番を返す
-    override suspend fun getNextId(): RoomId {
+    override suspend fun getNextRoomId(): RoomId {
         val id = roomDao.getNextId() ?: 0
         return RoomId(id.toInt() + 1)
     }

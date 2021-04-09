@@ -1,9 +1,9 @@
 package com.example.chatmemo.domain.value
 
 sealed class TemplateMode(val massage: String) {
-    data class Order(var message: String = "", var position: Int = 0) : TemplateMode(message)
+    data class Order(var message: String = "順番", var position: Int = 0) : TemplateMode(message)
     data class Randam(
-        var message: String = "", var position: MutableList<Int> = mutableListOf()
+        var message: String = "ランダム", var position: MutableList<Int> = mutableListOf()
     ) : TemplateMode(message)
 
     fun getInt(): Int {

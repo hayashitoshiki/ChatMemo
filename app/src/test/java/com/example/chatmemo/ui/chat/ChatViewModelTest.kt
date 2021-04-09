@@ -144,7 +144,7 @@ class ChatViewModelTest {
         viewModel.commentText.value = "test"
         viewModel.submit()
         val newCommentListSize = (viewModel.chatRoom.value!!.templateConfiguration!!.templateMode as TemplateMode.Order).position
-        assertEquals(newCommentListSize, 0)
+        assertEquals(0, newCommentListSize)
     }
 
     /**
@@ -180,7 +180,7 @@ class ChatViewModelTest {
         viewModel.commentText.value = "test"
         viewModel.submit()
         val newCommentListSize = (viewModel.chatRoom.value!!.templateConfiguration!!.templateMode as TemplateMode.Randam).position.size
-        assertEquals(newCommentListSize, 0)
+        assertEquals(0, newCommentListSize)
     }
 
     // endregion
@@ -230,7 +230,7 @@ class ChatViewModelTest {
     @Test
     fun changeSubmitButtonTrue() {
         viewModel.commentText.value = "test"
-        assertEquals(viewModel.isEnableSubmitButton.value, true)
+        assertEquals(true, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -241,7 +241,7 @@ class ChatViewModelTest {
     @Test
     fun changeSubmitButtonFalse() {
         viewModel.commentText.value = ""
-        assertEquals(viewModel.isEnableSubmitButton.value, false)
+        assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     // endregion

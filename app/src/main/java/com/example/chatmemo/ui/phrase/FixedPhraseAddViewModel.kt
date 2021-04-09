@@ -1,22 +1,26 @@
 package com.example.chatmemo.ui.phrase
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.chatmemo.domain.model.Template
 import com.example.chatmemo.domain.usecase.TemplateUseCase
 import com.example.chatmemo.domain.value.TemplateId
 import com.example.chatmemo.domain.value.TemplateMessage
+import com.example.chatmemo.ui.utils.BaseViewModel
+import com.example.chatmemo.ui.utils.ViewModelLiveData
 import kotlinx.coroutines.launch
 
 /**
  * 定型文作成画面_UIロジック
  *
- * @property dataBaseRepository DBアクセス用repository
+ * @property template DBアクセス用repository
+ * @property templateUseCase テンプレート用UseCase
  */
 class FixedPhraseAddViewModel(
-    private val templateUseCase: TemplateUseCase
-) : ViewModel() {
-
-    private var mTemplate = Template(TemplateId(0), "", listOf())
+    private val template: Template?, private val templateUseCase: TemplateUseCase
+) : BaseViewModel() {
 
     val titleText = MutableLiveData("")
     val phraseText = MutableLiveData("")
@@ -24,48 +28,51 @@ class FixedPhraseAddViewModel(
     val isPhraseEnableSubmitButton: LiveData<Boolean> = _isEnablePhraseSubmitButton
     private val _isEnableSubmitButton = MediatorLiveData<Boolean>()
     val isEnableSubmitButton: LiveData<Boolean> = _isEnableSubmitButton
-    private val _phraseList = MutableLiveData<MutableList<TemplateMessage>>(arrayListOf())
-    val phraseList: LiveData<MutableList<TemplateMessage>> = _phraseList
-
-    private val _submitState = MutableLiveData<Boolean>()
-    val submitState: LiveData<Boolean> = _submitState
-    private val _submitText = MutableLiveData<String>()
-    val submitText: LiveData<String> = _submitText
+    val phraseList = ViewModelLiveData<MutableList<TemplateMessage>>()
+    val submitState = ViewModelLiveData<Boolean>()
+    val submitText = ViewModelLiveData<String>()
 
     init {
         _isEnableSubmitButton.addSource(titleText) { changeSubmitButton() }
+        _isEnableSubmitButton.addSource(phraseList) { changeSubmitButton() }
         _isEnablePhraseSubmitButton.addSource(phraseText) { changePhraseSubmitButton(it) }
     }
 
     // 初期化
-    fun init(template: Template?) {
+    init {
         if (template != null) {
             viewModelScope.launch {
-                mTemplate = template
-                val list: MutableList<TemplateMessage> = templateUseCase.getPhraseByTemplateId(
-                    template.templateId
-                ).toMutableList()
-                _phraseList.postValue(list)
                 titleText.postValue(template.title)
-                _submitText.postValue("更新")
+                val templateId: TemplateId = template.templateId
+                val list = templateUseCase.getPhraseByTemplateId(templateId).toMutableList()
+                phraseList.postValue(list)
+                submitText.postValue("更新")
             }
         } else {
-            val templateId = templateUseCase.getTemplateId()
-            mTemplate = Template(templateId, "", listOf())
-            _submitText.postValue("追加")
+            phraseList.postValue(mutableListOf())
+            submitText.postValue("追加")
         }
     }
 
     // 登録
     fun submit() {
         viewModelScope.launch {
-
             var result = false
-            when (_submitText.value) {
-                "追加" -> result = templateUseCase.createTemplate(mTemplate, phraseList.value!!)
-                "更新" -> result = templateUseCase.updateTemplate(mTemplate, phraseList.value!!)
+            val templateTitle = titleText.value!!
+            val phraseList = phraseList.value!!
+            when (submitText.value) {
+                "追加" -> {
+                    val templateId: TemplateId = templateUseCase.getNextTemplateId()
+                    val template = Template(templateId, templateTitle, phraseList)
+                    result = templateUseCase.createTemplate(template)
+                }
+                "更新" -> {
+                    val templateId = template!!.templateId
+                    val template = Template(templateId, templateTitle, phraseList)
+                    result = templateUseCase.updateTemplate(template)
+                }
             }
-            _submitState.postValue(result)
+            submitState.postValue(result)
         }
     }
 
@@ -74,14 +81,13 @@ class FixedPhraseAddViewModel(
         val phrase = TemplateMessage(phraseText.value!!)
         val list = phraseList.value!!
         list.add(phrase)
-        _phraseList.postValue(list)
+        phraseList.postValue(list)
         phraseText.value = ""
-        changeSubmitButton()
     }
 
     // リスト更新
     fun updatePhraseList(items: MutableList<TemplateMessage>) {
-        _phraseList.value = items
+        phraseList.setValue(items)
     }
 
     // 定型文文章追加ボタン
@@ -91,6 +97,6 @@ class FixedPhraseAddViewModel(
 
     // 登録・更新ボタン活性・非活性制御
     private fun changeSubmitButton() {
-        _isEnableSubmitButton.value = titleText.value!!.isNotEmpty() && _phraseList.value!!.size != 0
+        _isEnableSubmitButton.value = !titleText.value.isNullOrEmpty() && phraseList.value != null && phraseList.value!!.size != 0
     }
 }

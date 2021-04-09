@@ -26,7 +26,7 @@ class ChatUseCaseImp(private val dataBaseRepository: DataBaseRepository) : ChatU
     }
 
     override suspend fun getNextRoomId(): RoomId {
-        return dataBaseRepository.getNextId()
+        return dataBaseRepository.getNextRoomId()
     }
 
     override fun getChatRoomByRoomById(roomId: RoomId): LiveData<ChatRoom> {

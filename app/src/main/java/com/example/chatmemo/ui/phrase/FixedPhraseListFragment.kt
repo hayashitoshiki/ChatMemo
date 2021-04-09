@@ -44,8 +44,7 @@ class FixedPhraseListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.title = "定型文一覧"
         viewModel.templateList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
-        viewModel.status.observe(
-            viewLifecycleOwner,
+        viewModel.status.observe(viewLifecycleOwner,
             Observer { if (it != null && !it) showErrorToast() })
 
         val adapter = PhraseTitleListAdapter(listOf())
@@ -80,8 +79,9 @@ class FixedPhraseListFragment : Fragment() {
         // 追加ボタン
         binding.fab.setOnClickListener {
             val extras = FragmentNavigatorExtras(it to "end_fab_transition")
+            val data = bundleOf("data" to null)
             findNavController().navigate(
-                R.id.action_fixedPhraseListFragment_to_fixedPhraseAddFragment, null, null, extras
+                R.id.action_fixedPhraseListFragment_to_fixedPhraseAddFragment, data, null, extras
             )
         }
     }

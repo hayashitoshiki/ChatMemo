@@ -64,6 +64,7 @@ class ChatRoomPhraseEditViewModelTest {
         val observerBoolean = mock<Observer<Boolean>>()
 
         templateUseCase = mockk<TemplateUseCase>().also {
+            coEvery { it.getSpinnerTemplateAll() } returns MutableLiveData(templateList)
             coEvery { it.getTemplateAll() } returns MutableLiveData(templateList)
         }
         chatUseCase = mockk<ChatUseCase>()
@@ -92,6 +93,37 @@ class ChatRoomPhraseEditViewModelTest {
         Dispatchers.resetMain()
     }
 
+    // region 初期化
+    /**
+     * 新規作成ボタン活性バリデート
+     * 条件：選択なしの場合の初期状態
+     * 結果：nullが設定される
+     */
+    @Test
+    fun initByNone() {
+        setChatRoom1()
+        Assert.assertEquals(null, viewModel.templateTitleValue.value)
+        Assert.assertEquals(null, viewModel.templateModeValue.value)
+        Assert.assertEquals(null, viewModel.isEnableTemplateMode.value)
+        Assert.assertEquals(null, viewModel.isEnableSubmitButton.value)
+    }
+
+    /**
+     * 新規作成ボタン活性バリデート
+     * 条件：選択済みの場合の初期状態
+     * 結果：falseが設定される
+     */
+    @Test
+    fun initByChoice() {
+        setChatRoom2()
+        Assert.assertEquals(template.title, viewModel.templateTitleValue.value)
+        Assert.assertEquals(templateMode1.message, viewModel.templateModeValue.value)
+        Assert.assertEquals(true, viewModel.isEnableTemplateMode.value)
+        Assert.assertEquals(false, viewModel.isEnableSubmitButton.value)
+    }
+
+
+    // endregion
 
     // region 新規作成ボタンのバリデート
 
@@ -103,7 +135,7 @@ class ChatRoomPhraseEditViewModelTest {
     @Test
     fun validateInitByNone() {
         setChatRoom1()
-        Assert.assertEquals(viewModel.isEnableSubmitButton.value, null)
+        Assert.assertEquals(null, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -114,7 +146,7 @@ class ChatRoomPhraseEditViewModelTest {
     @Test
     fun validateInitByChoice() {
         setChatRoom2()
-        Assert.assertEquals(viewModel.isEnableSubmitButton.value!!, false)
+        Assert.assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -126,7 +158,7 @@ class ChatRoomPhraseEditViewModelTest {
     fun validateByNonAndTitleNull() {
         setChatRoom1()
         viewModel.templateTitleValue.value = "選択なし"
-        Assert.assertEquals(viewModel.isEnableSubmitButton.value!!, false)
+        Assert.assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -138,7 +170,7 @@ class ChatRoomPhraseEditViewModelTest {
     fun validateByNonAndTitleNotNullAndTemplateModeNull() {
         setChatRoom1()
         viewModel.templateTitleValue.value = "testTemplate"
-        Assert.assertEquals(viewModel.isEnableSubmitButton.value!!, false)
+        Assert.assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -151,7 +183,7 @@ class ChatRoomPhraseEditViewModelTest {
         setChatRoom1()
         viewModel.templateTitleValue.value = "testTemplate"
         viewModel.templateModeValue.value = "順番"
-        Assert.assertEquals(viewModel.isEnableSubmitButton.value!!, true)
+        Assert.assertEquals(true, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -163,7 +195,7 @@ class ChatRoomPhraseEditViewModelTest {
     fun validateByChoiseAndTitleNull() {
         setChatRoom2()
         viewModel.templateTitleValue.value = "選択なし"
-        Assert.assertEquals(viewModel.isEnableSubmitButton.value!!, true)
+        Assert.assertEquals(true, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -176,7 +208,7 @@ class ChatRoomPhraseEditViewModelTest {
         setChatRoom2()
         viewModel.templateTitleValue.value = "testTemplate2"
         viewModel.templateModeValue.value = null
-        Assert.assertEquals(viewModel.isEnableSubmitButton.value!!, false)
+        Assert.assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -189,7 +221,7 @@ class ChatRoomPhraseEditViewModelTest {
         setChatRoom2()
         viewModel.templateTitleValue.value = "testTemplate1"
         viewModel.templateModeValue.value = "順番"
-        Assert.assertEquals(viewModel.isEnableSubmitButton.value!!, false)
+        Assert.assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -202,7 +234,7 @@ class ChatRoomPhraseEditViewModelTest {
         setChatRoom2()
         viewModel.templateTitleValue.value = "testTemplate1"
         viewModel.templateModeValue.value = "ランダム"
-        Assert.assertEquals(viewModel.isEnableSubmitButton.value!!, true)
+        Assert.assertEquals(true, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -215,7 +247,7 @@ class ChatRoomPhraseEditViewModelTest {
         setChatRoom2()
         viewModel.templateTitleValue.value = "testTemplate2"
         viewModel.templateModeValue.value = "順番"
-        Assert.assertEquals(viewModel.isEnableSubmitButton.value!!, true)
+        Assert.assertEquals(true, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -228,7 +260,7 @@ class ChatRoomPhraseEditViewModelTest {
         setChatRoom2()
         viewModel.templateTitleValue.value = "testTemplate2"
         viewModel.templateModeValue.value = "ランダム"
-        Assert.assertEquals(viewModel.isEnableSubmitButton.value!!, true)
+        Assert.assertEquals(true, viewModel.isEnableSubmitButton.value)
     }
 
     // endregion
@@ -246,8 +278,8 @@ class ChatRoomPhraseEditViewModelTest {
         viewModel.templateTitleValue.value = "testTemplate1"
         viewModel.templateModeValue.value = "順番"
         viewModel.templateTitleValue.value = "testTemplate2"
-        Assert.assertEquals(viewModel.templateModeValue.value!!, "順番")
-        Assert.assertEquals(viewModel.isEnableTemplateMode.value!!, true)
+        Assert.assertEquals("順番", viewModel.templateModeValue.value)
+        Assert.assertEquals(true, viewModel.isEnableTemplateMode.value)
     }
 
     /**
@@ -261,8 +293,8 @@ class ChatRoomPhraseEditViewModelTest {
         viewModel.templateTitleValue.value = "testTemplate1"
         viewModel.templateModeValue.value = "順番"
         viewModel.templateTitleValue.value = templateNon.title
-        Assert.assertEquals(viewModel.templateModeValue.value!!, "")
-        Assert.assertEquals(viewModel.isEnableTemplateMode.value!!, false)
+        Assert.assertEquals("", viewModel.templateModeValue.value)
+        Assert.assertEquals(false, viewModel.isEnableTemplateMode.value)
     }
 
     // endregion

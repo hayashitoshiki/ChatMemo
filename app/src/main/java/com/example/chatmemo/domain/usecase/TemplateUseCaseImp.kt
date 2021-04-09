@@ -31,22 +31,18 @@ class TemplateUseCaseImp(private val dataBaseRepository: DataBaseRepository) : T
     }
 
     override suspend fun getPhraseByTemplateId(templateId: TemplateId): List<TemplateMessage> {
-        TODO("Not yet implemented")
+        return dataBaseRepository.getPhraseByTitle(templateId)
     }
 
-    override suspend fun createTemplate(
-        template: Template, templateMessages: List<TemplateMessage>
-    ): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun createTemplate(template: Template): Boolean {
+        return dataBaseRepository.createTemplate(template)
     }
 
-    override suspend fun updateTemplate(
-        template: Template, templateMessages: List<TemplateMessage>
-    ): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun updateTemplate(template: Template): Boolean {
+        return dataBaseRepository.updateTemplate(template)
     }
 
-    override fun getTemplateId(): TemplateId {
-        TODO("Not yet implemented")
+    override suspend fun getNextTemplateId(): TemplateId {
+        return dataBaseRepository.getNextTemplateId()
     }
 }

@@ -1,6 +1,7 @@
 package com.example.chatmemo.ui.chat
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.chatmemo.domain.model.Template
 import com.example.chatmemo.domain.usecase.ChatUseCase
@@ -36,7 +37,7 @@ class ChatRoomAddViewModelTest {
     private val templateNon = Template(TemplateId(0), "選択なし", listOf())
     private val template1 = Template(TemplateId(1), "testTemplate", listOf())
     private val template2 = Template(TemplateId(2), "testTemplate2", listOf())
-    private val templateList = listOf(template1, template2)
+    private val templateList = listOf(templateNon, template1, template2)
 
     @ExperimentalCoroutinesApi
     @Before
@@ -47,7 +48,7 @@ class ChatRoomAddViewModelTest {
         val observerBoolean = mock<Observer<Boolean>>()
 
         val templateUseCase = mockk<TemplateUseCase>().also {
-            coEvery { it.getTemplateAll() } returns templateList
+            coEvery { it.getSpinnerTemplateAll() } returns MutableLiveData(templateList)
         }
         val chatUseCase = mockk<ChatUseCase>()
         viewModel = RoomAddViewModel(templateUseCase, chatUseCase)

@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.room.Room
 import com.example.chatmemo.domain.model.ChatRoom
+import com.example.chatmemo.domain.model.Template
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.example.chatmemo.domain.usecase.ChatUseCaseImp
 import com.example.chatmemo.domain.usecase.TemplateUseCase
@@ -54,9 +55,9 @@ class MyApplication : Application() {
         viewModel { HomeViewModel(get()) }
         viewModel { (id: RoomId) -> ChatViewModel(id, get()) }
         viewModel { RoomAddViewModel(get(), get()) }
-        viewModel { (roomEntity: ChatRoom) -> RoomPhraseEditViewModel(roomEntity, get(), get()) }
-        viewModel { (roomEntity: ChatRoom) -> RoomTitleEditViewModel(roomEntity, get()) }
-        viewModel { FixedPhraseAddViewModel(get()) }
+        viewModel { (chatroom: ChatRoom) -> RoomPhraseEditViewModel(chatroom, get(), get()) }
+        viewModel { (chatroom: ChatRoom) -> RoomTitleEditViewModel(chatroom, get()) }
+        viewModel { (template: Template?) -> FixedPhraseAddViewModel(template, get()) }
         viewModel { FixedPhraseListViewModel(get()) }
 
         factory<ChatUseCase> { ChatUseCaseImp(get()) }

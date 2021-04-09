@@ -70,7 +70,7 @@ class ChatViewModel(
                                 mode.position.clear()
                             } else {
                                 val position = room.templateConfiguration!!.template.templateMessageList.indexOf(
-                                    message
+                                    TemplateMessage(templateMessage)
                                 )
                                 mode.position.add(position)
                             }

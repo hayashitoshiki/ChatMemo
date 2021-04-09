@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.chatmemo.domain.model.ChatRoom
-import com.example.chatmemo.domain.model.Template
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.example.chatmemo.domain.usecase.TemplateUseCase
 import com.example.chatmemo.domain.value.TemplateConfiguration
@@ -24,9 +23,9 @@ class RoomPhraseEditViewModel(
     private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
 
-    val templateTitleList: LiveData<List<Template>> = templateUseCase.getSpinnerTemplateAll()
+    val templateTitleList = templateUseCase.getSpinnerTemplateAll()
     val templateTitleValue = MutableLiveData<String>()
-    val templateModeList: ViewModelLiveData<List<TemplateMode>> = ViewModelLiveData<List<TemplateMode>>()
+    val templateModeList = ViewModelLiveData<List<TemplateMode>>()
     val templateModeValue = MediatorLiveData<String>()
     private val _isEnableTemplateMode = MediatorLiveData<Boolean>()
     val isEnableTemplateMode: LiveData<Boolean> = _isEnableTemplateMode
@@ -78,14 +77,14 @@ class RoomPhraseEditViewModel(
 
     // テンプレート選択制御
     private fun changedTemplateTitleValue(text: String) {
-        if (text.isEmpty() || text == templateTitleList.value!![0].title) {
+        if (text.isEmpty() || text == "選択なし") {
             templateModeValue.value = ""
         }
     }
 
     // テンプレート表示形式選択欄のバリデート
     private fun changeModeEnable(text: String) {
-        val result = text.isNotEmpty() && text != templateTitleList.value!![0].title
+        val result = text.isNotEmpty() && text != "選択なし"
         _isEnableTemplateMode.value = result
     }
 }

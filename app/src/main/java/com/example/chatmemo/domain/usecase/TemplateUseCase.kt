@@ -15,9 +15,9 @@ interface TemplateUseCase {
 
     suspend fun getPhraseByTemplateId(templateId: TemplateId): List<TemplateMessage>
 
-    suspend fun createTemplate(template: Template, templateMessages: List<TemplateMessage>): Boolean
+    suspend fun createTemplate(template: Template): Boolean
 
-    suspend fun updateTemplate(template: Template, templateMessages: List<TemplateMessage>): Boolean
+    suspend fun updateTemplate(template: Template): Boolean
 
-    fun getTemplateId(): TemplateId
+    suspend fun getNextTemplateId(): TemplateId
 }

@@ -18,8 +18,11 @@ interface PhraseDao {
     @Delete
     fun delete(comment: PhraseEntity)
 
-    @Query("delete from comments")
+    @Query("delete from phrases")
     fun deleteAll()
+
+    @Query("delete from phrases WHERE template_id = :templateId")
+    suspend fun deleteAllByTemplateId(templateId: Long)
 
     @Query("SELECT * FROM phrases")
     fun getAll(): Array<PhraseEntity>
