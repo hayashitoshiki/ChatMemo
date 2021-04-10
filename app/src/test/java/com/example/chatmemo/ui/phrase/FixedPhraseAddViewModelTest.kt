@@ -51,7 +51,7 @@ class FixedPhraseAddViewModelTest {
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
         templateUseCase = mockk<TemplateUseCase>().also {
-            coEvery { it.getPhraseByTemplateId(TemplateId(any())) } returns templateMessageList
+            coEvery { it.getTemplateMessageById(TemplateId(any())) } returns templateMessageList
             coEvery { it.getNextTemplateId() } returns templateId
             coEvery { it.createTemplate(any()) } returns true
             coEvery { it.updateTemplate(any()) } returns true

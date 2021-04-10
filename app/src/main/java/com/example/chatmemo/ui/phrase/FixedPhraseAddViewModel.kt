@@ -44,7 +44,7 @@ class FixedPhraseAddViewModel(
             viewModelScope.launch {
                 titleText.postValue(template.title)
                 val templateId: TemplateId = template.templateId
-                val list = templateUseCase.getPhraseByTemplateId(templateId).toMutableList()
+                val list = templateUseCase.getTemplateMessageById(templateId).toMutableList()
                 phraseList.postValue(list)
                 submitText.postValue("更新")
             }

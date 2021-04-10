@@ -91,7 +91,7 @@ class ChatUseCaseImpTest {
     fun updateRoom() {
         runBlocking {
             useCase.updateRoom(chatroom1)
-            coVerify { (chatDataBaseRepository).updateRoom(chatroom1) }
+            coVerify(exactly = 1) { (chatDataBaseRepository).updateRoom(chatroom1) }
         }
     }
 

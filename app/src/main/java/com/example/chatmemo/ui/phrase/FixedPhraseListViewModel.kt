@@ -24,7 +24,7 @@ class FixedPhraseListViewModel(
     fun deletePhrase(template: Template) {
         viewModelScope.launch {
             status.postValue(null)
-            val result = templateUseCase.deleteTemplate(template)
+            val result = templateUseCase.deleteTemplate(template.templateId)
             status.postValue(result)
         }
     }
