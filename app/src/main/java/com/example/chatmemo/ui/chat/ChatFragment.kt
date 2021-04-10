@@ -63,7 +63,6 @@ class ChatFragment : Fragment(), CoroutineScope {
         viewModel.commentList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
         viewModel.chatRoom.observe(viewLifecycleOwner, Observer {
             (activity as AppCompatActivity).supportActionBar?.title = it.title
-            viewModel.updateRoom(it)
         })
 
         val adapter = ChatRecyclerAdapter(requireContext(), listOf())

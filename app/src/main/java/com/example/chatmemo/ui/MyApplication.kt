@@ -11,6 +11,8 @@ import com.example.chatmemo.domain.usecase.TemplateUseCase
 import com.example.chatmemo.domain.usecase.TemplateUseCaseImp
 import com.example.chatmemo.domain.value.RoomId
 import com.example.chatmemo.model.dao.AppDatabase
+import com.example.chatmemo.model.repository.ChatDataBaseRepository
+import com.example.chatmemo.model.repository.ChatDataBaseRepositoryImp
 import com.example.chatmemo.model.repository.DataBaseRepository
 import com.example.chatmemo.model.repository.DataBaseRepositoryImp
 import com.example.chatmemo.ui.chat.*
@@ -63,5 +65,6 @@ class MyApplication : Application() {
         factory<ChatUseCase> { ChatUseCaseImp(get()) }
         factory<TemplateUseCase> { TemplateUseCaseImp(get()) }
         factory<DataBaseRepository> { DataBaseRepositoryImp() }
+        factory<ChatDataBaseRepository> { ChatDataBaseRepositoryImp() }
     }
 }

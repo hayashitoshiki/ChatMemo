@@ -51,7 +51,7 @@ class DataBaseRepositoryImp : DataBaseRepository {
     }
 
     // コメント更新
-    override suspend fun updateComment(comments: List<Comment>, roomId: RoomId) {
+    override suspend fun updateComments(comments: List<Comment>) {
         withContext(Dispatchers.IO) {
             comments.forEach {
                 val user = it.user.chageInt()

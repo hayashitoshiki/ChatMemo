@@ -5,6 +5,9 @@ import com.example.chatmemo.domain.model.Template
 import com.example.chatmemo.domain.value.TemplateId
 import com.example.chatmemo.domain.value.TemplateMessage
 
+/**
+ * テンプレートに関するビジネスロジック
+ */
 interface TemplateUseCase {
 
     suspend fun deleteTemplate(template: Template): Boolean

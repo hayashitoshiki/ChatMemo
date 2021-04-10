@@ -17,7 +17,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -61,9 +60,20 @@ class ChatViewModelTest {
     private val comment2 = Comment("testComment2", User.WHITE, CommentDateTime(LocalDateTime.now()))
     private val comment3 = Comment("testComment3", User.BLACK, CommentDateTime(LocalDateTime.now()))
     private val commentList = mutableListOf(comment1, comment2, comment3)
+    private val reComment1 = Comment(
+        "testComment1", User.BLACK, CommentDateTime(LocalDateTime.now())
+    )
+    private val reComment2 = Comment(
+        "testComment2", User.WHITE, CommentDateTime(LocalDateTime.now())
+    )
+    private val reComment3 = Comment(
+        "testComment3", User.BLACK, CommentDateTime(LocalDateTime.now())
+    )
+    private val reCommentList = mutableListOf(reComment1, reComment2, reComment3)
     private val chatroom1 = ChatRoom(roomId1, title, null, commentList)
     private val chatroom2 = ChatRoom(roomId2, title, templateConfiguration1, commentList)
     private val chatroom3 = ChatRoom(roomId3, title, templateConfiguration2, commentList)
+    private val userComment = Comment("test", User.BLACK, CommentDateTime(LocalDateTime.now()))
 
     @ExperimentalCoroutinesApi
     @Before
@@ -73,17 +83,19 @@ class ChatViewModelTest {
             coEvery { it.getChatRoomByRoomById(RoomId(1)) } returns MutableLiveData(chatroom1)
             coEvery { it.getChatRoomByRoomById(RoomId(2)) } returns MutableLiveData(chatroom2)
             coEvery { it.getChatRoomByRoomById(RoomId(3)) } returns MutableLiveData(chatroom3)
-            coEvery { it.updateComment(any(), RoomId(any())) } returns Unit
+            coEvery { it.reverseAllCommentUser(any()) } returns reCommentList
             coEvery { it.deleteRoom(RoomId(any())) } returns Unit
             coEvery { it.updateRoom(any()) } returns Unit
-            coEvery { it.addComment(any(), RoomId(any())) } returns Unit
+            coEvery { it.addComment(any(), RoomId(any())) } returns userComment
+            coEvery { it.addTemplateComment(any(), RoomId(any())) } returns Pair(
+                templateConfiguration1, comment1
+            )
         }
         viewModel = ChatViewModel(roomId1, chatUseCase)
         viewModel.commentList.observeForever(observerComment)
         viewModel.commentText.observeForever(observerString)
         viewModel.isEnableSubmitButton.observeForever(observerBoolean)
         viewModel.chatRoom.observeForever(observerRoom)
-        viewModel.updateRoom(chatroom1)
     }
 
     @ExperimentalCoroutinesApi
@@ -97,90 +109,64 @@ class ChatViewModelTest {
     /**
      * コメント送信
      * 条件：テンプレート設定なし
-     * コメントリストが１増加し、コメント保存メソッドが呼ばれる
+     * 結果：
+     * ・コメント送信メソッドが１回呼ばる
+     * ・テンプレート文送信メソッドが１回も呼ばれない
+     * ・コメントリストが１増加する
      */
     @Test
     fun submitByTemplateNon() {
         viewModel = ChatViewModel(roomId1, chatUseCase)
-        viewModel.updateRoom(chatroom1)
-        val oldCommentListSize = viewModel.commentList.value!!.size
+        val oldCommentListSize = commentList.size
         viewModel.commentText.value = "test"
         viewModel.submit()
         val newCommentListSize = viewModel.commentList.value!!.size
         assertEquals(oldCommentListSize, newCommentListSize - 1)
+        coVerify(exactly = 1) { (chatUseCase).addComment(any(), RoomId(any())) }
+        coVerify(exactly = 0) { (chatUseCase).addTemplateComment(any(), RoomId(any())) }
         coVerify(exactly = 1) { (chatUseCase).updateRoom(any()) }
     }
 
     /**
      * コメント送信
      * 条件：テンプレート設定あり（順番）
-     * コメントリストが２増加し、コメント保存メソッドが呼ばれる
-     */
-    @Test
-    fun submitByTemplateOrder() {
-        viewModel = ChatViewModel(roomId2, chatUseCase)
-        viewModel.updateRoom(chatroom2)
-        val oldCommentListSize = viewModel.commentList.value!!.size
-        viewModel.commentText.value = "test"
-        viewModel.submit()
-        val newCommentListSize = viewModel.commentList.value!!.size
-        assertEquals(oldCommentListSize, newCommentListSize - 2)
-        coVerify(exactly = 1) { (chatUseCase).updateRoom(any()) }
-    }
-
-    /**
-     * コメント送信
-     * 条件：テンプレート設定あり（順番）でテンプレート文全て呼ぶ
-     * 次回表示されるテンプレート文が先頭に戻る
+     * 結果：
+     * ・コメント送信メソッドが１回呼ばる
+     * ・テンプレート文送信メソッドが１回呼ばれる
+     * ・コメントリストが２増加する
      */
     @Test
     fun submitByTemplateOrderAndList() {
         viewModel = ChatViewModel(roomId2, chatUseCase)
-        viewModel.updateRoom(chatroom2)
+        val oldCommentListSize = commentList.size
         viewModel.commentText.value = "test"
         viewModel.submit()
-        viewModel.commentText.value = "test"
-        viewModel.submit()
-        viewModel.commentText.value = "test"
-        viewModel.submit()
-        val newCommentListSize = (viewModel.chatRoom.value!!.templateConfiguration!!.templateMode as TemplateMode.Order).position
-        assertEquals(0, newCommentListSize)
+        val newCommentListSize = viewModel.commentList.value!!.size
+        assertEquals(oldCommentListSize, newCommentListSize - 2)
+        coVerify(exactly = 1) { (chatUseCase).addComment(any(), RoomId(any())) }
+        coVerify(exactly = 1) { (chatUseCase).addTemplateComment(any(), RoomId(any())) }
+        coVerify(exactly = 1) { (chatUseCase).updateRoom(any()) }
     }
 
     /**
      * コメント送信
      * 条件：テンプレート設定あり（ランダム）
-     * コメントリストが２増加し、コメント保存メソッドが呼ばれる
+     * 結果：
+     * ・コメント送信メソッドが１回呼ばる
+     * ・テンプレート文送信メソッドが１回呼ばれる
+     * ・コメントリストが２増加する
      */
     @Test
     fun submitByTemplatRandam() {
         viewModel = ChatViewModel(roomId3, chatUseCase)
-        viewModel.updateRoom(chatroom3)
-        val oldCommentListSize = viewModel.commentList.value!!.size
+        val oldCommentListSize = commentList.size
         viewModel.commentText.value = "test"
         viewModel.submit()
         val newCommentListSize = viewModel.commentList.value!!.size
         assertEquals(oldCommentListSize, newCommentListSize - 2)
+        coVerify(exactly = 1) { (chatUseCase).addComment(any(), RoomId(any())) }
+        coVerify(exactly = 1) { (chatUseCase).addTemplateComment(any(), RoomId(any())) }
         coVerify(exactly = 1) { (chatUseCase).updateRoom(any()) }
-    }
-
-    /**
-     * コメント送信
-     * 条件：テンプレート設定あり（順番）でテンプレート文全て呼ぶ
-     * 次回表示されるテンプレート文が先頭に戻る
-     */
-    @Test
-    fun submitByTemplateRandamAndList() {
-        viewModel = ChatViewModel(roomId3, chatUseCase)
-        viewModel.updateRoom(chatroom3)
-        viewModel.commentText.value = "test"
-        viewModel.submit()
-        viewModel.commentText.value = "test"
-        viewModel.submit()
-        viewModel.commentText.value = "test"
-        viewModel.submit()
-        val newCommentListSize = (viewModel.chatRoom.value!!.templateConfiguration!!.templateMode as TemplateMode.Randam).position.size
-        assertEquals(0, newCommentListSize)
     }
 
     // endregion
@@ -205,17 +191,13 @@ class ChatViewModelTest {
     /**
      * ユーザーチェンジ
      * 条件：なし
-     * 結果：
+     * 結果：コメント変換メソッドが１回呼ばれ、コメントリストの中の値が変化することること
      */
     @Test
     fun changeUser() {
-        val oldcomment = listOf(User.BLACK, User.WHITE, User.BLACK)
         viewModel.changeUser()
-        viewModel.commentList.value!!.forEachIndexed { index, comment ->
-            val oldCommentUser = oldcomment[index]
-            assertNotEquals(oldCommentUser, comment.user)
-        }
-        coVerify { (chatUseCase).updateComment(any(), RoomId(any())) }
+        coVerify(exactly = 1) { (chatUseCase).reverseAllCommentUser(any()) }
+        assertEquals(reCommentList, viewModel.commentList.value!!)
     }
 
     // endregion

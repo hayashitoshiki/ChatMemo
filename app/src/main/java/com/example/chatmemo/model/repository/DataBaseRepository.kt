@@ -29,7 +29,7 @@ interface DataBaseRepository {
      *
      * @param comments 更新するコメント
      */
-    suspend fun updateComment(comments: List<Comment>, roomId: RoomId)
+    suspend fun updateComments(comments: List<Comment>)
 
     /**
      * roomIdに関連するコメント削除
