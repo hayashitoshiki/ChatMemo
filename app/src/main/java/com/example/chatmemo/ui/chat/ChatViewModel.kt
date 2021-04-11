@@ -9,7 +9,6 @@ import com.example.chatmemo.domain.model.value.Comment
 import com.example.chatmemo.domain.model.value.RoomId
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.example.chatmemo.ui.utils.BaseViewModel
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -68,7 +67,7 @@ class ChatViewModel(
 
     // ルーム削除
     fun deleteRoom() {
-        GlobalScope.launch {
+        viewModelScope.launch {
             chatUseCase.deleteRoom(chatRoom.value!!.roomId)
         }
     }
