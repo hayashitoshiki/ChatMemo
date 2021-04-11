@@ -96,7 +96,7 @@ class TemplateUseCaseImpTest {
     @Test
     fun deleteTemplateByUse() {
         runBlocking {
-            val result = useCase.deleteTemplate(TemplateId(2))
+            val result = useCase.deleteTemplate(template.templateId)
             assertEquals(false, result)
             coVerify(exactly = 0) { (templateDataBaseRepository).deleteTemplate(TemplateId(2)) }
         }
@@ -112,9 +112,9 @@ class TemplateUseCaseImpTest {
     @Test
     fun deleteTemplateByNotUse() {
         runBlocking {
-            val result = useCase.deleteTemplate(template.templateId)
+            val result = useCase.deleteTemplate(TemplateId(2))
             assertEquals(true, result)
-            coVerify(exactly = 1) { (templateDataBaseRepository).deleteTemplate(template.templateId) }
+            coVerify(exactly = 1) { (templateDataBaseRepository).deleteTemplate(TemplateId(2)) }
         }
     }
 
