@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`RoomAddViewModel(dataBaseRepository: `[`DataBaseRepository`](../../com.example.chatmemo.model.repository/-data-base-repository/index.md)`)`
+`RoomAddViewModel(templateUseCase: `[`TemplateUseCase`](../../com.example.chatmemo.domain.usecase/-template-use-case/index.md)`, chatUseCase: `[`ChatUseCase`](../../com.example.chatmemo.domain.usecase/-chat-use-case/index.md)`)`
 
 新規ルーム作成画面_ロジック
 

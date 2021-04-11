@@ -12,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.chatmemo.databinding.ItemRoomListBinding
-import com.example.chatmemo.model.entity.ChatRoom
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
+import com.example.chatmemo.domain.model.entity.ChatRoom
 
 
 /**
@@ -56,27 +53,19 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
         // ルーム名
         holder.roomNameTextView.text = room.title
         // 最新コメント
-        room.commentLast?.also {
-            holder.commentTextView.text = it
+        if (room.commentList.size != 0) {
+            val comment = room.commentList.last()
             holder.commentTextView.visibility = View.VISIBLE
-        } ?: run {
+            holder.commentTextView.text = comment.message
+            holder.timeTextView.visibility = View.VISIBLE
+            holder.timeTextView.text = comment.time.toSectionDate()
+        } else {
             holder.commentTextView.visibility = View.GONE
-        }
-        // 最新コメント時間
-        room.commentTime?.also { commentTime ->
-            commentTime.substring(0, 10).let {
-                holder.timeTextView.visibility = View.VISIBLE
-                holder.timeTextView.text = if (it == getDataNow()) {
-                    commentTime.substring(11, 16)
-                } else {
-                    it
-                }
-            }
-        } ?: run {
             holder.timeTextView.visibility = View.GONE
         }
+
         // カードタップ
-        holder.container.transitionName = room.id.toString()
+        holder.container.transitionName = room.roomId.toString()
         holder.container.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -97,14 +86,6 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
                 listener.onItemClickListener(it, position, items[position])
             }
         }
-    }
-
-    // 日付取得
-    @SuppressLint("SimpleDateFormat")
-    private fun getDataNow(): String {
-        val df: DateFormat = SimpleDateFormat("yyyy/MM/dd")
-        val date = Date(System.currentTimeMillis())
-        return df.format(date)
     }
 
     // データ更新

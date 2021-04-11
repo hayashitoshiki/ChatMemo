@@ -2,4 +2,4 @@
 
 # chatRoom
 
-`val chatRoom: LiveData<`[`ChatRoom`](../../com.example.chatmemo.model.entity/-chat-room/index.md)`>`
+`val chatRoom: LiveData<`[`ChatRoom`](../../com.example.chatmemo.domain.model.entity/-chat-room/index.md)`>`

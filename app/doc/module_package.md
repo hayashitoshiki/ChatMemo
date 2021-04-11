@@ -1,33 +1,55 @@
 # Module app
 ChatMemo
 ### アーキテクチャ
-MVVM
+MVVM + Clean Architecture + DDD
 
-## 大枠のパッケージ
-#### model
-画面描画以外(データの加工)に関するクラスの管理
+## 構成
+* Data -- Data層
+    * DataBase -- データベース関連
+        * Dao -- データベースへのクエリ管理
+        * Entity -- データベースのテーブル管理
+    * Repository -- データベース・APIへのCRUD処理管理
+*  Domain --  Domain層
+    * Model -- ドメインモデル管理
+        * Entity -- エンティティ管理
+        * Value -- 値オブジェクト管理
+    * UseCase -- ビジネスロジック管理
+* UI -- Presentation層
+    * Utils 共通部分管理
+    * ○○　○○タブ内の画面管理
 
-#### ui
-画面描画に関するクラスの管理
+# Package com.example.chatmemo.data.database.dao
+DBクエリ管理
 
-# Package com.example.chatmemo.model
+# Package com.example.chatmemo.data.database.entity
+DBのテーブル構成管理
 
-# Package com.example.chatmemo.model.dao
-DB管理
+# Package com.example.chatmemo.data.repository
+DB・APIへのCRUD管理
 
-# Package com.example.chatmemo.model.entity
-Entity管理
+# Package com.example.chatmemo.domain.model.entity
+エンティティ管理
 
-# Package com.example.chatmemo.model.repository
-CRUD管理
+# Package  com.example.chatmemo.domain.model.value
+値オブジェクト管理
 
-# Package com.example.chatmemo.ui.adapter
-カスタムアダプター管理
+# Package com.example.chatmemo.domain.usecase
+ビジネスロジック管理
 
 # Package com.example.chatmemo.ui
+UIベース画面管理
 
 # Package com.example.chatmemo.ui.chat
-ホームタブ画面管理
+チャットタブ画面管理
 
 # Package com.example.chatmemo.ui.phrase
-定型文設定タブ画面管理
+テンプレート文設定タブ画面管理
+
+# Package com.example.chatmemo.ui.adapter
+アダプター管理
+
+# Package com.example.chatmemo.ui.utils
+UI共通処理管理
+
+# Package com.example.chatmemo.ui.transition
+アニメーション管理

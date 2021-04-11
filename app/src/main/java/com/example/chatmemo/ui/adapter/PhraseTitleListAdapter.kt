@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.chatmemo.databinding.ItemPhraseTitleBinding
-import com.example.chatmemo.model.entity.Template
+import com.example.chatmemo.domain.model.entity.Template
 
 /**
  * 定型文リスト画面用のリサイクルビューアダプター
@@ -48,7 +48,7 @@ class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.A
 
         // 値代入
         holder.textView.text = template.title
-        holder.textView.transitionName = template.id.toString()
+        holder.textView.transitionName = template.templateId.toString()
         holder.textView.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {

@@ -10,16 +10,16 @@
 
 | Name | Summary |
 |---|---|
-| [&lt;init&gt;](-init-.md) | `HomeViewModel(dataBaseRepository: `[`DataBaseRepository`](../../com.example.chatmemo.model.repository/-data-base-repository/index.md)`)`<br>ホーム画面_ロジック |
+| [&lt;init&gt;](-init-.md) | `HomeViewModel(chatUseCase: `[`ChatUseCase`](../../com.example.chatmemo.domain.usecase/-chat-use-case/index.md)`)`<br>ホーム画面_ロジック |
 
 ### Properties
 
 | Name | Summary |
 |---|---|
-| [chatRoomList](chat-room-list.md) | `val chatRoomList: LiveData<`[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ChatRoom`](../../com.example.chatmemo.model.entity/-chat-room/index.md)`>>` |
+| [chatRoomEntityList](chat-room-entity-list.md) | `val chatRoomEntityList: LiveData<`[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ChatRoom`](../../com.example.chatmemo.domain.model.entity/-chat-room/index.md)`>>` |
 
 ### Functions
 
 | Name | Summary |
 |---|---|
-| [deleteRoom](delete-room.md) | `fun deleteRoom(roomId: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
+| [deleteRoom](delete-room.md) | `fun deleteRoom(roomId: `[`RoomId`](../../com.example.chatmemo.domain.model.value/-room-id/index.md)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |

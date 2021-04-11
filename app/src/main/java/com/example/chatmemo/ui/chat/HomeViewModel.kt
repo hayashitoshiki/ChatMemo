@@ -3,23 +3,25 @@ package com.example.chatmemo.ui.chat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chatmemo.model.entity.ChatRoom
-import com.example.chatmemo.model.repository.DataBaseRepository
+import com.example.chatmemo.domain.model.entity.ChatRoom
+import com.example.chatmemo.domain.model.value.RoomId
+import com.example.chatmemo.domain.usecase.ChatUseCase
 import kotlinx.coroutines.launch
 
 /**
  * ホーム画面_ロジック
- * @property dataBaseRepository DB取得リポジトリ
+ * @property chatUseCase Chatに関するUseCase
  */
-class HomeViewModel(private val dataBaseRepository: DataBaseRepository) : ViewModel() {
+class HomeViewModel(
+    private val chatUseCase: ChatUseCase
+) : ViewModel() {
 
-    val chatRoomList: LiveData<List<ChatRoom>> = dataBaseRepository.getRoomAll()
+    val chatRoomEntityList: LiveData<List<ChatRoom>> = chatUseCase.getRoomAll()
 
     // ルーム削除
-    fun deleteRoom(roomId: Long) {
+    fun deleteRoom(roomId: RoomId) {
         viewModelScope.launch {
-            dataBaseRepository.deleteRoom(roomId)
-            dataBaseRepository.deleteCommentByRoomId(roomId)
+            chatUseCase.deleteRoom(roomId)
         }
     }
 }

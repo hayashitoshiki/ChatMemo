@@ -2,24 +2,25 @@ package com.example.chatmemo.ui.chat
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.example.chatmemo.model.entity.ChatRoom
-import com.example.chatmemo.model.entity.Template
-import com.example.chatmemo.model.repository.DataBaseRepository
+import com.example.chatmemo.domain.model.entity.ChatRoom
+import com.example.chatmemo.domain.model.value.Comment
+import com.example.chatmemo.domain.model.value.CommentDateTime
+import com.example.chatmemo.domain.model.value.RoomId
+import com.example.chatmemo.domain.model.value.User
+import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.nhaarman.mockito_kotlin.mock
-import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
+import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import java.time.LocalDateTime
 
 /**
  * ルーム名変更ダイアログ　ロジック仕様
@@ -37,21 +38,22 @@ class ChatRoomTitleEditViewModelTest {
 
     // mock
     private lateinit var viewModel: RoomTitleEditViewModel
-    private lateinit var databaseRepository: DataBaseRepository
+    private lateinit var chatUseCase: ChatUseCase
+
+    private val roomId1 = RoomId(1)
+    private val title = "testRoom"
+    private val comment1 = Comment("testComment1", User.BLACK, CommentDateTime(LocalDateTime.now()))
+    private val comment2 = Comment("testComment2", User.WHITE, CommentDateTime(LocalDateTime.now()))
+    private val comment3 = Comment("testComment3", User.BLACK, CommentDateTime(LocalDateTime.now()))
+    private val commentList = mutableListOf(comment1, comment2, comment3)
+    private val chatroom1 = ChatRoom(roomId1, title, null, commentList)
 
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
-        val room = ChatRoom(null, "test", 0, 0, "", "", "")
-        val template = Template(null, "test")
-        databaseRepository = mockk<DataBaseRepository>().also {
-            coEvery { it.createRoom(any()) } returns Unit
-            coEvery { it.getRoomByTitle("") } returns room
-            coEvery { it.getPhraseTitle() } returns listOf(template)
-            coEvery { it.updateRoom(any()) } returns Unit
-        }
-        viewModel = RoomTitleEditViewModel(room, databaseRepository)
+        chatUseCase = mockk()
+        viewModel = RoomTitleEditViewModel(chatroom1, chatUseCase)
         viewModel.newRoomTitle.observeForever(observerString)
         viewModel.isEnableSubmitButton.observeForever(observerBoolean)
         viewModel.oldRoomTitle.observeForever(observerString)
@@ -63,30 +65,49 @@ class ChatRoomTitleEditViewModelTest {
         Dispatchers.resetMain()
     }
 
+    // region 更新ボタンのバリデート
     /**
-     * ルーム名変更
+     * 変更ボタンの活性/非活性
+     * 条件：初期状態
+     * 結果：falseが返る
      */
     @Test
-    fun changeRoomName() {
-        runBlocking {
-            viewModel.changeRoomName("test")
-            coVerify { (databaseRepository).updateRoom(any()) }
-        }
+    fun changeSubmitButtonByInit() {
+        assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
      * 変更ボタンの活性/非活性
+     * 条件：新しいタイトルが入力されていない
+     * 結果：falseが返る
      */
     @Test
-    fun changeSubmitButton() {
-        // 入力文字なし
+    fun changeSubmitButtonByTitleNone() {
         viewModel.newRoomTitle.value = ""
-        assertEquals(viewModel.isEnableSubmitButton.value, false)
-        // 入力文字あり && 同じ文字列
-        viewModel.newRoomTitle.value = "test"
-        assertEquals(viewModel.isEnableSubmitButton.value, false)
-        // 入力文字あり && 違う文字列
-        viewModel.newRoomTitle.value = "test2"
-        assertEquals(viewModel.isEnableSubmitButton.value, true)
+        assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
+
+    /**
+     * 変更ボタンの活性/非活性
+     * 条件：入力したタイトルが元のタイトルと同じ
+     * 結果：falseが返る
+     */
+    @Test
+    fun changeSubmitButtonByTitleEqual() {
+        viewModel.newRoomTitle.value = "testRoom"
+        assertEquals(false, viewModel.isEnableSubmitButton.value)
+    }
+
+    /**
+     * 変更ボタンの活性/非活性
+     * 条件：入力したタイトルが元のタイトルと異なる
+     * 結果：trueが返る
+     */
+    @Test
+    fun changeSubmitButtonTitleNotEqual() {
+        viewModel.newRoomTitle.value = "testRoom2"
+        assertEquals(true, viewModel.isEnableSubmitButton.value)
+    }
+
+    // endregion
 }

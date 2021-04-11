@@ -8,7 +8,7 @@
 
 | Name | Summary |
 |---|---|
-| [&lt;init&gt;](-init-.md) | `ViewHolder(v: `[`View`](https://developer.android.com/reference/android/view/View.html)`)` |
+| [&lt;init&gt;](-init-.md) | `ViewHolder(v: ItemRoomListBinding)` |
 
 ### Properties
 

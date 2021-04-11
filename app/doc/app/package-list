@@ -1,12 +1,15 @@
 $dokka.format:gfm
 $dokka.linkExtension:md
-
-com.example.chatmemo
-com.example.chatmemo.model
-com.example.chatmemo.model.dao
-com.example.chatmemo.model.entity
-com.example.chatmemo.model.repository
+$dokka.location:com.example.chatmemo.ui.utils$toLocalDateTime(kotlin.String)com.example.chatmemo.ui.utils/kotlin.-string/to-local-date-time.md
+com.example.chatmemo.data.database.dao
+com.example.chatmemo.data.database.entity
+com.example.chatmemo.data.repository
+com.example.chatmemo.domain.model.entity
+com.example.chatmemo.domain.model.value
+com.example.chatmemo.domain.usecase
 com.example.chatmemo.ui
 com.example.chatmemo.ui.adapter
 com.example.chatmemo.ui.chat
-com.example.chatmemo.ui.phrase
+com.example.chatmemo.ui.template
+com.example.chatmemo.ui.utils
+com.example.chatmemo.ui.utils.transition

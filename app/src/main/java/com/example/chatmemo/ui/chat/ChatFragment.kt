@@ -15,9 +15,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentChatBinding
-import com.example.chatmemo.model.entity.Comment
+import com.example.chatmemo.domain.model.value.Comment
 import com.example.chatmemo.ui.adapter.ChatRecyclerAdapter
-import com.example.chatmemo.ui.transition.PlayTransition
+import com.example.chatmemo.ui.utils.transition.PlayTransition
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -35,7 +35,7 @@ class ChatFragment : Fragment(), CoroutineScope {
     private var isKeyboardShowing = false
     private val args: ChatFragmentArgs by navArgs()
     private lateinit var binding: FragmentChatBinding
-    private val viewModel: ChatViewModel by inject { parametersOf(args.data.id) }
+    private val viewModel: ChatViewModel by inject { parametersOf(args.data.roomId) }
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext = Dispatchers.Main + job
 
@@ -63,7 +63,6 @@ class ChatFragment : Fragment(), CoroutineScope {
         viewModel.commentList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
         viewModel.chatRoom.observe(viewLifecycleOwner, Observer {
             (activity as AppCompatActivity).supportActionBar?.title = it.title
-            viewModel.updateRoom(it)
         })
 
         val adapter = ChatRecyclerAdapter(requireContext(), listOf())

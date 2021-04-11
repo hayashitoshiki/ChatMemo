@@ -3,13 +3,21 @@ package com.example.chatmemo.ui
 import android.app.Application
 import android.util.Log
 import androidx.room.Room
-import com.example.chatmemo.model.dao.AppDatabase
-import com.example.chatmemo.model.entity.ChatRoom
-import com.example.chatmemo.model.repository.DataBaseRepository
-import com.example.chatmemo.model.repository.DataBaseRepositoryImp
+import com.example.chatmemo.data.database.dao.AppDatabase
+import com.example.chatmemo.data.repository.ChatDataBaseRepository
+import com.example.chatmemo.data.repository.ChatDataBaseRepositoryImp
+import com.example.chatmemo.data.repository.TemplateDataBaseRepository
+import com.example.chatmemo.data.repository.TemplateDataBaseRepositoryImp
+import com.example.chatmemo.domain.model.entity.ChatRoom
+import com.example.chatmemo.domain.model.entity.Template
+import com.example.chatmemo.domain.model.value.RoomId
+import com.example.chatmemo.domain.usecase.ChatUseCase
+import com.example.chatmemo.domain.usecase.ChatUseCaseImp
+import com.example.chatmemo.domain.usecase.TemplateUseCase
+import com.example.chatmemo.domain.usecase.TemplateUseCaseImp
 import com.example.chatmemo.ui.chat.*
-import com.example.chatmemo.ui.phrase.FixedPhraseAddViewModel
-import com.example.chatmemo.ui.phrase.FixedPhraseListViewModel
+import com.example.chatmemo.ui.template.TempalteAddViewModel
+import com.example.chatmemo.ui.template.TemplateListViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -47,17 +55,17 @@ class MyApplication : Application() {
     // Koinモジュール
     private val module: Module = module {
         viewModel { HomeViewModel(get()) }
-        viewModel { (id: Long) -> ChatViewModel(id, get()) }
-        viewModel { (modeList: List<String>) -> RoomAddViewModel(modeList, get()) }
-        viewModel { (room: ChatRoom, modeList: List<String>) ->
-            RoomPhraseEditViewModel(
-                room, modeList, get()
-            )
-        }
-        viewModel { (room: ChatRoom) -> RoomTitleEditViewModel(room, get()) }
-        viewModel { FixedPhraseAddViewModel(get()) }
-        viewModel { FixedPhraseListViewModel(get()) }
+        viewModel { (id: RoomId) -> ChatViewModel(id, get()) }
+        viewModel { RoomAddViewModel(get(), get()) }
+        viewModel { (chatroom: ChatRoom) -> RoomPhraseEditViewModel(chatroom, get(), get()) }
+        viewModel { (chatroom: ChatRoom) -> RoomTitleEditViewModel(chatroom, get()) }
+        viewModel { (template: Template?) -> TempalteAddViewModel(template, get()) }
+        viewModel { TemplateListViewModel(get()) }
 
-        factory<DataBaseRepository> { DataBaseRepositoryImp() }
+        factory<ChatUseCase> { ChatUseCaseImp(get()) }
+        factory<TemplateUseCase> { TemplateUseCaseImp(get(), get()) }
+
+        factory<ChatDataBaseRepository> { ChatDataBaseRepositoryImp() }
+        factory<TemplateDataBaseRepository> { TemplateDataBaseRepositoryImp() }
     }
 }

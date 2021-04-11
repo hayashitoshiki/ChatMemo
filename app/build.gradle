@@ -7,7 +7,7 @@ apply plugin: 'org.jetbrains.dokka-android'
 dokka {
     outputFormat = 'gfm'
     includes = ['doc/module_package.md']
-    outputDirectory = "$projectDir/javadoc"
+    outputDirectory = "$projectDir/doc"
 }
 android {
     compileSdkVersion 30
@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.chatmemo"
-        minSdkVersion 16
+        minSdkVersion 28
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -28,6 +28,7 @@ android {
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         abortOnError false
+        xmlReport true
     }
 
     buildTypes {
@@ -88,4 +89,9 @@ dependencies {
     // coroutine-test
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.2.0'
     testImplementation 'io.mockk:mockk:1.10.3-jdk8'
+}
+kotlin {
+    sourceSets.all {
+        languageSettings.enableLanguageFeature('InlineClasses')
+    }
 }

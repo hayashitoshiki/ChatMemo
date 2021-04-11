@@ -2,4 +2,4 @@
 
 # oldRoomTitle
 
-`val oldRoomTitle: LiveData<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>`
+`val oldRoomTitle: `[`ViewModelLiveData`](../../com.example.chatmemo.ui.utils/-view-model-live-data/index.md)`<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>`

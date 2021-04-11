@@ -2,4 +2,4 @@
 
 # setData
 
-`fun setData(items: `[`ArrayList`](https://developer.android.com/reference/java/util/ArrayList.html)`<`[`Phrase`](../../com.example.chatmemo.model.entity/-phrase/index.md)`>): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`fun setData(items: `[`MutableList`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html)`<`[`TemplateMessage`](../../com.example.chatmemo.domain.model.value/-template-message/index.md)`>): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)

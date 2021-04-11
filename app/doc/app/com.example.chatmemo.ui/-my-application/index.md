@@ -21,5 +21,5 @@
 | Name | Summary |
 |---|---|
 | [TAG](-t-a-g.md) | `const val TAG: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [database](database.md) | `lateinit var database: `[`AppDatabase`](../../com.example.chatmemo.model.dao/-app-database/index.md) |
-| [shered](shered.md) | `lateinit var shered: `[`MyApplication`](./index.md) |
+| [database](database.md) | `lateinit var database: `[`AppDatabase`](../../com.example.chatmemo.data.database.dao/-app-database/index.md) |
+| [shared](shared.md) | `lateinit var shared: `[`MyApplication`](./index.md) |
