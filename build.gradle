@@ -49,6 +49,8 @@ subprojects { // 配下のモジュール全てに適用される
     }
 }
 
+
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
