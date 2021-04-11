@@ -19,9 +19,9 @@ import androidx.transition.ChangeTransform
 import androidx.transition.TransitionSet
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentRoomAddBinding
-import com.example.chatmemo.domain.model.ChatRoom
+import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.ui.MainActivity
-import com.example.chatmemo.ui.transition.FabTransform
+import com.example.chatmemo.ui.utils.transition.FabTransform
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject

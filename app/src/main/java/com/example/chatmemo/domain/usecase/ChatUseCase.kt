@@ -1,10 +1,10 @@
 package com.example.chatmemo.domain.usecase
 
 import androidx.lifecycle.LiveData
-import com.example.chatmemo.domain.model.ChatRoom
-import com.example.chatmemo.domain.value.Comment
-import com.example.chatmemo.domain.value.RoomId
-import com.example.chatmemo.domain.value.TemplateConfiguration
+import com.example.chatmemo.domain.model.entity.ChatRoom
+import com.example.chatmemo.domain.model.value.Comment
+import com.example.chatmemo.domain.model.value.RoomId
+import com.example.chatmemo.domain.model.value.TemplateConfiguration
 
 /**
  * チャットルームに関するビジネスロジック

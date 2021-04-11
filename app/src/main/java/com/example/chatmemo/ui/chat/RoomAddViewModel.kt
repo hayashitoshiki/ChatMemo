@@ -3,13 +3,13 @@ package com.example.chatmemo.ui.chat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.chatmemo.domain.model.ChatRoom
-import com.example.chatmemo.domain.model.Template
+import com.example.chatmemo.domain.model.entity.ChatRoom
+import com.example.chatmemo.domain.model.entity.Template
+import com.example.chatmemo.domain.model.value.Comment
+import com.example.chatmemo.domain.model.value.TemplateConfiguration
+import com.example.chatmemo.domain.model.value.TemplateMode
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.example.chatmemo.domain.usecase.TemplateUseCase
-import com.example.chatmemo.domain.value.Comment
-import com.example.chatmemo.domain.value.TemplateConfiguration
-import com.example.chatmemo.domain.value.TemplateMode
 import com.example.chatmemo.ui.utils.BaseViewModel
 import com.example.chatmemo.ui.utils.ViewModelLiveData
 
@@ -49,11 +49,15 @@ class RoomAddViewModel(
         val title = titleText.value!!
         val templateConfiguration: TemplateConfiguration?
         val comment = mutableListOf<Comment>()
+        val templateTitle = templateTitleValue.value
+        val templateList = templateTitleList.value!!
+        val templateMode = templateModeValue.value
+        val templateModeList = templateModeList.value!!
 
-        templateConfiguration = if (!templateTitleValue.value.isNullOrEmpty()) {
-            val template = templateTitleList.value!!.first { it.title == templateTitleValue.value!! }
-            val templateMode = templateModeList.value!!.first { it.massage == templateModeValue.value!! }
-            TemplateConfiguration(template, templateMode)
+        templateConfiguration = if (!templateTitle.isNullOrEmpty() && templateTitle != templateList[0].title) {
+            val template = templateList.first { it.title == templateTitle }
+            val mode = templateModeList.first { it.massage == templateMode }
+            TemplateConfiguration(template, mode)
         } else {
             null
         }

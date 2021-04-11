@@ -1,9 +1,9 @@
 package com.example.chatmemo.domain.usecase
 
 import androidx.lifecycle.LiveData
-import com.example.chatmemo.domain.model.ChatRoom
-import com.example.chatmemo.domain.value.*
-import com.example.chatmemo.model.repository.ChatDataBaseRepository
+import com.example.chatmemo.data.repository.ChatDataBaseRepository
+import com.example.chatmemo.domain.model.entity.ChatRoom
+import com.example.chatmemo.domain.model.value.*
 import java.time.LocalDateTime
 
 class ChatUseCaseImp(private val chatDataBaseRepository: ChatDataBaseRepository) : ChatUseCase {
@@ -47,7 +47,7 @@ class ChatUseCaseImp(private val chatDataBaseRepository: ChatDataBaseRepository)
         templateConfiguration: TemplateConfiguration, roomId: RoomId
     ): Pair<TemplateConfiguration, Comment> {
         when (val templateMode = templateConfiguration.templateMode) {
-            is TemplateMode.Order  -> {
+            is TemplateMode.Order -> {
                 val templateMessage = templateConfiguration.template.templateMessageList[templateMode.position].massage
                 val templateMessageDate = CommentDateTime(LocalDateTime.now())
                 if (templateMode.position == templateConfiguration.template.templateMessageList.size - 1) {
@@ -56,6 +56,7 @@ class ChatUseCaseImp(private val chatDataBaseRepository: ChatDataBaseRepository)
                     templateMode.position++
                 }
                 val comment = Comment(templateMessage, User.WHITE, templateMessageDate)
+                chatDataBaseRepository.addComment(comment, roomId)
                 return Pair(templateConfiguration, comment)
             }
             is TemplateMode.Randam -> {
@@ -73,6 +74,7 @@ class ChatUseCaseImp(private val chatDataBaseRepository: ChatDataBaseRepository)
                     templateMode.position.add(position)
                 }
                 val comment = Comment(templateMessage, User.WHITE, templateMessageDate)
+                chatDataBaseRepository.addComment(comment, roomId)
                 return Pair(templateConfiguration, comment)
             }
         }

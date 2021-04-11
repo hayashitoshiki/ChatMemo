@@ -3,7 +3,7 @@ package com.example.chatmemo.ui.chat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.chatmemo.domain.model.ChatRoom
+import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.example.chatmemo.ui.utils.BaseViewModel
 import com.example.chatmemo.ui.utils.ViewModelLiveData

@@ -1,9 +1,9 @@
 package com.example.chatmemo.domain.usecase
 
 import androidx.lifecycle.LiveData
-import com.example.chatmemo.domain.model.Template
-import com.example.chatmemo.domain.value.TemplateId
-import com.example.chatmemo.domain.value.TemplateMessage
+import com.example.chatmemo.domain.model.entity.Template
+import com.example.chatmemo.domain.model.value.TemplateId
+import com.example.chatmemo.domain.model.value.TemplateMessage
 
 /**
  * テンプレートに関するビジネスロジック

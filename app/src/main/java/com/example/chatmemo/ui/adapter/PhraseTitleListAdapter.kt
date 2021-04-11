@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.chatmemo.databinding.ItemPhraseTitleBinding
-import com.example.chatmemo.domain.model.Template
+import com.example.chatmemo.domain.model.entity.Template
 
 /**
  * 定型文リスト画面用のリサイクルビューアダプター

@@ -2,11 +2,11 @@ package com.example.chatmemo.domain.usecase
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.chatmemo.domain.model.Template
-import com.example.chatmemo.domain.value.TemplateId
-import com.example.chatmemo.domain.value.TemplateMessage
-import com.example.chatmemo.model.repository.ChatDataBaseRepository
-import com.example.chatmemo.model.repository.TemplateDataBaseRepository
+import com.example.chatmemo.data.repository.ChatDataBaseRepository
+import com.example.chatmemo.data.repository.TemplateDataBaseRepository
+import com.example.chatmemo.domain.model.entity.Template
+import com.example.chatmemo.domain.model.value.TemplateId
+import com.example.chatmemo.domain.model.value.TemplateMessage
 
 class TemplateUseCaseImp(
     private val chatDataBaseRepository: ChatDataBaseRepository,

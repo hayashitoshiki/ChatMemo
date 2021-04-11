@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentHomeBinding
-import com.example.chatmemo.domain.model.ChatRoom
+import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.ui.MainActivity
 import com.example.chatmemo.ui.adapter.RoomListAdapter
 import kotlinx.coroutines.CoroutineScope

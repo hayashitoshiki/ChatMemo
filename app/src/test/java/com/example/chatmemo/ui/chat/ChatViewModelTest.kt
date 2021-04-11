@@ -3,10 +3,10 @@ package com.example.chatmemo.ui.chat
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.example.chatmemo.domain.model.ChatRoom
-import com.example.chatmemo.domain.model.Template
+import com.example.chatmemo.domain.model.entity.ChatRoom
+import com.example.chatmemo.domain.model.entity.Template
+import com.example.chatmemo.domain.model.value.*
 import com.example.chatmemo.domain.usecase.ChatUseCase
-import com.example.chatmemo.domain.value.*
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.coVerify

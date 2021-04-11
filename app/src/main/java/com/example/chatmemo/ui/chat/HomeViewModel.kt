@@ -3,9 +3,9 @@ package com.example.chatmemo.ui.chat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chatmemo.domain.model.ChatRoom
+import com.example.chatmemo.domain.model.entity.ChatRoom
+import com.example.chatmemo.domain.model.value.RoomId
 import com.example.chatmemo.domain.usecase.ChatUseCase
-import com.example.chatmemo.domain.value.RoomId
 import kotlinx.coroutines.launch
 
 /**

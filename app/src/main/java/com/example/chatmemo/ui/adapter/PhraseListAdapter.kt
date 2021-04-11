@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.example.chatmemo.databinding.ItemPhraseBinding
-import com.example.chatmemo.domain.value.TemplateMessage
+import com.example.chatmemo.domain.model.value.TemplateMessage
 
 /**
  * 定型文作成画面用のリストビューアダプター

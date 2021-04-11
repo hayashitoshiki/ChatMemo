@@ -15,9 +15,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentChatBinding
-import com.example.chatmemo.domain.value.Comment
+import com.example.chatmemo.domain.model.value.Comment
 import com.example.chatmemo.ui.adapter.ChatRecyclerAdapter
-import com.example.chatmemo.ui.transition.PlayTransition
+import com.example.chatmemo.ui.utils.transition.PlayTransition
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

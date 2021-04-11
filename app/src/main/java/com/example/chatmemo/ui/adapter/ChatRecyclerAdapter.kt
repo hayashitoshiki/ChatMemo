@@ -11,8 +11,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chatmemo.R
-import com.example.chatmemo.domain.value.Comment
-import com.example.chatmemo.domain.value.User
+import com.example.chatmemo.domain.model.value.Comment
+import com.example.chatmemo.domain.model.value.User
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*

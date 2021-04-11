@@ -3,11 +3,11 @@ package com.example.chatmemo.ui.chat
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.example.chatmemo.domain.model.ChatRoom
-import com.example.chatmemo.domain.model.Template
+import com.example.chatmemo.domain.model.entity.ChatRoom
+import com.example.chatmemo.domain.model.entity.Template
+import com.example.chatmemo.domain.model.value.*
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.example.chatmemo.domain.usecase.TemplateUseCase
-import com.example.chatmemo.domain.value.*
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -60,9 +60,6 @@ class ChatRoomPhraseEditViewModelTest {
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
-        val observerString = mock<Observer<String>>()
-        val observerBoolean = mock<Observer<Boolean>>()
-
         templateUseCase = mockk<TemplateUseCase>().also {
             coEvery { it.getSpinnerTemplateAll() } returns MutableLiveData(templateList)
             coEvery { it.getTemplateAll() } returns MutableLiveData(templateList)

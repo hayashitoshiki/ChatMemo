@@ -2,11 +2,11 @@ package com.example.chatmemo.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.example.chatmemo.domain.model.ChatRoom
-import com.example.chatmemo.domain.model.Template
-import com.example.chatmemo.domain.value.*
-import com.example.chatmemo.model.repository.ChatDataBaseRepository
-import com.example.chatmemo.model.repository.TemplateDataBaseRepository
+import com.example.chatmemo.data.repository.ChatDataBaseRepository
+import com.example.chatmemo.data.repository.TemplateDataBaseRepository
+import com.example.chatmemo.domain.model.entity.ChatRoom
+import com.example.chatmemo.domain.model.entity.Template
+import com.example.chatmemo.domain.model.value.*
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

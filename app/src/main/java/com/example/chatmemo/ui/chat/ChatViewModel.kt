@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.chatmemo.domain.model.ChatRoom
+import com.example.chatmemo.domain.model.entity.ChatRoom
+import com.example.chatmemo.domain.model.value.Comment
+import com.example.chatmemo.domain.model.value.RoomId
 import com.example.chatmemo.domain.usecase.ChatUseCase
-import com.example.chatmemo.domain.value.Comment
-import com.example.chatmemo.domain.value.RoomId
 import com.example.chatmemo.ui.utils.BaseViewModel
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -35,7 +36,9 @@ class ChatViewModel(
 
     // ルーム更新
     private fun updateRoom(chatRoom: ChatRoom) {
-        _commentList.value = chatRoom.commentList
+        if (_commentList.value == null || _commentList.value!!.isEmpty()) {
+            _commentList.value = chatRoom.commentList
+        }
     }
 
     // 送信
@@ -47,6 +50,7 @@ class ChatViewModel(
                 val comment = chatUseCase.addComment(message, roomId)
                 room.commentList.add(comment)
 
+                delay(300)
                 room.templateConfiguration?.let { templateConfiguration ->
                     val (configuretion, templateComment) = chatUseCase.addTemplateComment(
                         templateConfiguration, roomId

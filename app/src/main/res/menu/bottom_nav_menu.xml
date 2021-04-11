@@ -7,7 +7,7 @@
         android:title="@string/bottom_home" />
 
     <item
-        android:id="@+id/fixedPhraseListFragment"
+        android:id="@+id/templateListFragment"
         android:icon="@drawable/ic_bottom_phrase_24"
         android:title="@string/bottom_phrase" />
 

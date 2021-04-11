@@ -2,12 +2,12 @@ package com.example.chatmemo.ui.chat
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.example.chatmemo.domain.model.ChatRoom
+import com.example.chatmemo.domain.model.entity.ChatRoom
+import com.example.chatmemo.domain.model.value.Comment
+import com.example.chatmemo.domain.model.value.CommentDateTime
+import com.example.chatmemo.domain.model.value.RoomId
+import com.example.chatmemo.domain.model.value.User
 import com.example.chatmemo.domain.usecase.ChatUseCase
-import com.example.chatmemo.domain.value.Comment
-import com.example.chatmemo.domain.value.CommentDateTime
-import com.example.chatmemo.domain.value.RoomId
-import com.example.chatmemo.domain.value.User
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.mockk
 import junit.framework.Assert.assertEquals

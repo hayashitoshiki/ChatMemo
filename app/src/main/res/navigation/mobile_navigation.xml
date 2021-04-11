@@ -14,8 +14,8 @@
             android:id="@+id/action_homeFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_fixedPhraseListFragment"
-            app:destination="@id/fixedPhraseListFragment" />
+            android:id="@+id/action_homeFragment_to_templateListFragment"
+            app:destination="@id/templateListFragment" />
         <action
             android:id="@+id/action_homeFragment_to_roomAddFragment"
             app:destination="@id/roomAddFragment" />
@@ -28,26 +28,26 @@
         tools:layout="@layout/fragment_chat">
         <argument
             android:name="data"
-            app:argType="com.example.chatmemo.domain.model.ChatRoom" />
+            app:argType="com.example.chatmemo.domain.model.entity.ChatRoom" />
     </fragment>
 
     <fragment
-        android:id="@+id/fixedPhraseListFragment"
-        android:name="com.example.chatmemo.ui.phrase.FixedPhraseListFragment"
-        android:label="fragment_fixed_phrase_list"
-        tools:layout="@layout/fragment_fixed_phrase_list">
+        android:id="@+id/templateListFragment"
+        android:name="com.example.chatmemo.ui.template.TtemplateListFragment"
+        android:label="fragment_template_list"
+        tools:layout="@layout/fragment_template_list">
         <action
-            android:id="@+id/action_fixedPhraseListFragment_to_fixedPhraseAddFragment"
-            app:destination="@id/fixedPhraseAddFragment" />
+            android:id="@+id/action_templateListFragment_to_templateAddFragment"
+            app:destination="@id/templateAddFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/fixedPhraseAddFragment"
-        android:name="com.example.chatmemo.ui.phrase.FixedPhraseAddFragment"
-        android:label="FixedPhraseAddFragment">
+        android:id="@+id/templateAddFragment"
+        android:name="com.example.chatmemo.ui.template.TemplateAddFragment"
+        android:label="fragment_template_add">
         <argument
             android:name="data"
-            app:argType="com.example.chatmemo.domain.model.Template"
+            app:argType="com.example.chatmemo.domain.model.entity.Template"
             app:nullable="true" />
     </fragment>
 
