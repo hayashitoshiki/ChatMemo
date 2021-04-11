@@ -64,7 +64,7 @@ class ChatViewModel(
                 if (room.templateId != null) {
                     when (room.templateMode) {
                         // 順番出力
-                        Const.ORDER  -> {
+                        Const.ORDER -> {
                             val index = if (room.phrasePoint != null && phraseList.size - 1 != room.phrasePoint!!.toInt()) {
                                 room.phrasePoint!!.toInt() + 1
                             } else {
@@ -144,6 +144,7 @@ class ChatViewModel(
                     Const.BLACK -> comments.user = Const.WHITE
                 }
             }
+
             viewModelScope.launch {
                 dataBaseRepository.updateComment(it)
                 _commentList.postValue(dataBaseRepository.getCommentAll(chatRoom.value!!.id!!))
