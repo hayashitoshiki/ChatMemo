@@ -2,7 +2,7 @@
 
 ## Package com.example.chatmemo.ui.adapter
 
-カスタムアダプター管理
+アダプター管理
 
 ### Types
 
@@ -12,3 +12,9 @@
 | [PhraseListAdapter](-phrase-list-adapter/index.md) | `class PhraseListAdapter : Adapter<`[`ViewHolder`](-phrase-list-adapter/-view-holder/index.md)`>`<br>定型文作成画面用のリストビューアダプター |
 | [PhraseTitleListAdapter](-phrase-title-list-adapter/index.md) | `class PhraseTitleListAdapter : Adapter<`[`ViewHolder`](-phrase-title-list-adapter/-view-holder/index.md)`>`<br>定型文リスト画面用のリサイクルビューアダプター |
 | [RoomListAdapter](-room-list-adapter/index.md) | `class RoomListAdapter : Adapter<`[`ViewHolder`](-room-list-adapter/-view-holder/index.md)`>`<br>ルームリスト用アダプター |
+
+### Functions
+
+| Name | Summary |
+|---|---|
+| [setText](set-text.md) | `fun setText(view: `[`AutoCompleteTextView`](https://developer.android.com/reference/android/widget/AutoCompleteTextView.html)`, text: `[`CharSequence`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-char-sequence/index.html)`?): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |

@@ -2,6 +2,8 @@
 
 ## Package com.example.chatmemo.ui
 
+UIベース画面管理
+
 ### Types
 
 | Name | Summary |

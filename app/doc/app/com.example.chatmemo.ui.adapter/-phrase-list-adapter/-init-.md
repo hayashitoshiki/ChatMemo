@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`PhraseListAdapter(items: `[`ArrayList`](https://developer.android.com/reference/java/util/ArrayList.html)`<`[`Phrase`](../../com.example.chatmemo.model.entity/-phrase/index.md)`>)`
+`PhraseListAdapter(items: `[`MutableList`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html)`<`[`TemplateMessage`](../../com.example.chatmemo.domain.model.value/-template-message/index.md)`>)`
 
 定型文作成画面用のリストビューアダプター
 

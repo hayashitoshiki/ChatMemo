@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`HomeViewModel(dataBaseRepository: `[`DataBaseRepository`](../../com.example.chatmemo.model.repository/-data-base-repository/index.md)`)`
+`HomeViewModel(chatUseCase: `[`ChatUseCase`](../../com.example.chatmemo.domain.usecase/-chat-use-case/index.md)`)`
 
 ホーム画面_ロジック
 

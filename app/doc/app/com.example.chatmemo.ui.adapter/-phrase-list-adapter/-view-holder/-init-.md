@@ -2,4 +2,4 @@
 
 # &lt;init&gt;
 
-`ViewHolder(v: `[`View`](https://developer.android.com/reference/android/view/View.html)`)`
+`ViewHolder(v: ItemPhraseBinding)`

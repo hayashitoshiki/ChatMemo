@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`RoomPhraseEditViewModel(chatRoom: `[`ChatRoom`](../../com.example.chatmemo.model.entity/-chat-room/index.md)`, dataBaseRepository: `[`DataBaseRepository`](../../com.example.chatmemo.model.repository/-data-base-repository/index.md)`)`
+`RoomPhraseEditViewModel(chatRoom: `[`ChatRoom`](../../com.example.chatmemo.domain.model.entity/-chat-room/index.md)`, templateUseCase: `[`TemplateUseCase`](../../com.example.chatmemo.domain.usecase/-template-use-case/index.md)`, chatUseCase: `[`ChatUseCase`](../../com.example.chatmemo.domain.usecase/-chat-use-case/index.md)`)`
 
 ルームの定型文設定変更ダイアログ_ロジック
 

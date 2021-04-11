@@ -2,4 +2,4 @@
 
 # database
 
-`lateinit var database: `[`AppDatabase`](../../com.example.chatmemo.model.dao/-app-database/index.md)
+`lateinit var database: `[`AppDatabase`](../../com.example.chatmemo.data.database.dao/-app-database/index.md)

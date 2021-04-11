@@ -2,4 +2,4 @@
 
 # createRoom
 
-`suspend fun createRoom(): `[`ChatRoom`](../../com.example.chatmemo.model.entity/-chat-room/index.md)
+`suspend fun createRoom(): `[`ChatRoom`](../../com.example.chatmemo.domain.model.entity/-chat-room/index.md)

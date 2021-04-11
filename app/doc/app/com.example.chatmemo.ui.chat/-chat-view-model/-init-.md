@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`ChatViewModel(id: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)`, dataBaseRepository: `[`DataBaseRepository`](../../com.example.chatmemo.model.repository/-data-base-repository/index.md)`)`
+`ChatViewModel(id: `[`RoomId`](../../com.example.chatmemo.domain.model.value/-room-id/index.md)`, chatUseCase: `[`ChatUseCase`](../../com.example.chatmemo.domain.usecase/-chat-use-case/index.md)`)`
 
 チャット画面_UIロジック
 
