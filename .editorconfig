@@ -1,0 +1,6 @@
+[*]
+insert_final_newline = true
+
+[*.{kt, kts}]
+max_line_length = 128
+disabled_rules = import-ordering

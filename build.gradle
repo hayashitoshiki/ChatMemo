@@ -22,6 +22,34 @@ allprojects {
     }
 }
 
+subprojects { // 配下のモジュール全てに適用される
+
+    configurations { ktlint }
+
+    dependencies { ktlint "com.pinterest:ktlint:0.39.0" }
+
+    task ktlint(type: JavaExec, group: "verification") {
+        description = "Check Kotlin code style."
+        main = "com.pinterest.ktlint.Main"
+        classpath = configurations.ktlint
+        args "--android", "--color", "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/reports/ktlint-results.xml", "src/**/*.kt"
+        ignoreExitValue true
+    }
+
+    task ktlintFormat(type: JavaExec, group: "formatting") {
+        description = "Fix Kotlin code style deviations."
+        main = "com.pinterest.ktlint.Main"
+        classpath = configurations.ktlint
+        args "-F", "--android", "src/**/*.kt"
+        ignoreExitValue true
+    }
+
+    afterEvaluate {
+        check.dependsOn ktlint
+    }
+}
+
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
