@@ -22,6 +22,9 @@ interface TemplateDao {
     @Delete
     suspend fun delete(template: TemplateEntity)
 
+    @Query("delete from template WHERE id = :templateId")
+    suspend fun deleteByTemplateId(templateId: Long)
+
     @Query("SELECT * FROM template")
     fun getAll(): LiveData<List<TemplateEntity>>
 

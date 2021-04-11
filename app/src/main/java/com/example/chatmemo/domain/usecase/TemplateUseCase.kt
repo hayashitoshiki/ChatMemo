@@ -18,7 +18,7 @@ interface TemplateUseCase {
     /**
      * テンプレート削除
      */
-    suspend fun deleteTemplate(templateid: TemplateId): Boolean
+    suspend fun deleteTemplate(templateId: TemplateId): Boolean
 
     /**
      * テンプレートアプデート

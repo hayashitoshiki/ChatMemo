@@ -2,9 +2,10 @@ package com.example.chatmemo.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.model.Template
-import com.example.chatmemo.domain.value.TemplateId
-import com.example.chatmemo.domain.value.TemplateMessage
+import com.example.chatmemo.domain.value.*
+import com.example.chatmemo.model.repository.ChatDataBaseRepository
 import com.example.chatmemo.model.repository.TemplateDataBaseRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -20,6 +21,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import java.time.LocalDateTime
 
 class TemplateUseCaseImpTest {
 
@@ -29,17 +31,31 @@ class TemplateUseCaseImpTest {
     val rule: TestRule = InstantTaskExecutorRule()
 
     // mock
+    private lateinit var chatDataBaseRepository: ChatDataBaseRepository
     private lateinit var templateDataBaseRepository: TemplateDataBaseRepository
     private lateinit var useCase: TemplateUseCaseImp
     private val templateMessage = TemplateMessage("testMessge")
     private val templateMessageList = listOf(templateMessage)
     private val template = Template(TemplateId(1), "testTemplate", templateMessageList)
     private val templateList = listOf(template)
+    private val roomId1 = RoomId(1)
+    private val time1 = CommentDateTime(LocalDateTime.now())
+    private val time2 = CommentDateTime(LocalDateTime.now())
+    private val time3 = CommentDateTime(LocalDateTime.now())
+    private val comment1 = Comment("testComment1", User.BLACK, time1)
+    private val comment2 = Comment("testComment2", User.WHITE, time2)
+    private val comment3 = Comment("testComment3", User.BLACK, time3)
+    private val commentList = mutableListOf(comment1, comment2, comment3)
+    private val chatroom1 = ChatRoom(roomId1, "room1", null, commentList)
 
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
+        chatDataBaseRepository = mockk<ChatDataBaseRepository>().also {
+            coEvery { it.getRoomByTemplateId(TemplateId(1)) } returns mutableListOf(chatroom1)
+            coEvery { it.getRoomByTemplateId(TemplateId(2)) } returns mutableListOf()
+        }
         templateDataBaseRepository = mockk<TemplateDataBaseRepository>().also {
             coEvery { it.createTemplate(any()) } returns true
             coEvery { it.deleteTemplate(TemplateId(any())) } returns true
@@ -48,7 +64,7 @@ class TemplateUseCaseImpTest {
             coEvery { it.getTemplateAll() } returns MutableLiveData(templateList)
             coEvery { it.getTemplateMessageById(TemplateId(any())) } returns listOf(templateMessage)
         }
-        useCase = TemplateUseCaseImp(templateDataBaseRepository)
+        useCase = TemplateUseCaseImp(chatDataBaseRepository, templateDataBaseRepository)
     }
 
     @ExperimentalCoroutinesApi
@@ -72,13 +88,32 @@ class TemplateUseCaseImpTest {
 
     /**
      * テンプレート削除
-     * 条件：なし
-     * 結果：テンプレートを削除するメソッドが呼ばれること
+     * 条件：指定したIDのテンプレートを使用しているチャットルームが存在している
+     * 結果：
+     * ・テンプレートを削除するメソッドが呼ばれること
+     * ・trueが返ること
      */
     @Test
-    fun deleteTemplate() {
+    fun deleteTemplateByUse() {
         runBlocking {
-            useCase.deleteTemplate(template.templateId)
+            val result = useCase.deleteTemplate(TemplateId(2))
+            assertEquals(false, result)
+            coVerify(exactly = 0) { (templateDataBaseRepository).deleteTemplate(TemplateId(2)) }
+        }
+    }
+
+    /**
+     * テンプレート削除
+     * 条件：指定したIDのテンプレートを使用しているチャットルームが存在していない
+     * 結果：
+     * ・テンプレートを削除するメソッドが呼ばれること
+     * ・trueが返ること
+     */
+    @Test
+    fun deleteTemplateByNotUse() {
+        runBlocking {
+            val result = useCase.deleteTemplate(template.templateId)
+            assertEquals(true, result)
             coVerify(exactly = 1) { (templateDataBaseRepository).deleteTemplate(template.templateId) }
         }
     }

@@ -44,8 +44,9 @@ class FixedPhraseListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.title = "定型文一覧"
         viewModel.templateList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
-        viewModel.status.observe(viewLifecycleOwner,
-            Observer { if (it != null && !it) showErrorToast() })
+        viewModel.status.observe(viewLifecycleOwner, Observer {
+            if (it != null && !it) showErrorToast()
+        })
 
         val adapter = PhraseTitleListAdapter(listOf())
         val layoutManager = LinearLayoutManager(requireContext())
@@ -57,7 +58,7 @@ class FixedPhraseListFragment : Fragment() {
         adapter.setOnItemClickListener(object : PhraseTitleListAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, position: Int, item: Template) {
                 when (view.id) {
-                    R.id.txt_name -> {
+                    R.id.txt_name   -> {
                         val extras = FragmentNavigatorExtras(view to "end_title_transition")
                         val data = bundleOf("data" to item)
                         findNavController().navigate(

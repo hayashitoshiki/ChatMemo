@@ -13,8 +13,8 @@ import com.example.chatmemo.domain.value.RoomId
 import com.example.chatmemo.model.dao.AppDatabase
 import com.example.chatmemo.model.repository.ChatDataBaseRepository
 import com.example.chatmemo.model.repository.ChatDataBaseRepositoryImp
-import com.example.chatmemo.model.repository.DataBaseRepository
-import com.example.chatmemo.model.repository.DataBaseRepositoryImp
+import com.example.chatmemo.model.repository.TemplateDataBaseRepository
+import com.example.chatmemo.model.repository.TemplateDataBaseRepositoryImp
 import com.example.chatmemo.ui.chat.*
 import com.example.chatmemo.ui.phrase.FixedPhraseAddViewModel
 import com.example.chatmemo.ui.phrase.FixedPhraseListViewModel
@@ -63,8 +63,9 @@ class MyApplication : Application() {
         viewModel { FixedPhraseListViewModel(get()) }
 
         factory<ChatUseCase> { ChatUseCaseImp(get()) }
-        factory<TemplateUseCase> { TemplateUseCaseImp(get()) }
-        factory<DataBaseRepository> { DataBaseRepositoryImp() }
+        factory<TemplateUseCase> { TemplateUseCaseImp(get(), get()) }
+
         factory<ChatDataBaseRepository> { ChatDataBaseRepositoryImp() }
+        factory<TemplateDataBaseRepository> { TemplateDataBaseRepositoryImp() }
     }
 }

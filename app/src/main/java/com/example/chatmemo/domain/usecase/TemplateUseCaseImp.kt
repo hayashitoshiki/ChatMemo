@@ -5,16 +5,25 @@ import androidx.lifecycle.MutableLiveData
 import com.example.chatmemo.domain.model.Template
 import com.example.chatmemo.domain.value.TemplateId
 import com.example.chatmemo.domain.value.TemplateMessage
+import com.example.chatmemo.model.repository.ChatDataBaseRepository
 import com.example.chatmemo.model.repository.TemplateDataBaseRepository
 
-class TemplateUseCaseImp(private val templateDataBaseRepository: TemplateDataBaseRepository) : TemplateUseCase {
+class TemplateUseCaseImp(
+    private val chatDataBaseRepository: ChatDataBaseRepository,
+    private val templateDataBaseRepository: TemplateDataBaseRepository
+) : TemplateUseCase {
 
     override suspend fun createTemplate(template: Template): Boolean {
         return templateDataBaseRepository.createTemplate(template)
     }
 
     override suspend fun deleteTemplate(templateId: TemplateId): Boolean {
-        return templateDataBaseRepository.deleteTemplate(templateId)
+        val roomList = chatDataBaseRepository.getRoomByTemplateId(templateId)
+        return if (roomList.isNotEmpty()) {
+            false
+        } else {
+            templateDataBaseRepository.deleteTemplate(templateId)
+        }
     }
 
     override suspend fun updateTemplate(template: Template): Boolean {

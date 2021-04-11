@@ -49,8 +49,7 @@ class ChatViewModel(
 
                 room.templateConfiguration?.let { templateConfiguration ->
                     val (configuretion, templateComment) = chatUseCase.addTemplateComment(
-                        templateConfiguration,
-                        roomId
+                        templateConfiguration, roomId
                     )
                     room.templateConfiguration = configuretion
                     room.commentList.add(templateComment)
@@ -72,7 +71,7 @@ class ChatViewModel(
 
     // 立場変更
     fun changeUser() {
-        chatRoom.value?.commentList?.let { comments ->
+        commentList.value?.let { comments ->
             viewModelScope.launch {
                 val newCommentList = chatUseCase.reverseAllCommentUser(comments)
                 _commentList.postValue(newCommentList)

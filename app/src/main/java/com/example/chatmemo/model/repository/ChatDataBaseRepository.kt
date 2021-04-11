@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.example.chatmemo.domain.model.ChatRoom
 import com.example.chatmemo.domain.value.Comment
 import com.example.chatmemo.domain.value.RoomId
+import com.example.chatmemo.domain.value.TemplateId
 
 /**
  * チャットに関するDataBaseCRUD用Repository
@@ -52,7 +53,7 @@ interface ChatDataBaseRepository {
      * @param templateId テンプレートID
      * @return 指定したテンプレートが使用されているルーム
      */
-    suspend fun getRoomByTemplateId(templateId: Long): List<ChatRoom>
+    suspend fun getRoomByTemplateId(templateId: TemplateId): List<ChatRoom>
 
     /**
      * メッセージ追加

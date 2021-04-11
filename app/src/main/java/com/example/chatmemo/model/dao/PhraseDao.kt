@@ -22,7 +22,7 @@ interface PhraseDao {
     fun deleteAll()
 
     @Query("delete from phrases WHERE template_id = :templateId")
-    suspend fun deleteAllByTemplateId(templateId: Long)
+    suspend fun deleteByTemplateId(templateId: Long)
 
     @Query("SELECT * FROM phrases")
     fun getAll(): Array<PhraseEntity>
