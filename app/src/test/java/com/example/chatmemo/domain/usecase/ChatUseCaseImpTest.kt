@@ -69,7 +69,7 @@ class ChatUseCaseImpTest {
             coEvery { it.updateRoom(any()) } returns Unit
             coEvery { it.getRoomAll() } returns MutableLiveData(listOf(chatroom1))
             coEvery { it.getRoomById(RoomId(any())) } returns MutableLiveData(chatroom1)
-            coEvery { it.getRoomByTemplateId(any()) } returns listOf(chatroom1)
+            coEvery { it.getRoomByTemplateId(TemplateId(any())) } returns listOf(chatroom1)
             coEvery { it.addComment(any(), RoomId(any())) } returns Unit
             coEvery { it.updateComments(any()) } returns Unit
         }
