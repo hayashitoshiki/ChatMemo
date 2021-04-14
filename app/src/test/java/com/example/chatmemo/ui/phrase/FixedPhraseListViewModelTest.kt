@@ -14,11 +14,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Before
-import org.junit.Test
-
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 import org.junit.rules.TestRule
 
 /**
@@ -72,7 +71,7 @@ class FixedPhraseListViewModelTest {
     @Test
     fun getList() {
         viewModel.getList()
-        coVerify{(databaseRepository).getPhraseTitle()}
+        coVerify { (databaseRepository).getPhraseTitle() }
     }
 
     /**
@@ -86,7 +85,7 @@ class FixedPhraseListViewModelTest {
         // 使用していルームが存在しいない
         viewModel.deletePhrase(template2)
         assertEquals(viewModel.status.value, true)
-        coVerify{(databaseRepository).deletePhraseByTitle(any())}
-        coVerify{(databaseRepository).deleteTemplateTitle(any())}
+        coVerify { (databaseRepository).deletePhraseByTitle(any()) }
+        coVerify { (databaseRepository).deleteTemplateTitle(any()) }
     }
 }

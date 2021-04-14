@@ -7,7 +7,6 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.chatmemo.model.entity.ChatRoom
 
-
 /**
  * 定型文用クエリ管理
  */

@@ -17,7 +17,6 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 /**
  * チャット画面のリサイクルビュー
  *
@@ -25,7 +24,8 @@ import java.util.*
  * @property commentList 取得したコメント情報
  */
 class ChatRecyclerAdapter(
-    private val context: Context, private var commentList: List<Comment>
+    private val context: Context,
+    private var commentList: List<Comment>
 ) : RecyclerView.Adapter<ChatRecyclerAdapter.ViewHolder>() {
 
     // 参照するviewの定義
@@ -51,9 +51,11 @@ class ChatRecyclerAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val comment = commentList[position]
-        if (position == 0 || (position > 0 && commentList[position - 1].createdAt.substring(
-                0, 10
-            ) != commentList[position].createdAt.substring(0, 10))
+        if (position == 0 || (
+            position > 0 && commentList[position - 1].createdAt.substring(
+                    0, 10
+                ) != commentList[position].createdAt.substring(0, 10)
+            )
         ) {
             comment.createdAt.substring(0, 10).let {
                 holder.dataTextView.visibility = View.VISIBLE

@@ -11,7 +11,8 @@ import kotlinx.coroutines.launch
  * @property dataBaseRepository DB取得リポジトリ
  */
 class RoomAddViewModel(
-    private val modelist: List<String>, private val dataBaseRepository: DataBaseRepository
+    private val modelist: List<String>,
+    private val dataBaseRepository: DataBaseRepository
 ) : ViewModel() {
 
     val titleText = MutableLiveData("")
@@ -55,11 +56,20 @@ class RoomAddViewModel(
 
     // 作成ボタン活性・非活性制御
     fun changeSubmitButton() {
-        _isEnableSubmitButton.postValue(true)
-        if (titleText.value != null && templateTitleValue.value != null) {
-            _isEnableSubmitButton.postValue(titleText.value!!.isNotEmpty() && ((templateTitleValue.value!! != templateTitleList.value!![0] && modeValue.value != null) || templateTitleValue.value!! == templateTitleList.value!![0]))
-        } else {
+        val roomName = titleText.value
+        val templateTitle = templateTitleValue.value
+        val templateNone = templateTitleList.value!![0]
+        val templateMode = modeValue.value
+        if (roomName == null || templateTitle == null) {
             _isEnableSubmitButton.postValue(false)
+            return
         }
+        if (roomName.isEmpty()) {
+            _isEnableSubmitButton.postValue(false)
+            return
+        }
+
+        val enable = ((templateTitle != templateNone && templateMode != null) || templateTitle == templateNone)
+        _isEnableSubmitButton.postValue(enable)
     }
 }

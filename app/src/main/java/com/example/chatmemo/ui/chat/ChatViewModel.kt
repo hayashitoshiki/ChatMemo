@@ -6,10 +6,10 @@ import com.example.chatmemo.model.entity.ChatRoom
 import com.example.chatmemo.model.entity.Comment
 import com.example.chatmemo.model.entity.Phrase
 import com.example.chatmemo.model.repository.DataBaseRepository
-import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlinx.coroutines.launch
 
 /**
  * チャット画面_UIロジック
@@ -17,7 +17,8 @@ import java.util.*
  * @property dataBaseRepository DBアクセス用repository
  */
 class ChatViewModel(
-    id: Long, private val dataBaseRepository: DataBaseRepository
+    id: Long,
+    private val dataBaseRepository: DataBaseRepository
 ) : ViewModel() {
 
     val chatRoom: LiveData<ChatRoom> = dataBaseRepository.getRoomById(id)
@@ -64,7 +65,7 @@ class ChatViewModel(
                 if (room.templateId != null) {
                     when (room.templateMode) {
                         // 順番出力
-                        Const.ORDER  -> {
+                        Const.ORDER -> {
                             val index = if (room.phrasePoint != null && phraseList.size - 1 != room.phrasePoint!!.toInt()) {
                                 room.phrasePoint!!.toInt() + 1
                             } else {
@@ -110,7 +111,6 @@ class ChatViewModel(
                             dataBaseRepository.updateRoom(room)
                         }
                     }
-
                 }
 
                 _commentList.postValue(dataBaseRepository.getCommentAll(room.id))

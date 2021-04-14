@@ -21,7 +21,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 
-
 /**
  * ルーム作成顔面 ロジック仕様
  */

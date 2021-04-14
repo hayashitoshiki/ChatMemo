@@ -23,5 +23,4 @@ interface CommentDao {
 
     @Query("delete from comments WHERE room_id = :roomId")
     fun deleteById(roomId: Long)
-
 }

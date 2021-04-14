@@ -127,7 +127,7 @@ class FixedPhraseAddViewModelTest {
     @Test
     fun changePhraseSubmitButton() {
         // 入力なし
-        //viewModel.changePhraseSubmitButton("")
+        // viewModel.changePhraseSubmitButton("")
         assertEquals(viewModel.isPhraseEnableSubmitButton.value, false)
         // 入力あり
         viewModel.phraseText.value = "test"
@@ -142,21 +142,21 @@ class FixedPhraseAddViewModelTest {
     fun changeSubmitButton() {
         // タイトルなし + 定型文リストなし
         viewModel.titleText.value = ""
-        //viewModel.changeSubmitButton()
+        // viewModel.changeSubmitButton()
         assertEquals(viewModel.isEnableSubmitButton.value, false)
         // タイトルあり + 定型文リストなし
         viewModel.titleText.value = "aaa"
-        //viewModel.changeSubmitButton()
+        // viewModel.changeSubmitButton()
         assertEquals(viewModel.isEnableSubmitButton.value, false)
         // タイトルなし + 定型文リストあり
         viewModel.titleText.value = ""
         viewModel.addPhrase()
-        //viewModel.changeSubmitButton()
+        // viewModel.changeSubmitButton()
         assertEquals(viewModel.isEnableSubmitButton.value, false)
         // タイトルあり + 定型文リストあり
         viewModel.titleText.value = "aaa"
         viewModel.addPhrase()
-        //viewModel.changeSubmitButton()
+        // viewModel.changeSubmitButton()
         assertEquals(viewModel.isEnableSubmitButton.value, true)
     }
 }

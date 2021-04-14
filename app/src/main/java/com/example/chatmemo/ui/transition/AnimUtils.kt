@@ -114,7 +114,8 @@ class AnimUtils {
     }
 
     private class AnimatorListenerWrapper internal constructor(
-        private val mAnimator: Animator, private val mListener: Animator.AnimatorListener
+        private val mAnimator: Animator,
+        private val mListener: Animator.AnimatorListener
     ) : Animator.AnimatorListener {
         override fun onAnimationStart(animator: Animator) {
             mListener.onAnimationStart(mAnimator)

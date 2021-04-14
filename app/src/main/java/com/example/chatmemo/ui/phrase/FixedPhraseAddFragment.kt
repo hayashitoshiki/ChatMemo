@@ -38,7 +38,9 @@ class FixedPhraseAddFragment : Fragment() {
     private val args: FixedPhraseAddFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_fixed_phrase_add, container, false
@@ -80,20 +82,23 @@ class FixedPhraseAddFragment : Fragment() {
         viewModel.phraseList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
 
         // 文字入力
-        viewModel.phraseText.observe(viewLifecycleOwner, Observer {
-            // 高さ自動統制
-            binding.editPharase.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    binding.editPharase.viewTreeObserver.removeOnPreDrawListener(this)
-                    if (binding.editPharase.lineCount in 1..4) {
-                        val scrollViewLayoutParam = binding.scrollView.layoutParams as ViewGroup.MarginLayoutParams
-                        scrollViewLayoutParam.height = binding.editPharase.height
-                        binding.scrollView.layoutParams = scrollViewLayoutParam
+        viewModel.phraseText.observe(
+            viewLifecycleOwner,
+            Observer {
+                // 高さ自動統制
+                binding.editPharase.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                    override fun onPreDraw(): Boolean {
+                        binding.editPharase.viewTreeObserver.removeOnPreDrawListener(this)
+                        if (binding.editPharase.lineCount in 1..4) {
+                            val scrollViewLayoutParam = binding.scrollView.layoutParams as ViewGroup.MarginLayoutParams
+                            scrollViewLayoutParam.height = binding.editPharase.height
+                            binding.scrollView.layoutParams = scrollViewLayoutParam
+                        }
+                        return true
                     }
-                    return true
-                }
-            })
-        })
+                })
+            }
+        )
         // 定型文リスト
         val adapter = PhraseListAdapter(arrayListOf())
         val layoutManager = LinearLayoutManager(requireContext())
@@ -147,7 +152,7 @@ class FixedPhraseAddFragment : Fragment() {
     // 設定画面へ画面戻る
     private fun back(result: Boolean) {
         when (result) {
-            true  -> findNavController().popBackStack()
+            true -> findNavController().popBackStack()
             false -> {
                 Toast.makeText(
                     requireContext(), R.string.error_phrase_title, Toast.LENGTH_SHORT
@@ -155,5 +160,4 @@ class FixedPhraseAddFragment : Fragment() {
             }
         }
     }
-
 }

@@ -54,7 +54,7 @@ class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.A
                 MotionEvent.ACTION_DOWN -> {
                     x = event.x
                 }
-                MotionEvent.ACTION_UP   -> {
+                MotionEvent.ACTION_UP -> {
                     if (-5 < x - event.x && x - event.x < 5) {
                         listener.onItemClickListener(holder.textView, position, template)
                     }
@@ -75,7 +75,7 @@ class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.A
         this.items = items
     }
 
-    //インターフェースの作成
+    // インターフェースの作成
     interface OnItemClickListener {
         fun onItemClickListener(view: View, position: Int, item: Template)
     }

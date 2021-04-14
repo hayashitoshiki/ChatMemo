@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
-
 /**
  * ルームの定型文設定変更ダイアログ
  */
@@ -28,13 +27,16 @@ class RoomPhraseEditDialogFragment : DialogFragment() {
         parametersOf(
             requireArguments().getSerializable(
                 "room"
-            ) as ChatRoom, modeList
+            ) as ChatRoom,
+            modeList
         )
     }
     private lateinit var binding: DialogRoomPhraseEditBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.dialog_room_phrase_edit, container, false
@@ -49,12 +51,15 @@ class RoomPhraseEditDialogFragment : DialogFragment() {
 
         viewModel.templateTitleValue.observe(viewLifecycleOwner, Observer { viewModel.validate() })
         viewModel.modeValue.observe(viewLifecycleOwner, Observer { viewModel.validate() })
-        viewModel.templateTitleList.observe(viewLifecycleOwner, Observer {
-            val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                requireActivity(), android.R.layout.simple_dropdown_item_1line, it
-            )
-            binding.spinnerTitle.setAdapter(arrayAdapter)
-        })
+        viewModel.templateTitleList.observe(
+            viewLifecycleOwner,
+            Observer {
+                val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                    requireActivity(), android.R.layout.simple_dropdown_item_1line, it
+                )
+                binding.spinnerTitle.setAdapter(arrayAdapter)
+            }
+        )
 
         // spinner 設定
         binding.spinnerTitle.let { spinner ->
@@ -89,5 +94,4 @@ class RoomPhraseEditDialogFragment : DialogFragment() {
             it.setLayout(width, height)
         }
     }
-
 }

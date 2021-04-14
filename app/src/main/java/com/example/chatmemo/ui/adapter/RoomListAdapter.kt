@@ -17,7 +17,6 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 /**
  * ルームリスト用アダプター
  */
@@ -82,7 +81,7 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
                 MotionEvent.ACTION_DOWN -> {
                     x = event.x
                 }
-                MotionEvent.ACTION_UP   -> {
+                MotionEvent.ACTION_UP -> {
                     if (-5 < x - event.x && x - event.x < 5) {
                         listener.onItemClickListener(v, position, items[position])
                     }
@@ -112,7 +111,7 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
         this.items = items
     }
 
-    //インターフェースの作成
+    // インターフェースの作成
     interface OnItemClickListener {
         fun onItemClickListener(view: View, position: Int, item: ChatRoom)
     }

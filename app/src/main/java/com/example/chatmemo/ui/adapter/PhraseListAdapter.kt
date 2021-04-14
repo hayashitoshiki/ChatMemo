@@ -61,7 +61,7 @@ class PhraseListAdapter(private var items: ArrayList<Phrase>) : RecyclerView.Ada
         this.items = items
     }
 
-    //インターフェースの作成
+    // インターフェースの作成
     interface OnItemClickListener {
         fun onItemClickListener(view: View, position: Int, items: ArrayList<Phrase>)
     }

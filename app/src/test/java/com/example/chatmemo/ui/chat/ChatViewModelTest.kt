@@ -45,7 +45,6 @@ class ChatViewModelTest {
     private val room1 = ChatRoom(1, "test", null, null, null, null, "")
     private val room2 = ChatRoom(2, "test", 1, 1, null, null, "")
 
-
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {

@@ -54,7 +54,6 @@ class ChatRoomPhraseEditViewModelTest {
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
 
-
         databaseRepository = mockk<DataBaseRepository>().also {
             coEvery { it.createRoom(any()) } returns Unit
             coEvery { it.getRoomByTitle(any()) } returns room1

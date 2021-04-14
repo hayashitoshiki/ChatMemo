@@ -150,5 +150,4 @@ interface DataBaseRepository {
      */
     fun getRoomAll(): LiveData<List<ChatRoom>>
     // endregion
-
 }

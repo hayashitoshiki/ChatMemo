@@ -17,13 +17,12 @@ import com.example.chatmemo.databinding.FragmentHomeBinding
 import com.example.chatmemo.model.entity.ChatRoom
 import com.example.chatmemo.ui.MainActivity
 import com.example.chatmemo.ui.adapter.RoomListAdapter
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
-import kotlin.coroutines.CoroutineContext
-
 
 /**
  * ホーム画面
@@ -36,7 +35,9 @@ class HomeFragment : Fragment(), CoroutineScope {
     override val coroutineContext: CoroutineContext = Dispatchers.Main + job
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -72,7 +73,7 @@ class HomeFragment : Fragment(), CoroutineScope {
                             R.id.action_homeFragment_to_chatFragment, data, null, extras
                         )
                     }
-                    R.id.btn_delete     -> {
+                    R.id.btn_delete -> {
                         AlertDialog.Builder(requireActivity()).setTitle("ルーム削除")
                             .setMessage("削除しますか？").setPositiveButton("はい") { _, _ ->
                                 viewModel.deleteRoom(item.id!!)
@@ -114,5 +115,4 @@ class HomeFragment : Fragment(), CoroutineScope {
             }
         }
     }
-
 }

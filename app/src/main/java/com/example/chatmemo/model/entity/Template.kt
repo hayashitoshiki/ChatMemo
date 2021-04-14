@@ -10,5 +10,6 @@ import androidx.room.PrimaryKey
  */
 @Entity(tableName = "template")
 data class Template(
-    @PrimaryKey(autoGenerate = true) val id: Long?, var title: String
+    @PrimaryKey(autoGenerate = true) val id: Long?,
+    var title: String
 ) : java.io.Serializable

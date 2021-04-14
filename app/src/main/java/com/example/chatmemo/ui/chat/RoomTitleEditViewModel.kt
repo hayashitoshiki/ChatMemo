@@ -12,7 +12,8 @@ import com.example.chatmemo.model.repository.DataBaseRepository
  * @property dataBaseRepository DB取得リポジトリ
  */
 class RoomTitleEditViewModel(
-    private var chatRoom: ChatRoom, private val dataBaseRepository: DataBaseRepository
+    private var chatRoom: ChatRoom,
+    private val dataBaseRepository: DataBaseRepository
 ) : ViewModel() {
 
     val newRoomTitle = MutableLiveData("")

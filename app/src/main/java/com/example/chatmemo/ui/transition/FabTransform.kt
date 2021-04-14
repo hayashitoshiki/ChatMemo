@@ -78,7 +78,9 @@ class FabTransform : Transition {
     }
 
     override fun createAnimator(
-        sceneRoot: ViewGroup, startValues: TransitionValues?, endValues: TransitionValues?
+        sceneRoot: ViewGroup,
+        startValues: TransitionValues?,
+        endValues: TransitionValues?
     ): Animator? {
         if (startValues == null || endValues == null) return null
         val startBounds: Rect = startValues.values[PROP_BOUNDS] as Rect
@@ -133,16 +135,19 @@ class FabTransform : Transition {
         val circularReveal: Animator
         if (fromFab) {
             circularReveal = ViewAnimationUtils.createCircularReveal(
-                view, view.width / 2, view.height / 2, (startBounds.width() / 2).toFloat(), hypot(
+                view, view.width / 2, view.height / 2, (startBounds.width() / 2).toFloat(),
+                hypot(
                     (endBounds.width() / 2).toDouble(), (endBounds.height() / 2).toDouble()
                 ).toFloat()
             )
             circularReveal.interpolator = FastOutLinearInInterpolator()
         } else {
             circularReveal = ViewAnimationUtils.createCircularReveal(
-                view, view.width / 2, view.height / 2, hypot(
+                view, view.width / 2, view.height / 2,
+                hypot(
                     (startBounds.width() / 2).toDouble(), (startBounds.height() / 2).toDouble()
-                ).toFloat(), (endBounds.width() / 2).toFloat()
+                ).toFloat(),
+                (endBounds.width() / 2).toFloat()
             )
             circularReveal.interpolator = LinearOutSlowInInterpolator()
 
@@ -166,7 +171,8 @@ class FabTransform : Transition {
 
         // Translate to end position along an arc
         val translate: Animator = ObjectAnimator.ofFloat(
-            view, View.TRANSLATION_X, View.TRANSLATION_Y, if (fromFab) pathMotion.getPath(
+            view, View.TRANSLATION_X, View.TRANSLATION_Y,
+            if (fromFab) pathMotion.getPath(
                 translationX.toFloat(), translationY.toFloat(), 0F, 0F
             ) else pathMotion.getPath(
                 0F, 0F, (-translationX).toFloat(), (-translationY).toFloat()
@@ -254,7 +260,9 @@ class FabTransform : Transition {
          * Configure `intent` with the extras needed to initialize this transition.
          */
         fun addExtras(
-            intent: Intent, @ColorInt fabColor: Int, @DrawableRes fabIconResId: Int
+            intent: Intent,
+            @ColorInt fabColor: Int,
+            @DrawableRes fabIconResId: Int
         ) {
             intent.putExtra(EXTRA_FAB_COLOR, fabColor)
             intent.putExtra(EXTRA_FAB_ICON_RES_ID, fabIconResId)

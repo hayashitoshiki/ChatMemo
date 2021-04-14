@@ -30,7 +30,9 @@ class FixedPhraseListFragment : Fragment() {
     private val viewModel: FixedPhraseListViewModel by viewModel()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_fixed_phrase_list, container, false
@@ -47,7 +49,8 @@ class FixedPhraseListFragment : Fragment() {
         viewModel.phraseList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
         viewModel.status.observe(
             viewLifecycleOwner,
-            Observer { if (it != null && !it) showErrorToast() })
+            Observer { if (it != null && !it) showErrorToast() }
+        )
 
         val adapter = PhraseTitleListAdapter(listOf())
         val layoutManager = LinearLayoutManager(requireContext())
