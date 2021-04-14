@@ -37,7 +37,9 @@ class RoomAddFragment : Fragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_room_add, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -59,20 +61,26 @@ class RoomAddFragment : Fragment() {
 
         (activity as AppCompatActivity).supportActionBar?.title = "ルーム作成"
 
-        viewModel.templateTitleList.observe(viewLifecycleOwner, Observer { templateList ->
-            val templateTitleList = templateList.map { it.title }
-            val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                requireActivity(), android.R.layout.simple_dropdown_item_1line, templateTitleList
-            )
-            binding.spinnerTitle.setAdapter(arrayAdapter)
-        })
-        viewModel.templateModeList.observe(viewLifecycleOwner, Observer { modeList ->
-            val modeTitleList = modeList.map { it.massage }
-            val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                requireActivity(), android.R.layout.simple_dropdown_item_1line, modeTitleList
-            )
-            binding.spinnerMode.setAdapter(arrayAdapter)
-        })
+        viewModel.templateTitleList.observe(
+            viewLifecycleOwner,
+            Observer { templateList ->
+                val templateTitleList = templateList.map { it.title }
+                val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                    requireActivity(), android.R.layout.simple_dropdown_item_1line, templateTitleList
+                )
+                binding.spinnerTitle.setAdapter(arrayAdapter)
+            }
+        )
+        viewModel.templateModeList.observe(
+            viewLifecycleOwner,
+            Observer { modeList ->
+                val modeTitleList = modeList.map { it.massage }
+                val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                    requireActivity(), android.R.layout.simple_dropdown_item_1line, modeTitleList
+                )
+                binding.spinnerMode.setAdapter(arrayAdapter)
+            }
+        )
 
         // spinner 設定
         binding.spinnerTitle.let { spinner ->
@@ -100,7 +108,6 @@ class RoomAddFragment : Fragment() {
                 val chatRoom: ChatRoom = viewModel.createRoom()
                 val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(chatRoom)
                 findNavController().navigate(action)
-
             }
         }
         // editTextフォーカス制御

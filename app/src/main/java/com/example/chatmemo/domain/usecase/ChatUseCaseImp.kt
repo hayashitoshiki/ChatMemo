@@ -44,7 +44,8 @@ class ChatUseCaseImp(private val chatDataBaseRepository: ChatDataBaseRepository)
     }
 
     override suspend fun addTemplateComment(
-        templateConfiguration: TemplateConfiguration, roomId: RoomId
+        templateConfiguration: TemplateConfiguration,
+        roomId: RoomId
     ): Pair<TemplateConfiguration, Comment> {
         when (val templateMode = templateConfiguration.templateMode) {
             is TemplateMode.Order -> {
@@ -68,9 +69,7 @@ class ChatUseCaseImp(private val chatDataBaseRepository: ChatDataBaseRepository)
                 if (randomList.size == 1) {
                     templateMode.position.clear()
                 } else {
-                    val position = templateConfiguration.template.templateMessageList.indexOf(
-                        TemplateMessage(templateMessage)
-                    )
+                    val position = templateConfiguration.template.templateMessageList.indexOf(TemplateMessage(templateMessage))
                     templateMode.position.add(position)
                 }
                 val comment = Comment(templateMessage, User.WHITE, templateMessageDate)
@@ -86,5 +85,4 @@ class ChatUseCaseImp(private val chatDataBaseRepository: ChatDataBaseRepository)
         chatDataBaseRepository.addComment(comment, roomId)
         return comment
     }
-
 }

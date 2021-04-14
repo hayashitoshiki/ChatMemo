@@ -15,7 +15,8 @@ import com.example.chatmemo.domain.model.value.TemplateMessage
  * 定型文作成画面用のリストビューアダプター
  * @property items 定型文リスト
  */
-class PhraseListAdapter(private var items: MutableList<TemplateMessage>) : RecyclerView.Adapter<PhraseListAdapter.ViewHolder>() {
+class PhraseListAdapter(private var items: MutableList<TemplateMessage>) :
+    RecyclerView.Adapter<PhraseListAdapter.ViewHolder>() {
 
     private lateinit var listener: OnItemClickListener
 
@@ -60,7 +61,7 @@ class PhraseListAdapter(private var items: MutableList<TemplateMessage>) : Recyc
         this.items = items
     }
 
-    //インターフェースの作成
+    // インターフェースの作成
     interface OnItemClickListener {
         fun onItemClickListener(view: View, position: Int, items: MutableList<TemplateMessage>)
     }

@@ -66,5 +66,4 @@ interface ChatDataBaseRepository {
     suspend fun updateComments(commentList: List<Comment>)
 
     // endregion
-
 }

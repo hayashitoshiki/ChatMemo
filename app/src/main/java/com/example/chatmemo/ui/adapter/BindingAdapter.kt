@@ -4,7 +4,6 @@ import android.text.Spanned
 import android.widget.AutoCompleteTextView
 import androidx.databinding.BindingAdapter
 
-
 @BindingAdapter("android:text")
 fun setText(view: AutoCompleteTextView, text: CharSequence?) {
     val oldText = view.text
@@ -13,16 +12,17 @@ fun setText(view: AutoCompleteTextView, text: CharSequence?) {
     }
     if (text is Spanned) {
         if (text == oldText) {
-            return  // No change in the spans, so don't set anything.
+            return // No change in the spans, so don't set anything.
         }
     } else if (!haveContentsChanged(text, oldText)) {
-        return  // No content changes, so don't set anything.
+        return // No content changes, so don't set anything.
     }
     view.setText(text, false)
 }
 
 private fun haveContentsChanged(
-    str1: CharSequence?, str2: CharSequence?
+    str1: CharSequence?,
+    str2: CharSequence?
 ): Boolean {
     if (str1 == null != (str2 == null)) {
         return true

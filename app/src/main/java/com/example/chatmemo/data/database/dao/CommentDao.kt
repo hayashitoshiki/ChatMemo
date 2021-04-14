@@ -26,5 +26,4 @@ interface CommentDao {
 
     @Query("update comments SET user = :user WHERE created_at = :createAt")
     fun updateUserBy(user: Int, createAt: String)
-
 }

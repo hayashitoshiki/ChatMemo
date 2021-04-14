@@ -74,7 +74,10 @@ class GravityArcMotion : ArcMotion {
     }
 
     override fun getPath(
-        startX: Float, startY: Float, endX: Float, endY: Float
+        startX: Float,
+        startY: Float,
+        endX: Float,
+        endY: Float
     ): Path {
         // Here's a little ascii art to show how this is calculated:
         // c---------- b

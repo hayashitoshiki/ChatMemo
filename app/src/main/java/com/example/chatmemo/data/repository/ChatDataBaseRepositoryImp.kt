@@ -35,7 +35,7 @@ class ChatDataBaseRepositoryImp : ChatDataBaseRepository {
         if (templateConfiguration != null) {
             templateId = templateConfiguration.template.templateId.value.toLong()
             point = when (val templateMode = templateConfiguration.templateMode) {
-                is TemplateMode.Order  -> {
+                is TemplateMode.Order -> {
                     templateMode.position.toString()
                 }
                 is TemplateMode.Randam -> {
@@ -73,7 +73,7 @@ class ChatDataBaseRepositoryImp : ChatDataBaseRepository {
             if (templateConfiguration != null) {
                 templateId = templateConfiguration.template.templateId.value.toLong()
                 point = when (val templateMode = templateConfiguration.templateMode) {
-                    is com.example.chatmemo.domain.model.value.TemplateMode.Order  -> {
+                    is com.example.chatmemo.domain.model.value.TemplateMode.Order -> {
                         templateMode.position.toString()
                     }
                     is com.example.chatmemo.domain.model.value.TemplateMode.Randam -> {
@@ -97,7 +97,13 @@ class ChatDataBaseRepositoryImp : ChatDataBaseRepository {
             }
 
             val chatRoomEntity = com.example.chatmemo.data.database.entity.ChatRoomEntity(
-                id, title, templateId, mode, point, commentLast, commentLastTime
+                id,
+                title,
+                templateId,
+                mode,
+                point,
+                commentLast,
+                commentLastTime
             )
             return@withContext roomDao.update(chatRoomEntity)
         }
@@ -141,14 +147,9 @@ class ChatDataBaseRepositoryImp : ChatDataBaseRepository {
                 val templateConfiguration = if (chatroomEntity.templateId != null) {
                     val templateHeader = runBlocking { templateDao.getTemplateById(it.templateId!!) }
                     val templatePhrase = runBlocking {
-                        phraseDao.getAllByTitle(templateHeader.id!!)
-                            .map { TemplateMessage(it.text) }
+                        phraseDao.getAllByTitle(templateHeader.id!!).map { TemplateMessage(it.text) }
                     }
-                    val template = Template(
-                        TemplateId(templateHeader.id!!.toInt()),
-                        templateHeader.title,
-                        templatePhrase
-                    )
+                    val template = Template(TemplateId(templateHeader.id!!.toInt()), templateHeader.title, templatePhrase)
                     val templateMode = TemplateMode.toStatus(it.templateMode!!)
                     TemplateConfiguration(template, templateMode)
                 } else {
@@ -162,19 +163,18 @@ class ChatDataBaseRepositoryImp : ChatDataBaseRepository {
 
     override suspend fun getRoomByTemplateId(templateId: TemplateId): List<ChatRoom> {
         return withContext(Dispatchers.IO) {
-            return@withContext roomDao.getRoomByTemplateId(templateId.value.toLong())
-                .map { chatRoomEntity ->
-                    val roomId = RoomId(chatRoomEntity.id!!.toInt())
-                    val title = chatRoomEntity.title
-                    val commentList = mutableListOf<Comment>()
-                    chatRoomEntity.commentTime?.let { date ->
-                        val message = chatRoomEntity.commentLast ?: ""
-                        val commentDate = CommentDateTime(date.toLocalDateTime())
-                        val comment = Comment(message, User.BLACK, commentDate)
-                        commentList.add(comment)
-                    }
-                    ChatRoom(roomId, title, null, commentList)
+            return@withContext roomDao.getRoomByTemplateId(templateId.value.toLong()).map { chatRoomEntity ->
+                val roomId = RoomId(chatRoomEntity.id!!.toInt())
+                val title = chatRoomEntity.title
+                val commentList = mutableListOf<Comment>()
+                chatRoomEntity.commentTime?.let { date ->
+                    val message = chatRoomEntity.commentLast ?: ""
+                    val commentDate = CommentDateTime(date.toLocalDateTime())
+                    val comment = Comment(message, User.BLACK, commentDate)
+                    commentList.add(comment)
                 }
+                ChatRoom(roomId, title, null, commentList)
+            }
         }
     }
 

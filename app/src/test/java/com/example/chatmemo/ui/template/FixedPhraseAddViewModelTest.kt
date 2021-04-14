@@ -45,7 +45,6 @@ class FixedPhraseAddViewModelTest {
     private val templateId = TemplateId(1)
     private val template = Template(templateId, "template1", templateMessageList)
 
-
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {

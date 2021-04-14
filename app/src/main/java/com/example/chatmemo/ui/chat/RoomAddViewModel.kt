@@ -19,7 +19,8 @@ import com.example.chatmemo.ui.utils.ViewModelLiveData
  * @property chatUseCase Chatに関するUseCase
  */
 class RoomAddViewModel(
-    private val templateUseCase: TemplateUseCase, private val chatUseCase: ChatUseCase
+    private val templateUseCase: TemplateUseCase,
+    private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
 
     val titleText = MutableLiveData("")
@@ -75,9 +76,9 @@ class RoomAddViewModel(
         val templateModeNon = templateTitleList.value?.get(0)?.title
         val enable = if (title != null) {
             when {
-                title.isEmpty()                                                    -> false
+                title.isEmpty() -> false
                 !templateTitle.isNullOrEmpty() && templateTitle != templateModeNon -> !templateMode.isNullOrEmpty()
-                else                                                               -> true
+                else -> true
             }
         } else {
             false
