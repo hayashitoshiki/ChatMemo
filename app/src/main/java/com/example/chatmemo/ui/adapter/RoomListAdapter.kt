@@ -14,7 +14,6 @@ import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.example.chatmemo.databinding.ItemRoomListBinding
 import com.example.chatmemo.domain.model.entity.ChatRoom
 
-
 /**
  * ルームリスト用アダプター
  */
@@ -34,9 +33,7 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = ItemRoomListBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
+        val inflater = ItemRoomListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(inflater)
     }
 
@@ -71,7 +68,7 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
                 MotionEvent.ACTION_DOWN -> {
                     x = event.x
                 }
-                MotionEvent.ACTION_UP   -> {
+                MotionEvent.ACTION_UP -> {
                     if (-5 < x - event.x && x - event.x < 5) {
                         listener.onItemClickListener(v, position, items[position])
                     }
@@ -93,7 +90,7 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
         this.items = items
     }
 
-    //インターフェースの作成
+    // インターフェースの作成
     interface OnItemClickListener {
         fun onItemClickListener(view: View, position: Int, item: ChatRoom)
     }

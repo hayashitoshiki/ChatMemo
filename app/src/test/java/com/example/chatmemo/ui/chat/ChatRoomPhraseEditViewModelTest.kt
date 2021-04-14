@@ -11,13 +11,13 @@ import com.example.chatmemo.domain.usecase.TemplateUseCase
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.mockk
+import java.time.LocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.*
 import org.junit.rules.TestRule
-import java.time.LocalDateTime
 
 /**
  * ルーム定型文設定画面　ロジック仕様
@@ -118,7 +118,6 @@ class ChatRoomPhraseEditViewModelTest {
         Assert.assertEquals(true, viewModel.isEnableTemplateMode.value)
         Assert.assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
-
 
     // endregion
 

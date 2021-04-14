@@ -19,7 +19,8 @@ import kotlinx.coroutines.launch
  * @property templateUseCase テンプレート用UseCase
  */
 class TempalteAddViewModel(
-    private val template: Template?, private val templateUseCase: TemplateUseCase
+    private val template: Template?,
+    private val templateUseCase: TemplateUseCase
 ) : BaseViewModel() {
 
     val titleText = MutableLiveData("")
@@ -97,6 +98,8 @@ class TempalteAddViewModel(
 
     // 登録・更新ボタン活性・非活性制御
     private fun changeSubmitButton() {
-        _isEnableSubmitButton.value = !titleText.value.isNullOrEmpty() && phraseList.value != null && phraseList.value!!.size != 0
+        val templateTitle = titleText.value
+        val messageList = phraseList.value
+        _isEnableSubmitButton.value = !templateTitle.isNullOrEmpty() && messageList != null && messageList.size != 0
     }
 }

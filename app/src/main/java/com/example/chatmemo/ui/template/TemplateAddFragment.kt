@@ -38,9 +38,10 @@ class TemplateAddFragment : Fragment() {
     private val args: TemplateAddFragmentArgs by navArgs()
     private val viewModel: TempalteAddViewModel by inject { parametersOf(args.data) }
 
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_template_add, container, false
@@ -81,20 +82,23 @@ class TemplateAddFragment : Fragment() {
         viewModel.phraseList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
 
         // 文字入力
-        viewModel.phraseText.observe(viewLifecycleOwner, Observer {
-            // 高さ自動統制
-            binding.editPharase.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    binding.editPharase.viewTreeObserver.removeOnPreDrawListener(this)
-                    if (binding.editPharase.lineCount in 1..4) {
-                        val scrollViewLayoutParam = binding.scrollView.layoutParams as ViewGroup.MarginLayoutParams
-                        scrollViewLayoutParam.height = binding.editPharase.height
-                        binding.scrollView.layoutParams = scrollViewLayoutParam
+        viewModel.phraseText.observe(
+            viewLifecycleOwner,
+            Observer {
+                // 高さ自動統制
+                binding.editPharase.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                    override fun onPreDraw(): Boolean {
+                        binding.editPharase.viewTreeObserver.removeOnPreDrawListener(this)
+                        if (binding.editPharase.lineCount in 1..4) {
+                            val scrollViewLayoutParam = binding.scrollView.layoutParams as ViewGroup.MarginLayoutParams
+                            scrollViewLayoutParam.height = binding.editPharase.height
+                            binding.scrollView.layoutParams = scrollViewLayoutParam
+                        }
+                        return true
                     }
-                    return true
-                }
-            })
-        })
+                })
+            }
+        )
         // 定型文リスト
         val adapter = PhraseListAdapter(arrayListOf())
         val layoutManager = LinearLayoutManager(requireContext())
@@ -106,7 +110,9 @@ class TemplateAddFragment : Fragment() {
         binding.recyclerView.addItemDecoration(itemDecoration)
         adapter.setOnItemClickListener(object : PhraseListAdapter.OnItemClickListener {
             override fun onItemClickListener(
-                view: View, position: Int, items: MutableList<TemplateMessage>
+                view: View,
+                position: Int,
+                items: MutableList<TemplateMessage>
             ) {
                 when (view.id) {
                     R.id.btn_delete -> {
@@ -150,7 +156,7 @@ class TemplateAddFragment : Fragment() {
     // 設定画面へ画面戻る
     private fun back(result: Boolean) {
         when (result) {
-            true  -> findNavController().popBackStack()
+            true -> findNavController().popBackStack()
             false -> {
                 Toast.makeText(
                     requireContext(), R.string.error_phrase_title, Toast.LENGTH_SHORT
@@ -158,5 +164,4 @@ class TemplateAddFragment : Fragment() {
             }
         }
     }
-
 }

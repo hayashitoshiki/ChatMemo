@@ -17,16 +17,14 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 /**
  * チャット画面のリサイクルビュー
  *
  * @property context コンテキスト
  * @property commentList 取得したコメント情報
  */
-class ChatRecyclerAdapter(
-    private val context: Context, private var commentList: List<Comment>
-) : RecyclerView.Adapter<ChatRecyclerAdapter.ViewHolder>() {
+class ChatRecyclerAdapter(private val context: Context, private var commentList: List<Comment>) :
+    RecyclerView.Adapter<ChatRecyclerAdapter.ViewHolder>() {
 
     // 参照するviewの定義
     open class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -40,8 +38,7 @@ class ChatRecyclerAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_comment, parent, false)
+        val inflater = LayoutInflater.from(parent.context).inflate(R.layout.item_comment, parent, false)
         return ViewHolder(inflater)
     }
 
@@ -79,9 +76,7 @@ class ChatRecyclerAdapter(
                 holder.commentBlackTextView.text = message
                 holder.commentBlackTextView.setOnLongClickListener {
                     val clipboard: ClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText(
-                        "PhoneNumber", holder.commentBlackTextView.text
-                    )
+                    val clip = ClipData.newPlainText("PhoneNumber", holder.commentBlackTextView.text)
                     clipboard.setPrimaryClip(clip)
                     true
                 }
@@ -93,9 +88,7 @@ class ChatRecyclerAdapter(
                 holder.commentWhiteTextView.text = message
                 holder.commentWhiteTextView.setOnLongClickListener {
                     val clipboard: ClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText(
-                        "PhoneNumber", holder.commentBlackTextView.text
-                    )
+                    val clip = ClipData.newPlainText("PhoneNumber", holder.commentBlackTextView.text)
                     clipboard.setPrimaryClip(clip)
                     true
                 }

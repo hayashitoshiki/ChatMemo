@@ -13,8 +13,8 @@ enum class User {
     companion object {
         fun getUser(index: Int): User {
             return when (index) {
-                1    -> BLACK
-                2    -> WHITE
+                1 -> BLACK
+                2 -> WHITE
                 else -> BLACK
             }
         }

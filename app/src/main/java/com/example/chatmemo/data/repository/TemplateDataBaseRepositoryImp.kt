@@ -78,5 +78,4 @@ class TemplateDataBaseRepositoryImp : TemplateDataBaseRepository {
             }
         }
     }
-
 }

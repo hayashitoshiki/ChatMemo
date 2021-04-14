@@ -9,6 +9,7 @@ import com.example.chatmemo.domain.model.value.*
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import java.time.LocalDateTime
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,7 +21,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import java.time.LocalDateTime
 
 class ChatUseCaseImpTest {
 
@@ -170,7 +170,6 @@ class ChatUseCaseImpTest {
             assertEquals(reCommentList, result)
             coVerify(exactly = 1) { (chatDataBaseRepository).updateComments(reCommentList) }
         }
-
     }
 
     /**

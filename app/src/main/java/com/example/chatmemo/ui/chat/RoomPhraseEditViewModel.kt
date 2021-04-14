@@ -61,17 +61,17 @@ class RoomPhraseEditViewModel(
 
     // 変更ボタンのバリデート
     private fun changeSubmitButton() {
-        val templateTitle = templateTitleValue.value
-        val templateMode = templateModeValue.value
+        val title = templateTitleValue.value
+        val mode = templateModeValue.value
 
         _isEnableSubmitButton.value = if (chatRoom.templateConfiguration == null) {
             // 現在、テンプレートが設定されていない場合
-            templateTitleList.value != null && templateTitle != templateTitleList.value!![0].title && templateMode != null
+            templateTitleList.value != null && title != templateTitleList.value!![0].title && mode != null
         } else {
             // 現在、テンプレートが設定されている場合
-            val oldTemplateTitle = chatRoom.templateConfiguration!!.template.title
-            val oldTemplateMode = chatRoom.templateConfiguration!!.templateMode.massage
-            templateTitle == null || (templateMode != null && !(templateTitle == oldTemplateTitle && templateMode == oldTemplateMode))
+            val oldTitle = chatRoom.templateConfiguration!!.template.title
+            val oldMode = chatRoom.templateConfiguration!!.templateMode.massage
+            title == null || (mode != null && !(title == oldTitle && mode == oldMode))
         }
     }
 

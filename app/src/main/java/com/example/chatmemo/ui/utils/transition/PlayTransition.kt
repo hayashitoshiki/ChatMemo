@@ -18,7 +18,6 @@ import androidx.transition.Transition
 import androidx.transition.TransitionValues
 import kotlin.math.sqrt
 
-
 class PlayTransition : Transition {
     var color = Color.parseColor("#6c1622")
 
@@ -27,7 +26,8 @@ class PlayTransition : Transition {
     }
 
     constructor(
-        context: Context, attrs: AttributeSet?
+        context: Context,
+        attrs: AttributeSet?
     ) : super(context, attrs) {
         // val a = context.obtainStyledAttributes(attrs, R.styleable.PlayTransition)
         // color = a.getColor(R.styleable.PlayTransition_colorCT, color)
@@ -71,7 +71,9 @@ class PlayTransition : Transition {
     }
 
     override fun createAnimator(
-        sceneRoot: ViewGroup, startValues: TransitionValues?, endValues: TransitionValues?
+        sceneRoot: ViewGroup,
+        startValues: TransitionValues?,
+        endValues: TransitionValues?
     ): Animator? {
         if (startValues == null || endValues == null) {
             return null
@@ -172,7 +174,10 @@ class PlayTransition : Transition {
     }
 
     private fun addViewToOverlay(
-        sceneRoot: ViewGroup, width: Int, height: Int, background: Drawable
+        sceneRoot: ViewGroup,
+        width: Int,
+        height: Int,
+        background: Drawable
     ): View {
         val view: View = NoOverlapView(sceneRoot.context)
         view.background = background
@@ -188,9 +193,10 @@ class PlayTransition : Transition {
         return view
     }
 
-
     private fun createCircularReveal(
-        view: View, startRadius: Float, endRadius: Float
+        view: View,
+        startRadius: Float,
+        endRadius: Float
     ): Animator {
         val centerX = view.width / 2
         val centerY = view.height / 2
@@ -290,11 +296,11 @@ class PlayTransition : Transition {
         override fun start() {
             mAnimator.start()
         }
-
     }
 
     private class AnimatorListenerWrapper(
-        private val mAnimator: Animator, private val mListener: Animator.AnimatorListener
+        private val mAnimator: Animator,
+        private val mListener: Animator.AnimatorListener
     ) : Animator.AnimatorListener {
         override fun onAnimationStart(animator: Animator) {
             mListener.onAnimationStart(mAnimator)
@@ -311,7 +317,6 @@ class PlayTransition : Transition {
         override fun onAnimationRepeat(animator: Animator) {
             mListener.onAnimationRepeat(mAnimator)
         }
-
     }
 
     private class NoOverlapView(context: Context?) : View(

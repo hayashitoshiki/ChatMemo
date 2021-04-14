@@ -10,6 +10,7 @@ import com.example.chatmemo.domain.model.value.User
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.mockk
+import java.time.LocalDateTime
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,7 +21,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import java.time.LocalDateTime
 
 /**
  * ルーム名変更ダイアログ　ロジック仕様
