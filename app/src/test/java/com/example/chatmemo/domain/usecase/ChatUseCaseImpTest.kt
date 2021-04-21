@@ -9,11 +9,12 @@ import com.example.chatmemo.domain.model.value.*
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import java.time.LocalDateTime
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -21,6 +22,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import java.time.LocalDateTime
 
 class ChatUseCaseImpTest {
 
@@ -28,6 +30,13 @@ class ChatUseCaseImpTest {
     @Rule
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
+
+    @ExperimentalCoroutinesApi
+    private val testDispatcher = TestCoroutineDispatcher()
+
+    @ExperimentalCoroutinesApi
+    private val testScope = TestCoroutineScope(testDispatcher)
+
 
     private lateinit var chatDataBaseRepository: ChatDataBaseRepository
     private lateinit var useCase: ChatUseCaseImp
@@ -49,9 +58,7 @@ class ChatUseCaseImpTest {
     private val templateMessage1 = TemplateMessage("test1")
     private val templateMessage2 = TemplateMessage("test2")
     private val templateMessage3 = TemplateMessage("test3")
-    private val templateMessageList = mutableListOf(
-        templateMessage1, templateMessage2, templateMessage3
-    )
+    private val templateMessageList = mutableListOf(templateMessage1, templateMessage2, templateMessage3)
     private val template = Template(TemplateId(1), "testTemplate1", templateMessageList)
     private val templateMode1 = TemplateMode.Order("順番", 0)
     private val templateMode2 = TemplateMode.Randam("ランダム", mutableListOf())
@@ -61,7 +68,7 @@ class ChatUseCaseImpTest {
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
-        Dispatchers.setMain(Dispatchers.Unconfined)
+        Dispatchers.setMain(testDispatcher)
         chatDataBaseRepository = mockk<ChatDataBaseRepository>().also {
             coEvery { it.getNextRoomId() } returns RoomId(1)
             coEvery { it.createRoom(any()) } returns Unit
@@ -73,7 +80,7 @@ class ChatUseCaseImpTest {
             coEvery { it.addComment(any(), RoomId(any())) } returns Unit
             coEvery { it.updateComments(any()) } returns Unit
         }
-        useCase = ChatUseCaseImp(chatDataBaseRepository)
+        useCase = ChatUseCaseImp(chatDataBaseRepository, testScope)
     }
 
     @ExperimentalCoroutinesApi
@@ -193,12 +200,19 @@ class ChatUseCaseImpTest {
      * テンプレート文を送信するメソッド
      * 条件：表示形式が順番のテンプレート
      * 結果：
+     * ・コメント追加repositoryが呼ばれること
+     * ・次に表示するコメントの添字が1になっていること
+     * ・渡した時のpositionのコメントが返ること
      */
     @Test
     fun addTemplateCommentByOrder() {
         runBlocking {
             val result = useCase.addTemplateComment(templateConfiguration1, roomId1)
-            assertEquals(1, (result.first.templateMode as TemplateMode.Order).position)
+            val expectedPositoin = 1
+            val expectedMessage = templateConfiguration1.template.templateMessageList[0]
+            coVerify(exactly = 1) { (chatDataBaseRepository).addComment(result.second, roomId1) }
+            assertEquals(expectedPositoin, (result.first.templateMode as TemplateMode.Order).position)
+            assertEquals(expectedMessage.massage, result.second.message)
         }
     }
 
@@ -206,6 +220,7 @@ class ChatUseCaseImpTest {
      * テンプレート文を送信するメソッド
      * 条件：表示形式が順番のテンプレートを最後まで繰り返す
      * 結果：
+     * ・次に表示するコメントの添字が0になっていること
      */
     @Test
     fun addTemplateCommentByOderAndReset() {
@@ -213,7 +228,8 @@ class ChatUseCaseImpTest {
             val result1 = useCase.addTemplateComment(templateConfiguration1, roomId1)
             val result2 = useCase.addTemplateComment(result1.first, roomId1)
             val result3 = useCase.addTemplateComment(result2.first, roomId1)
-            assertEquals(0, (result3.first.templateMode as TemplateMode.Order).position)
+            val expectedPositoin = 0
+            assertEquals(expectedPositoin, (result3.first.templateMode as TemplateMode.Order).position)
         }
     }
 
@@ -221,12 +237,19 @@ class ChatUseCaseImpTest {
      * テンプレート文を送信するメソッド
      * 条件：表示形式がランダムのテンプレート
      * 結果：
+     * ・コメント追加repositoryが呼ばれること
+     * ・ランダムカウントが１つ進んでいること
+     * ・追加されたpositionのコメントが返ること
      */
     @Test
     fun addTemplateCommentByRandam() {
         runBlocking {
             val result = useCase.addTemplateComment(templateConfiguration2, roomId1)
+            val position = (result.first.templateMode as TemplateMode.Randam).position.first()
+            val expectedMessage = templateConfiguration1.template.templateMessageList[position]
+            coVerify(exactly = 1) { (chatDataBaseRepository).addComment(result.second, roomId1) }
             assertEquals(1, (result.first.templateMode as TemplateMode.Randam).position.size)
+            assertEquals(expectedMessage.massage, result.second.message)
         }
     }
 
@@ -234,6 +257,7 @@ class ChatUseCaseImpTest {
      * テンプレート文を送信するメソッド
      * 条件：表示形式がランダムのテンプレートを最後まで繰り返す
      * 結果：
+     * ・ランダムカウントが空になっていること
      */
     @Test
     fun addTemplateCommentByRandamAndReset() {

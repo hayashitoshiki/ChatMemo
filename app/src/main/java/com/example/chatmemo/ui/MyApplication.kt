@@ -18,6 +18,7 @@ import com.example.chatmemo.domain.usecase.TemplateUseCaseImp
 import com.example.chatmemo.ui.chat.*
 import com.example.chatmemo.ui.template.TempalteAddViewModel
 import com.example.chatmemo.ui.template.TemplateListViewModel
+import kotlinx.coroutines.MainScope
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -32,6 +33,9 @@ class MyApplication : Application() {
 
         const val TAG = "MyApplication"
     }
+
+    // Grovalp Scope
+    private val applicationScope = MainScope()
 
     init {
         shared = this
@@ -60,7 +64,7 @@ class MyApplication : Application() {
         viewModel { (template: Template?) -> TempalteAddViewModel(template, get()) }
         viewModel { TemplateListViewModel(get()) }
 
-        factory<ChatUseCase> { ChatUseCaseImp(get()) }
+        factory<ChatUseCase> { ChatUseCaseImp(get(), applicationScope) }
         factory<TemplateUseCase> { TemplateUseCaseImp(get(), get()) }
 
         factory<ChatDataBaseRepository> { ChatDataBaseRepositoryImp() }
