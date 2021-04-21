@@ -17,28 +17,17 @@ import com.example.chatmemo.databinding.FragmentHomeBinding
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.ui.MainActivity
 import com.example.chatmemo.ui.adapter.RoomListAdapter
-import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * ホーム画面
  */
-class HomeFragment : Fragment(), CoroutineScope {
+class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModel()
-    private val job = SupervisorJob()
-    override val coroutineContext: CoroutineContext = Dispatchers.Main + job
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
@@ -69,13 +58,11 @@ class HomeFragment : Fragment(), CoroutineScope {
                         binding.fab.visibility = View.GONE
                         val data = bundleOf("data" to item)
                         val extras = FragmentNavigatorExtras(view to "end_fab_transition")
-                        findNavController().navigate(
-                            R.id.action_homeFragment_to_chatFragment, data, null, extras
-                        )
+                        findNavController().navigate(R.id.action_homeFragment_to_chatFragment, data, null, extras)
                     }
                     R.id.btn_delete -> {
-                        AlertDialog.Builder(requireActivity()).setTitle("ルーム削除")
-                            .setMessage("削除しますか？").setPositiveButton("はい") { _, _ ->
+                        AlertDialog.Builder(requireActivity()).setTitle("ルーム削除").setMessage("削除しますか？")
+                            .setPositiveButton("はい") { _, _ ->
                                 viewModel.deleteRoom(item.roomId)
                             }.setNegativeButton("いいえ", null).show()
                     }
@@ -85,15 +72,8 @@ class HomeFragment : Fragment(), CoroutineScope {
         // Fabボタン
         binding.fab.setOnClickListener {
             val extras = FragmentNavigatorExtras(it to "end_fab_transition")
-            findNavController().navigate(
-                R.id.action_homeFragment_to_roomAddFragment, null, null, extras
-            )
+            findNavController().navigate(R.id.action_homeFragment_to_roomAddFragment, null, null, extras)
         }
-    }
-
-    override fun onDestroy() {
-        job.cancel()
-        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -104,15 +84,13 @@ class HomeFragment : Fragment(), CoroutineScope {
 
     // データ反映
     private fun viewUpDate(data: List<ChatRoom>) {
-        launch {
-            val adapter = binding.recyclerView.adapter as RoomListAdapter
-            adapter.setData(data)
-            adapter.notifyDataSetChanged()
-            if (data.isEmpty()) {
-                binding.noDataText.visibility = View.VISIBLE
-            } else {
-                binding.noDataText.visibility = View.GONE
-            }
+        val adapter = binding.recyclerView.adapter as RoomListAdapter
+        adapter.setData(data)
+        adapter.notifyDataSetChanged()
+        if (data.isEmpty()) {
+            binding.noDataText.visibility = View.VISIBLE
+        } else {
+            binding.noDataText.visibility = View.GONE
         }
     }
 }
