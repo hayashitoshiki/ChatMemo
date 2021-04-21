@@ -44,8 +44,7 @@ class ChatUseCaseImp(private val chatDataBaseRepository: ChatDataBaseRepository)
     }
 
     override suspend fun addTemplateComment(
-        templateConfiguration: TemplateConfiguration,
-        roomId: RoomId
+        templateConfiguration: TemplateConfiguration, roomId: RoomId
     ): Pair<TemplateConfiguration, Comment> {
         when (val templateMode = templateConfiguration.templateMode) {
             is TemplateMode.Order -> {

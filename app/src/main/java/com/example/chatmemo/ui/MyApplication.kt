@@ -47,9 +47,7 @@ class MyApplication : Application() {
         }
 
         // AppDatabaseをビルドする
-        database = Room.databaseBuilder(
-            applicationContext, AppDatabase::class.java, "app_database"
-        ).build()
+        database = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "app_database").build()
     }
 
     // Koinモジュール

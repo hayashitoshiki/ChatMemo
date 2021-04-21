@@ -25,9 +25,6 @@ interface RoomDao {
     @Query("SELECT * FROM room")
     fun getAll(): LiveData<List<ChatRoomEntity>>
 
-    @Query("SELECT * FROM room WHERE title = :title")
-    suspend fun getRoomByTitle(title: String): List<ChatRoomEntity>
-
     @Query("SELECT * FROM room WHERE template_id = :templateId")
     suspend fun getRoomByTemplateId(templateId: Long): List<ChatRoomEntity>
 
