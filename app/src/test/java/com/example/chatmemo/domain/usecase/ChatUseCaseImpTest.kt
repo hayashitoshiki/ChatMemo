@@ -80,7 +80,7 @@ class ChatUseCaseImpTest {
             coEvery { it.addComment(any(), RoomId(any())) } returns Unit
             coEvery { it.updateComments(any()) } returns Unit
         }
-        useCase = ChatUseCaseImp(chatDataBaseRepository, testScope)
+        useCase = ChatUseCaseImp(chatDataBaseRepository, testScope, testDispatcher)
     }
 
     @ExperimentalCoroutinesApi
