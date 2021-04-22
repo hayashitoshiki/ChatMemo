@@ -9,11 +9,12 @@ import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.*
 import com.example.chatmemo.ui.MyApplication
 import com.example.chatmemo.ui.utils.toLocalDateTime
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-class ChatDataBaseRepositoryImp : ChatDataBaseRepository {
+class ChatDataBaseRepositoryImp(private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : ChatDataBaseRepository {
 
     private val roomDao = MyApplication.database.roomDao()
     private val commentDao = MyApplication.database.commentDao()
@@ -21,62 +22,27 @@ class ChatDataBaseRepositoryImp : ChatDataBaseRepository {
     private val phraseDao = MyApplication.database.phraseDao()
 
     override suspend fun getNextRoomId(): RoomId {
-        val id = roomDao.getNextId() ?: 0
-        return RoomId(id.toInt() + 1)
+        return withContext(ioDispatcher) {
+            val id = roomDao.getNextId() ?: 0
+            return@withContext RoomId(id.toInt() + 1)
+        }
     }
 
     override suspend fun createRoom(chatRoom: ChatRoom) {
-        val id = chatRoom.roomId.value.toLong()
-        val title = chatRoom.title
-        val templateId: Long?
-        val point: String?
-        val mode: Int?
-        val templateConfiguration = chatRoom.templateConfiguration
-        if (templateConfiguration != null) {
-            templateId = templateConfiguration.template.templateId.value.toLong()
-            point = when (val templateMode = templateConfiguration.templateMode) {
-                is TemplateMode.Order -> {
-                    templateMode.position.toString()
-                }
-                is TemplateMode.Randam -> {
-                    templateMode.position.joinToString()
-                }
-            }
-            mode = templateConfiguration.templateMode.getInt()
-        } else {
-            templateId = null
-            point = null
-            mode = null
-        }
-        val chatRoomEntity = ChatRoomEntity(id, title, templateId, mode, point, null, null)
-        withContext(Dispatchers.IO) {
-            roomDao.insert(chatRoomEntity)
-        }
-    }
-
-    override suspend fun deleteRoom(roomId: RoomId) {
-        withContext(Dispatchers.IO) {
-            val id = roomId.value.toLong()
-            roomDao.deleteById(id)
-            commentDao.deleteById(id)
-        }
-    }
-
-    override suspend fun updateRoom(chatRoom: ChatRoom) {
-        return withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val id = chatRoom.roomId.value.toLong()
             val title = chatRoom.title
-            val templateId: kotlin.Long?
-            val point: kotlin.String?
-            val mode: kotlin.Int?
+            val templateId: Long?
+            val point: String?
+            val mode: Int?
             val templateConfiguration = chatRoom.templateConfiguration
             if (templateConfiguration != null) {
                 templateId = templateConfiguration.template.templateId.value.toLong()
                 point = when (val templateMode = templateConfiguration.templateMode) {
-                    is com.example.chatmemo.domain.model.value.TemplateMode.Order -> {
+                    is TemplateMode.Order -> {
                         templateMode.position.toString()
                     }
-                    is com.example.chatmemo.domain.model.value.TemplateMode.Randam -> {
+                    is TemplateMode.Randam -> {
                         templateMode.position.joinToString()
                     }
                 }
@@ -86,8 +52,46 @@ class ChatDataBaseRepositoryImp : ChatDataBaseRepository {
                 point = null
                 mode = null
             }
-            val commentLast: kotlin.String?
-            val commentLastTime: kotlin.String?
+            val chatRoomEntity = ChatRoomEntity(id, title, templateId, mode, point, null, null)
+
+            roomDao.insert(chatRoomEntity)
+        }
+    }
+
+    override suspend fun deleteRoom(roomId: RoomId) {
+        withContext(ioDispatcher) {
+            val id = roomId.value.toLong()
+            roomDao.deleteById(id)
+            commentDao.deleteById(id)
+        }
+    }
+
+    override suspend fun updateRoom(chatRoom: ChatRoom) {
+        return withContext(ioDispatcher) {
+            val id = chatRoom.roomId.value.toLong()
+            val title = chatRoom.title
+            val templateId: Long?
+            val point: String?
+            val mode: Int?
+            val templateConfiguration = chatRoom.templateConfiguration
+            if (templateConfiguration != null) {
+                templateId = templateConfiguration.template.templateId.value.toLong()
+                point = when (val templateMode = templateConfiguration.templateMode) {
+                    is TemplateMode.Order -> {
+                        templateMode.position.toString()
+                    }
+                    is TemplateMode.Randam -> {
+                        templateMode.position.joinToString()
+                    }
+                }
+                mode = templateConfiguration.templateMode.getInt()
+            } else {
+                templateId = null
+                point = null
+                mode = null
+            }
+            val commentLast: String?
+            val commentLastTime: String?
             if (chatRoom.commentList.size != 0) {
                 commentLast = chatRoom.commentList.last().message
                 commentLastTime = chatRoom.commentList.last().time.toDataBaseDate()
@@ -96,15 +100,7 @@ class ChatDataBaseRepositoryImp : ChatDataBaseRepository {
                 commentLastTime = null
             }
 
-            val chatRoomEntity = com.example.chatmemo.data.database.entity.ChatRoomEntity(
-                id,
-                title,
-                templateId,
-                mode,
-                point,
-                commentLast,
-                commentLastTime
-            )
+            val chatRoomEntity = ChatRoomEntity(id, title, templateId, mode, point, commentLast, commentLastTime)
             return@withContext roomDao.update(chatRoomEntity)
         }
     }
@@ -162,7 +158,7 @@ class ChatDataBaseRepositoryImp : ChatDataBaseRepository {
     }
 
     override suspend fun getRoomByTemplateId(templateId: TemplateId): List<ChatRoom> {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             return@withContext roomDao.getRoomByTemplateId(templateId.value.toLong()).map { chatRoomEntity ->
                 val roomId = RoomId(chatRoomEntity.id!!.toInt())
                 val title = chatRoomEntity.title
@@ -179,18 +175,19 @@ class ChatDataBaseRepositoryImp : ChatDataBaseRepository {
     }
 
     override suspend fun addComment(comment: Comment, roomId: RoomId) {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             val message = comment.message
             val user = comment.user.chageInt()
             val date = comment.time.toDataBaseDate()
             val roomIdLong = roomId.value.toLong()
             val commentEntity = CommentEntity(null, message, user, date, roomIdLong)
+
             return@withContext commentDao.insert(commentEntity)
         }
     }
 
     override suspend fun updateComments(commentList: List<Comment>) {
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             commentList.forEach {
                 val user = it.user.chageInt()
                 val commentDate = it.time.toDataBaseDate()

@@ -11,8 +11,6 @@ import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import java.time.LocalDateTime
-import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -20,10 +18,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import java.time.LocalDateTime
 
 /**
  * チャット画面　ロジック仕様
@@ -62,15 +62,9 @@ class ChatViewModelTest {
     private val comment2 = Comment("testComment2", User.WHITE, CommentDateTime(LocalDateTime.now()))
     private val comment3 = Comment("testComment3", User.BLACK, CommentDateTime(LocalDateTime.now()))
     private val commentList = mutableListOf(comment1, comment2, comment3)
-    private val reComment1 = Comment(
-        "testComment1", User.BLACK, CommentDateTime(LocalDateTime.now())
-    )
-    private val reComment2 = Comment(
-        "testComment2", User.WHITE, CommentDateTime(LocalDateTime.now())
-    )
-    private val reComment3 = Comment(
-        "testComment3", User.BLACK, CommentDateTime(LocalDateTime.now())
-    )
+    private val reComment1 = Comment("testComment1", User.BLACK, CommentDateTime(LocalDateTime.now()))
+    private val reComment2 = Comment("testComment2", User.WHITE, CommentDateTime(LocalDateTime.now()))
+    private val reComment3 = Comment("testComment3", User.BLACK, CommentDateTime(LocalDateTime.now()))
     private val reCommentList = mutableListOf(reComment1, reComment2, reComment3)
     private val chatroom1 = ChatRoom(roomId1, title, null, commentList)
     private val chatroom2 = ChatRoom(roomId2, title, templateConfiguration1, commentList)
@@ -89,9 +83,7 @@ class ChatViewModelTest {
             coEvery { it.deleteRoom(RoomId(any())) } returns Unit
             coEvery { it.updateRoom(any()) } returns Unit
             coEvery { it.addComment(any(), RoomId(any())) } returns userComment
-            coEvery { it.addTemplateComment(any(), RoomId(any())) } returns Pair(
-                templateConfiguration1, comment1
-            )
+            coEvery { it.addTemplateComment(any(), RoomId(any())) } returns Pair(templateConfiguration1, comment1)
         }
         viewModel = ChatViewModel(roomId1, chatUseCase)
         viewModel.commentList.observeForever(observerComment)

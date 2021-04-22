@@ -4,9 +4,17 @@ import androidx.lifecycle.LiveData
 import com.example.chatmemo.data.repository.ChatDataBaseRepository
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.value.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
-class ChatUseCaseImp(private val chatDataBaseRepository: ChatDataBaseRepository) : ChatUseCase {
+class ChatUseCaseImp(
+    private val chatDataBaseRepository: ChatDataBaseRepository,
+    private val externalScope: CoroutineScope,
+    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
+) : ChatUseCase {
 
     override suspend fun updateRoom(chatRoom: ChatRoom) {
         chatDataBaseRepository.updateRoom(chatRoom)
@@ -39,13 +47,14 @@ class ChatUseCaseImp(private val chatDataBaseRepository: ChatDataBaseRepository)
                 User.BLACK -> Comment(it.message, User.WHITE, it.time)
             }
         }
-        chatDataBaseRepository.updateComments(reverseCommentList)
+        externalScope.launch(defaultDispatcher) {
+            chatDataBaseRepository.updateComments(reverseCommentList)
+        }
         return reverseCommentList
     }
 
     override suspend fun addTemplateComment(
-        templateConfiguration: TemplateConfiguration,
-        roomId: RoomId
+        templateConfiguration: TemplateConfiguration, roomId: RoomId
     ): Pair<TemplateConfiguration, Comment> {
         when (val templateMode = templateConfiguration.templateMode) {
             is TemplateMode.Order -> {
@@ -57,7 +66,9 @@ class ChatUseCaseImp(private val chatDataBaseRepository: ChatDataBaseRepository)
                     templateMode.position++
                 }
                 val comment = Comment(templateMessage, User.WHITE, templateMessageDate)
-                chatDataBaseRepository.addComment(comment, roomId)
+                externalScope.launch(defaultDispatcher) {
+                    chatDataBaseRepository.addComment(comment, roomId)
+                }
                 return Pair(templateConfiguration, comment)
             }
             is TemplateMode.Randam -> {
@@ -73,7 +84,9 @@ class ChatUseCaseImp(private val chatDataBaseRepository: ChatDataBaseRepository)
                     templateMode.position.add(position)
                 }
                 val comment = Comment(templateMessage, User.WHITE, templateMessageDate)
-                chatDataBaseRepository.addComment(comment, roomId)
+                externalScope.launch(defaultDispatcher) {
+                    chatDataBaseRepository.addComment(comment, roomId)
+                }
                 return Pair(templateConfiguration, comment)
             }
         }
@@ -82,7 +95,9 @@ class ChatUseCaseImp(private val chatDataBaseRepository: ChatDataBaseRepository)
     override suspend fun addComment(message: String, roomId: RoomId): Comment {
         val date = CommentDateTime(LocalDateTime.now())
         val comment = Comment(message, User.BLACK, date)
-        chatDataBaseRepository.addComment(comment, roomId)
+        externalScope.launch(defaultDispatcher) {
+            chatDataBaseRepository.addComment(comment, roomId)
+        }
         return comment
     }
 }

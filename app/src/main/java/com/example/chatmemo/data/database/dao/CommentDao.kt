@@ -13,17 +13,17 @@ import com.example.chatmemo.data.database.entity.CommentEntity
 interface CommentDao {
 
     @Insert
-    fun insert(comment: CommentEntity)
+    suspend fun insert(comment: CommentEntity)
 
     @Update
-    fun update(comment: CommentEntity)
+    suspend fun update(comment: CommentEntity)
 
     @Query("SELECT * FROM comments WHERE room_id = :roomId")
     suspend fun getAllCommentByRoom(roomId: Long): List<CommentEntity>
 
     @Query("delete from comments WHERE room_id = :roomId")
-    fun deleteById(roomId: Long)
+    suspend fun deleteById(roomId: Long)
 
     @Query("update comments SET user = :user WHERE created_at = :createAt")
-    fun updateUserBy(user: Int, createAt: String)
+    suspend fun updateUserBy(user: Int, createAt: String)
 }

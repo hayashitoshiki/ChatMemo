@@ -18,30 +18,21 @@ import com.example.chatmemo.databinding.FragmentChatBinding
 import com.example.chatmemo.domain.model.value.Comment
 import com.example.chatmemo.ui.adapter.ChatRecyclerAdapter
 import com.example.chatmemo.ui.utils.transition.PlayTransition
-import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
 /**
  * チャット画面
  */
-class ChatFragment : Fragment(), CoroutineScope {
+class ChatFragment : Fragment() {
 
     private var isKeyboardShowing = false
     private val args: ChatFragmentArgs by navArgs()
     private lateinit var binding: FragmentChatBinding
     private val viewModel: ChatViewModel by inject { parametersOf(args.data.roomId) }
-    private val job = SupervisorJob()
-    override val coroutineContext: CoroutineContext = Dispatchers.Main + job
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_chat, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -62,12 +53,9 @@ class ChatFragment : Fragment(), CoroutineScope {
         setHasOptionsMenu(true)
 
         viewModel.commentList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
-        viewModel.chatRoom.observe(
-            viewLifecycleOwner,
-            Observer {
-                (activity as AppCompatActivity).supportActionBar?.title = it.title
-            }
-        )
+        viewModel.chatRoom.observe(viewLifecycleOwner, Observer {
+            (activity as AppCompatActivity).supportActionBar?.title = it.title
+        })
 
         val adapter = ChatRecyclerAdapter(requireContext(), listOf())
         val layoutManager = LinearLayoutManager(requireContext())
@@ -76,23 +64,20 @@ class ChatFragment : Fragment(), CoroutineScope {
         binding.recyclerView.layoutManager = layoutManager
 
         // 文字入力
-        viewModel.commentText.observe(
-            viewLifecycleOwner,
-            Observer {
-                // 高さ自動統制
-                binding.editText.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
-                    override fun onPreDraw(): Boolean {
-                        binding.editText.viewTreeObserver.removeOnPreDrawListener(this)
-                        if (binding.editText.lineCount in 1..4) {
-                            val scrollViewLayoutParam = binding.scrollView.layoutParams as ViewGroup.MarginLayoutParams
-                            scrollViewLayoutParam.height = binding.editText.height
-                            binding.scrollView.layoutParams = scrollViewLayoutParam
-                        }
-                        return true
+        viewModel.commentText.observe(viewLifecycleOwner, Observer {
+            // 高さ自動統制
+            binding.editText.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    binding.editText.viewTreeObserver.removeOnPreDrawListener(this)
+                    if (binding.editText.lineCount in 1..4) {
+                        val scrollViewLayoutParam = binding.scrollView.layoutParams as ViewGroup.MarginLayoutParams
+                        scrollViewLayoutParam.height = binding.editText.height
+                        binding.scrollView.layoutParams = scrollViewLayoutParam
                     }
-                })
-            }
-        )
+                    return true
+                }
+            })
+        })
 
         // キーボード表示時のスクロール
         binding.container.viewTreeObserver.addOnGlobalLayoutListener {
@@ -120,7 +105,6 @@ class ChatFragment : Fragment(), CoroutineScope {
     override fun onDestroy() {
         val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_out_bottom)
         binding.layoutInput.startAnimation(anim1)
-        job.cancel()
         super.onDestroy()
     }
 
@@ -162,12 +146,11 @@ class ChatFragment : Fragment(), CoroutineScope {
             }
             // 新規作成ボタン
             R.id.menu_delete_room -> {
-                AlertDialog.Builder(requireActivity()).setTitle("ルームを削除しますか？")
-                    .setPositiveButton("はい") { dialog, _ ->
-                        viewModel.deleteRoom()
-                        findNavController().popBackStack()
-                        dialog.dismiss()
-                    }.setNegativeButton("いいえ", null).show()
+                AlertDialog.Builder(requireActivity()).setTitle("ルームを削除しますか？").setPositiveButton("はい") { dialog, _ ->
+                    viewModel.deleteRoom()
+                    findNavController().popBackStack()
+                    dialog.dismiss()
+                }.setNegativeButton("いいえ", null).show()
             }
         }
         return true
@@ -175,11 +158,9 @@ class ChatFragment : Fragment(), CoroutineScope {
 
     // データ反映
     private fun viewUpDate(data: List<Comment>) {
-        launch {
-            val adapter = binding.recyclerView.adapter as ChatRecyclerAdapter
-            adapter.setData(data)
-            adapter.notifyDataSetChanged()
-            binding.recyclerView.scrollToPosition(adapter.itemCount - 1)
-        }
+        val adapter = binding.recyclerView.adapter as ChatRecyclerAdapter
+        adapter.setData(data)
+        adapter.notifyDataSetChanged()
+        binding.recyclerView.scrollToPosition(adapter.itemCount - 1)
     }
 }

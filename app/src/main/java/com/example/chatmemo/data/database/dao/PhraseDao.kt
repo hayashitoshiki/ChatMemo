@@ -16,20 +16,17 @@ interface PhraseDao {
     suspend fun update(comment: PhraseEntity)
 
     @Delete
-    fun delete(comment: PhraseEntity)
-
-    @Query("delete from phrases")
-    fun deleteAll()
+    suspend fun delete(comment: PhraseEntity)
 
     @Query("delete from phrases WHERE template_id = :templateId")
     suspend fun deleteByTemplateId(templateId: Long)
 
     @Query("SELECT * FROM phrases")
-    fun getAll(): Array<PhraseEntity>
+    suspend fun getAll(): Array<PhraseEntity>
 
     @Query("SELECT * FROM phrases WHERE template_id = :templateId")
     suspend fun getAllByTitle(templateId: Long): List<PhraseEntity>
 
     @Query("delete from phrases WHERE template_id = :templateId")
-    fun deleteById(templateId: Long)
+    suspend fun deleteById(templateId: Long)
 }
