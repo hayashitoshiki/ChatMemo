@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.data.database.dao](../index.md) / [CommentDao](index.md) / [getAllCommentByRoom](./get-all-comment-by-room.md)
+[app](../../index.md) / [com.example.chatmemo.data.local.database.dao](../index.md) / [CommentDao](index.md) / [getAllCommentByRoom](./get-all-comment-by-room.md)
 
 # getAllCommentByRoom
 

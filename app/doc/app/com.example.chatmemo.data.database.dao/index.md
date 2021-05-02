@@ -1,6 +1,6 @@
-[app](../index.md) / [com.example.chatmemo.data.database.dao](./index.md)
+[app](../index.md) / [com.example.chatmemo.data.local.database.dao](./index.md)
 
-## Package com.example.chatmemo.data.database.dao
+## Package com.example.chatmemo.data.local.database.dao
 
 DBクエリ管理
 

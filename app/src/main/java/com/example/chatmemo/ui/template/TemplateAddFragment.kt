@@ -24,7 +24,6 @@ import androidx.transition.TransitionSet
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentTemplateAddBinding
 import com.example.chatmemo.domain.model.value.TemplateMessage
-import com.example.chatmemo.ui.adapter.PhraseListAdapter
 import com.example.chatmemo.ui.utils.transition.FabTransform
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf

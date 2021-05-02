@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentTemplateListBinding
 import com.example.chatmemo.domain.model.entity.Template
-import com.example.chatmemo.ui.adapter.PhraseTitleListAdapter
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -34,9 +33,7 @@ class TtemplateListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_template_list, container, false
-        )
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_template_list, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         return binding.root
@@ -46,12 +43,7 @@ class TtemplateListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.title = "定型文一覧"
         viewModel.templateList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
-        viewModel.status.observe(
-            viewLifecycleOwner,
-            Observer {
-                if (it != null && !it) showErrorToast()
-            }
-        )
+        viewModel.status.observe(viewLifecycleOwner, Observer { if (it != null && !it) showErrorToast() })
 
         val adapter = PhraseTitleListAdapter(listOf())
         val layoutManager = LinearLayoutManager(requireContext())
@@ -67,15 +59,13 @@ class TtemplateListFragment : Fragment() {
                         val extras = FragmentNavigatorExtras(view to "end_title_transition")
                         val data = bundleOf("data" to item)
                         findNavController().navigate(
-                            R.id.action_templateListFragment_to_templateAddFragment,
-                            data,
-                            null,
+                            R.id.action_templateListFragment_to_templateAddFragment, data, null,
                             extras
                         )
                     }
                     R.id.btn_delete -> {
-                        AlertDialog.Builder(requireActivity()).setTitle("定型文削除")
-                            .setMessage("削除しますか？").setPositiveButton("はい") { _, _ ->
+                        AlertDialog.Builder(requireActivity()).setTitle("定型文削除").setMessage("削除しますか？")
+                            .setPositiveButton("はい") { _, _ ->
                                 viewModel.deletePhrase(item)
                             }.setNegativeButton("いいえ", null).show()
                     }
@@ -86,9 +76,7 @@ class TtemplateListFragment : Fragment() {
         binding.fab.setOnClickListener {
             val extras = FragmentNavigatorExtras(it to "end_fab_transition")
             val data = bundleOf("data" to null)
-            findNavController().navigate(
-                R.id.action_templateListFragment_to_templateAddFragment, data, null, extras
-            )
+            findNavController().navigate(R.id.action_templateListFragment_to_templateAddFragment, data, null, extras)
         }
     }
 

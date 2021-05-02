@@ -1,4 +1,4 @@
-package com.example.chatmemo.data.database.entity
+package com.example.chatmemo.data.local.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

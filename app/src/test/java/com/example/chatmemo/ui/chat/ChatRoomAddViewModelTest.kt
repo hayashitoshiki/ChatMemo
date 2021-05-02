@@ -1,8 +1,8 @@
 package com.example.chatmemo.ui.chat
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.example.chatmemo.BaseUnitTest
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.RoomId
 import com.example.chatmemo.domain.model.value.TemplateId
@@ -14,6 +14,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -28,7 +29,7 @@ import org.junit.rules.TestRule
 /**
  * ルーム作成顔面 ロジック仕様
  */
-class ChatRoomAddViewModelTest {
+class ChatRoomAddViewModelTest : BaseUnitTest() {
 
     // LiveData用
     @Rule
@@ -50,9 +51,10 @@ class ChatRoomAddViewModelTest {
         val observerString = mock<Observer<String>>()
         val observerTemplateMode = mock<Observer<List<TemplateMode>>>()
         val observerBoolean = mock<Observer<Boolean>>()
+        val observerTemplateList = mock<Observer<List<Template>>>()
 
         val templateUseCase = mockk<TemplateUseCase>().also {
-            coEvery { it.getSpinnerTemplateAll() } returns MutableLiveData(templateList)
+            coEvery { it.getSpinnerTemplateAll() } returns flow { emit(templateList) }
         }
         val chatUseCase = mockk<ChatUseCase>().also {
             coEvery { it.getNextRoomId() } returns RoomId(1)
@@ -65,6 +67,7 @@ class ChatRoomAddViewModelTest {
         viewModel.templateModeValue.observeForever(observerString)
         viewModel.isEnableTemplateMode.observeForever(observerBoolean)
         viewModel.isEnableSubmitButton.observeForever(observerBoolean)
+        viewModel.templateTitleList.observeForever(observerTemplateList)
     }
 
     @ExperimentalCoroutinesApi

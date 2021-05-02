@@ -3,6 +3,7 @@ package com.example.chatmemo.ui.chat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.Comment
@@ -10,8 +11,8 @@ import com.example.chatmemo.domain.model.value.TemplateConfiguration
 import com.example.chatmemo.domain.model.value.TemplateMode
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.example.chatmemo.domain.usecase.TemplateUseCase
-import com.example.chatmemo.ui.utils.BaseViewModel
-import com.example.chatmemo.ui.utils.ViewModelLiveData
+import com.example.chatmemo.ui.utils.expansion.BaseViewModel
+import com.example.chatmemo.ui.utils.expansion.ViewModelLiveData
 
 /**
  * 新規ルーム作成画面_ロジック
@@ -24,7 +25,7 @@ class RoomAddViewModel(
 ) : BaseViewModel() {
 
     val titleText = MutableLiveData("")
-    val templateTitleList: LiveData<List<Template>> = templateUseCase.getSpinnerTemplateAll()
+    val templateTitleList: LiveData<List<Template>> = templateUseCase.getSpinnerTemplateAll().asLiveData()
     val templateTitleValue = MutableLiveData<String>()
     val templateModeList = ViewModelLiveData<List<TemplateMode>>()
     val templateModeValue = MediatorLiveData<String>()
@@ -39,6 +40,7 @@ class RoomAddViewModel(
         _isEnableSubmitButton.addSource(titleText) { changeSubmitButton() }
         _isEnableSubmitButton.addSource(templateTitleValue) { changeSubmitButton() }
         _isEnableSubmitButton.addSource(templateModeValue) { changeSubmitButton() }
+        templateTitleList.observeForever({})
 
         val modeList = listOf(TemplateMode.Order("順番"), TemplateMode.Randam("ランダム"))
         templateModeList.setValue(modeList)
@@ -51,17 +53,18 @@ class RoomAddViewModel(
         val templateConfiguration: TemplateConfiguration?
         val comment = mutableListOf<Comment>()
         val templateTitle = templateTitleValue.value
-        val templateList = templateTitleList.value!!
+        val templateList = templateTitleList.value
         val templateMode = templateModeValue.value
         val templateModeList = templateModeList.value!!
 
-        templateConfiguration = if (!templateTitle.isNullOrEmpty() && templateTitle != templateList[0].title) {
-            val template = templateList.first { it.title == templateTitle }
-            val mode = templateModeList.first { it.massage == templateMode }
-            TemplateConfiguration(template, mode)
-        } else {
-            null
-        }
+        templateConfiguration =
+            if (!templateTitle.isNullOrEmpty() && !templateList.isNullOrEmpty() && templateTitle != templateList[0].title) {
+                val template = templateList.first { it.title == templateTitle }
+                val mode = templateModeList.first { it.massage == templateMode }
+                TemplateConfiguration(template, mode)
+            } else {
+                null
+            }
 
         val room = ChatRoom(roomId, title, templateConfiguration, comment)
         chatUseCase.createRoom(room)

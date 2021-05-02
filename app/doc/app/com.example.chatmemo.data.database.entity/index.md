@@ -1,6 +1,6 @@
-[app](../index.md) / [com.example.chatmemo.data.database.entity](./index.md)
+[app](../index.md) / [com.example.chatmemo.data.local.database.entity](./index.md)
 
-## Package com.example.chatmemo.data.database.entity
+## Package com.example.chatmemo.data.local.database.entity
 
 DBのテーブル構成管理
 

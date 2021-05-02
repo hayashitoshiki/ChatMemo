@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.data.database.dao](../index.md) / [PhraseDao](index.md) / [getAll](./get-all.md)
+[app](../../index.md) / [com.example.chatmemo.data.local.database.dao](../index.md) / [PhraseDao](index.md) / [getAll](./get-all.md)
 
 # getAll
 

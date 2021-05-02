@@ -1,11 +1,11 @@
 package com.example.chatmemo.data.repository
 
-import androidx.lifecycle.LiveData
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.TemplateId
 import com.example.chatmemo.domain.model.value.TemplateMessage
+import kotlinx.coroutines.flow.Flow
 
-interface TemplateDataBaseRepository {
+interface LocalTemplateRepository {
 
     // region 定型文タイトル
 
@@ -39,7 +39,7 @@ interface TemplateDataBaseRepository {
      * 定型文のタイトル一覧取得
      * return 定型文のタイトル一覧
      */
-    fun getTemplateAll(): LiveData<List<Template>>
+    fun getTemplateAll(): Flow<List<Template>>
 
     // endregion
 

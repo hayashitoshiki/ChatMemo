@@ -1,4 +1,4 @@
-package com.example.chatmemo.ui.adapter
+package com.example.chatmemo.ui.utils.expansion
 
 import android.text.Spanned
 import android.widget.AutoCompleteTextView

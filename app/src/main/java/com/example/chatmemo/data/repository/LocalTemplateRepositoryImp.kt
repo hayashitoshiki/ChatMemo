@@ -1,23 +1,23 @@
 package com.example.chatmemo.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.chatmemo.data.database.entity.PhraseEntity
-import com.example.chatmemo.data.database.entity.TemplateEntity
+import com.example.chatmemo.data.local.database.dao.PhraseDao
+import com.example.chatmemo.data.local.database.dao.TemplateDao
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.TemplateId
 import com.example.chatmemo.domain.model.value.TemplateMessage
-import com.example.chatmemo.ui.MyApplication
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-class TemplateDataBaseRepositoryImp(private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) :
-    TemplateDataBaseRepository {
+class LocalTemplateRepositoryImp(
+    private val templateDao: TemplateDao,
+    private val phraseDao: PhraseDao,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : LocalTemplateRepository {
 
-    private val templateDao = MyApplication.database.templateDao()
-    private val phraseDao = MyApplication.database.phraseDao()
-
+    // テンプレートテーブルの次の連番取得
     override suspend fun getNextTemplateId(): TemplateId {
         return withContext(ioDispatcher) {
             val id = templateDao.getNextId() ?: 0
@@ -25,37 +25,35 @@ class TemplateDataBaseRepositoryImp(private val ioDispatcher: CoroutineDispatche
         }
     }
 
+    // テンプレート登録
     override suspend fun createTemplate(template: Template): Boolean {
         return withContext(ioDispatcher) {
-            val templateId = template.templateId.value.toLong()
-            val templateTitle = template.title
-            val templateEntity = TemplateEntity(null, templateTitle)
+            val templateEntity = Converter.templateEntityFromTemplate(template)
             templateDao.insert(templateEntity)
             template.templateMessageList.forEach {
-                val phraseTitle = it.massage
-                val phrase = PhraseEntity(null, phraseTitle, templateId)
+                val phrase = Converter.praseEntityFromTemplateAndMessage(template, it)
                 phraseDao.insert(phrase)
             }
             return@withContext true
         }
     }
 
+    // テンプレート更新
     override suspend fun updateTemplate(template: Template): Boolean {
         return withContext(ioDispatcher) {
             val templateId = template.templateId.value.toLong()
-            val templateTitle = template.title
-            val templateEntity = TemplateEntity(templateId, templateTitle)
+            val templateEntity = Converter.templateEntityFromTemplate(template)
             templateDao.update(templateEntity)
             phraseDao.deleteByTemplateId(templateId)
             template.templateMessageList.forEach {
-                val phraseTitle = it.massage
-                val phrase = PhraseEntity(null, phraseTitle, templateId)
+                val phrase = Converter.praseEntityFromTemplateAndMessage(template, it)
                 phraseDao.insert(phrase)
             }
             return@withContext true
         }
     }
 
+    // テンプレート削除
     override suspend fun deleteTemplate(templateId: TemplateId): Boolean {
         return withContext(ioDispatcher) {
             val temId = templateId.value.toLong()
@@ -66,24 +64,19 @@ class TemplateDataBaseRepositoryImp(private val ioDispatcher: CoroutineDispatche
         }
     }
 
-    override fun getTemplateAll(): LiveData<List<Template>> {
-        val templateListLiveData = templateDao.getAll()
-        val templateList = MutableLiveData<List<Template>>()
-        templateListLiveData.observeForever {
-            val list = it.map { templateEntity ->
+    override fun getTemplateAll(): Flow<List<Template>> {
+        return templateDao.getAll().map { templateEntityList ->
+            templateEntityList.map { templateEntity ->
                 Template(TemplateId(templateEntity.id!!.toInt()), templateEntity.title, listOf())
             }
-            templateList.postValue(list)
         }
-        return templateList
     }
 
     override suspend fun getTemplateMessageById(templateId: TemplateId): List<TemplateMessage> {
         return withContext(ioDispatcher) {
             val id = templateId.value.toLong()
             return@withContext phraseDao.getAllByTitle(id).map {
-                val message = it.text
-                TemplateMessage(message)
+                Converter.templateMessageFromPharaseEntity(it)
             }
         }
     }

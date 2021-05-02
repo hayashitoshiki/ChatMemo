@@ -1,9 +1,9 @@
 package com.example.chatmemo.domain.usecase
 
-import androidx.lifecycle.LiveData
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.TemplateId
 import com.example.chatmemo.domain.model.value.TemplateMessage
+import kotlinx.coroutines.flow.Flow
 
 /**
  * テンプレートに関するビジネスロジック
@@ -28,12 +28,12 @@ interface TemplateUseCase {
     /**
      * 全てのテンプレート取得
      */
-    fun getTemplateAll(): LiveData<List<Template>>
+    fun getTemplateAll(): Flow<List<Template>>
 
     /**
      * 全てのテンプレート取得（選択肢スピナーに表示させる用）
      */
-    fun getSpinnerTemplateAll(): LiveData<List<Template>>
+    fun getSpinnerTemplateAll(): Flow<List<Template>>
 
     /**
      * テンプレートIDに紐づくテンプレートコメント取得

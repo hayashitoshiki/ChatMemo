@@ -1,14 +1,11 @@
 package com.example.chatmemo.ui.chat
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.value.Comment
 import com.example.chatmemo.domain.model.value.RoomId
 import com.example.chatmemo.domain.usecase.ChatUseCase
-import com.example.chatmemo.ui.utils.BaseViewModel
+import com.example.chatmemo.ui.utils.expansion.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -22,7 +19,7 @@ class ChatViewModel(
     private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
 
-    val chatRoom = chatUseCase.getChatRoomByRoomById(id)
+    val chatRoom = chatUseCase.getChatRoomByRoomById(id).asLiveData()
     val commentText = MutableLiveData("")
     private val _commentList = MediatorLiveData<List<Comment>>()
     val commentList: LiveData<List<Comment>> = _commentList
@@ -49,12 +46,9 @@ class ChatViewModel(
                 val message = commentText.value!!
                 val comment = chatUseCase.addComment(message, roomId)
                 room.commentList.add(comment)
-
                 delay(300)
                 room.templateConfiguration?.let { templateConfiguration ->
-                    val (configuretion, templateComment) = chatUseCase.addTemplateComment(
-                        templateConfiguration, roomId
-                    )
+                    val (configuretion, templateComment) = chatUseCase.addTemplateComment(templateConfiguration, roomId)
                     room.templateConfiguration = configuretion
                     room.commentList.add(templateComment)
                 }

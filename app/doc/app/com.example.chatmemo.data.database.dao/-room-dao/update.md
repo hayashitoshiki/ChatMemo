@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.data.database.dao](../index.md) / [RoomDao](index.md) / [update](./update.md)
+[app](../../index.md) / [com.example.chatmemo.data.local.database.dao](../index.md) / [RoomDao](index.md) / [update](./update.md)
 
 # update
 

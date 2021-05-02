@@ -16,7 +16,6 @@ import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentHomeBinding
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.ui.MainActivity
-import com.example.chatmemo.ui.adapter.RoomListAdapter
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**

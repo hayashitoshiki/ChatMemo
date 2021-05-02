@@ -1,17 +1,20 @@
 package com.example.chatmemo.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
-import com.example.chatmemo.data.repository.ChatDataBaseRepository
-import com.example.chatmemo.data.repository.TemplateDataBaseRepository
+import com.example.chatmemo.BaseUnitTest
+import com.example.chatmemo.data.repository.LocalChatRepository
+import com.example.chatmemo.data.repository.LocalTemplateRepository
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.*
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import java.time.LocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -21,9 +24,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import java.time.LocalDateTime
 
-class TemplateUseCaseImpTest {
+class TemplateUseCaseImpTest : BaseUnitTest() {
 
     // LiveData用
     @Rule
@@ -31,8 +33,8 @@ class TemplateUseCaseImpTest {
     val rule: TestRule = InstantTaskExecutorRule()
 
     // mock
-    private lateinit var chatDataBaseRepository: ChatDataBaseRepository
-    private lateinit var templateDataBaseRepository: TemplateDataBaseRepository
+    private lateinit var localChatRepository: LocalChatRepository
+    private lateinit var localTemplateRepository: LocalTemplateRepository
     private lateinit var useCase: TemplateUseCaseImp
     private val templateMessage = TemplateMessage("testMessge")
     private val templateMessageList = listOf(templateMessage)
@@ -52,19 +54,19 @@ class TemplateUseCaseImpTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
-        chatDataBaseRepository = mockk<ChatDataBaseRepository>().also {
+        localChatRepository = mockk<LocalChatRepository>().also {
             coEvery { it.getRoomByTemplateId(TemplateId(1)) } returns mutableListOf(chatroom1)
             coEvery { it.getRoomByTemplateId(TemplateId(2)) } returns mutableListOf()
         }
-        templateDataBaseRepository = mockk<TemplateDataBaseRepository>().also {
+        localTemplateRepository = mockk<LocalTemplateRepository>().also {
             coEvery { it.createTemplate(any()) } returns true
             coEvery { it.deleteTemplate(TemplateId(any())) } returns true
             coEvery { it.updateTemplate(any()) } returns true
             coEvery { it.getNextTemplateId() } returns TemplateId(1)
-            coEvery { it.getTemplateAll() } returns MutableLiveData(templateList)
+            coEvery { it.getTemplateAll() } returns flow { emit(templateList) }
             coEvery { it.getTemplateMessageById(TemplateId(any())) } returns listOf(templateMessage)
         }
-        useCase = TemplateUseCaseImp(chatDataBaseRepository, templateDataBaseRepository)
+        useCase = TemplateUseCaseImp(localChatRepository, localTemplateRepository)
     }
 
     @ExperimentalCoroutinesApi
@@ -82,7 +84,7 @@ class TemplateUseCaseImpTest {
     fun createTemplate() {
         runBlocking {
             useCase.createTemplate(template)
-            coVerify(exactly = 1) { (templateDataBaseRepository).createTemplate(template) }
+            coVerify(exactly = 1) { (localTemplateRepository).createTemplate(template) }
         }
     }
 
@@ -98,7 +100,7 @@ class TemplateUseCaseImpTest {
         runBlocking {
             val result = useCase.deleteTemplate(template.templateId)
             assertEquals(false, result)
-            coVerify(exactly = 0) { (templateDataBaseRepository).deleteTemplate(TemplateId(2)) }
+            coVerify(exactly = 0) { (localTemplateRepository).deleteTemplate(TemplateId(2)) }
         }
     }
 
@@ -114,7 +116,7 @@ class TemplateUseCaseImpTest {
         runBlocking {
             val result = useCase.deleteTemplate(TemplateId(2))
             assertEquals(true, result)
-            coVerify(exactly = 1) { (templateDataBaseRepository).deleteTemplate(TemplateId(2)) }
+            coVerify(exactly = 1) { (localTemplateRepository).deleteTemplate(TemplateId(2)) }
         }
     }
 
@@ -127,7 +129,7 @@ class TemplateUseCaseImpTest {
     fun updateTemplate() {
         runBlocking {
             useCase.updateTemplate(template)
-            coVerify(exactly = 1) { (templateDataBaseRepository).updateTemplate(template) }
+            coVerify(exactly = 1) { (localTemplateRepository).updateTemplate(template) }
         }
     }
 
@@ -139,7 +141,7 @@ class TemplateUseCaseImpTest {
     @Test
     fun getTemplateAll() {
         useCase.getTemplateAll()
-        coVerify(exactly = 1) { (templateDataBaseRepository).getTemplateAll() }
+        coVerify(exactly = 1) { (localTemplateRepository).getTemplateAll() }
     }
 
     /**
@@ -151,10 +153,12 @@ class TemplateUseCaseImpTest {
      */
     @Test
     fun getSpinnerTemplateAll() {
-        val result = useCase.getSpinnerTemplateAll()
-        coVerify(exactly = 1) { (templateDataBaseRepository).getTemplateAll() }
-        assertEquals(templateList.size + 1, result.value!!.size)
-        assertEquals(templateList[0], result.value!![1])
+        runBlocking {
+            val result = useCase.getSpinnerTemplateAll().first()
+            coVerify(exactly = 1) { (localTemplateRepository).getTemplateAll() }
+            assertEquals(templateList.size + 1, result.size)
+            assertEquals(templateList[0], result[1])
+        }
     }
 
     /**
@@ -166,7 +170,7 @@ class TemplateUseCaseImpTest {
     fun getNextTemplateId() {
         runBlocking {
             useCase.getNextTemplateId()
-            coVerify(exactly = 1) { (templateDataBaseRepository).getNextTemplateId() }
+            coVerify(exactly = 1) { (localTemplateRepository).getNextTemplateId() }
         }
     }
 
@@ -179,7 +183,7 @@ class TemplateUseCaseImpTest {
     fun getTemplateMessageByTemplateId() {
         runBlocking {
             useCase.getTemplateMessageById(template.templateId)
-            coVerify(exactly = 1) { (templateDataBaseRepository).getTemplateMessageById(template.templateId) }
+            coVerify(exactly = 1) { (localTemplateRepository).getTemplateMessageById(template.templateId) }
         }
     }
 }

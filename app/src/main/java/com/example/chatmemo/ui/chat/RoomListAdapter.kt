@@ -1,4 +1,4 @@
-package com.example.chatmemo.ui.adapter
+package com.example.chatmemo.ui.chat
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

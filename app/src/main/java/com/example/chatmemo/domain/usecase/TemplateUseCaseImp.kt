@@ -1,55 +1,55 @@
 package com.example.chatmemo.domain.usecase
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.chatmemo.data.repository.ChatDataBaseRepository
-import com.example.chatmemo.data.repository.TemplateDataBaseRepository
+import com.example.chatmemo.data.repository.LocalChatRepository
+import com.example.chatmemo.data.repository.LocalTemplateRepository
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.TemplateId
 import com.example.chatmemo.domain.model.value.TemplateMessage
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 
 class TemplateUseCaseImp(
-    private val chatDataBaseRepository: ChatDataBaseRepository,
-    private val templateDataBaseRepository: TemplateDataBaseRepository
+    private val localChatRepository: LocalChatRepository,
+    private val localTemplateRepository: LocalTemplateRepository
 ) : TemplateUseCase {
 
     override suspend fun createTemplate(template: Template): Boolean {
-        return templateDataBaseRepository.createTemplate(template)
+        return localTemplateRepository.createTemplate(template)
     }
 
     override suspend fun deleteTemplate(templateId: TemplateId): Boolean {
-        val roomList = chatDataBaseRepository.getRoomByTemplateId(templateId)
+        val roomList = localChatRepository.getRoomByTemplateId(templateId)
         return if (roomList.isNotEmpty()) {
             false
         } else {
-            templateDataBaseRepository.deleteTemplate(templateId)
+            localTemplateRepository.deleteTemplate(templateId)
         }
     }
 
     override suspend fun updateTemplate(template: Template): Boolean {
-        return templateDataBaseRepository.updateTemplate(template)
+        return localTemplateRepository.updateTemplate(template)
     }
 
-    override fun getTemplateAll(): LiveData<List<Template>> {
-        return templateDataBaseRepository.getTemplateAll()
+    override fun getTemplateAll(): Flow<List<Template>> {
+        return localTemplateRepository.getTemplateAll()
     }
 
-    override fun getSpinnerTemplateAll(): LiveData<List<Template>> {
-        val templateList = MutableLiveData<List<Template>>()
-        val templateLiveData = templateDataBaseRepository.getTemplateAll()
-        templateLiveData.observeForever {
-            val list = arrayListOf(Template(TemplateId(0), "選択なし", listOf()))
-            list.addAll(it)
-            templateList.postValue(list)
+    override fun getSpinnerTemplateAll(): Flow<List<Template>> {
+        return flow<List<Template>> {
+            localTemplateRepository.getTemplateAll().collect {
+                val list = arrayListOf(Template(TemplateId(0), "選択なし", listOf()))
+                list.addAll(it)
+                emit(list)
+            }
         }
-        return templateList
     }
 
     override suspend fun getNextTemplateId(): TemplateId {
-        return templateDataBaseRepository.getNextTemplateId()
+        return localTemplateRepository.getNextTemplateId()
     }
 
     override suspend fun getTemplateMessageById(templateId: TemplateId): List<TemplateMessage> {
-        return templateDataBaseRepository.getTemplateMessageById(templateId)
+        return localTemplateRepository.getTemplateMessageById(templateId)
     }
 }

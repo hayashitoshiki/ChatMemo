@@ -1,19 +1,19 @@
 package com.example.chatmemo.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
-import com.example.chatmemo.data.repository.ChatDataBaseRepository
+import com.example.chatmemo.BaseUnitTest
+import com.example.chatmemo.data.repository.LocalChatRepository
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.*
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import java.time.LocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -22,23 +22,15 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import java.time.LocalDateTime
 
-class ChatUseCaseImpTest {
+class ChatUseCaseImpTest : BaseUnitTest() {
 
     // LiveData用
     @Rule
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
 
-    @ExperimentalCoroutinesApi
-    private val testDispatcher = TestCoroutineDispatcher()
-
-    @ExperimentalCoroutinesApi
-    private val testScope = TestCoroutineScope(testDispatcher)
-
-
-    private lateinit var chatDataBaseRepository: ChatDataBaseRepository
+    private lateinit var localChatRepository: LocalChatRepository
     private lateinit var useCase: ChatUseCaseImp
 
     private val time1 = CommentDateTime(LocalDateTime.now())
@@ -69,18 +61,18 @@ class ChatUseCaseImpTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        chatDataBaseRepository = mockk<ChatDataBaseRepository>().also {
+        localChatRepository = mockk<LocalChatRepository>().also {
             coEvery { it.getNextRoomId() } returns RoomId(1)
             coEvery { it.createRoom(any()) } returns Unit
             coEvery { it.deleteRoom(RoomId(any())) } returns Unit
             coEvery { it.updateRoom(any()) } returns Unit
-            coEvery { it.getRoomAll() } returns MutableLiveData(listOf(chatroom1))
-            coEvery { it.getRoomById(RoomId(any())) } returns MutableLiveData(chatroom1)
+            coEvery { it.getRoomAll() } returns flow { emit(listOf(chatroom1)) }
+            coEvery { it.getRoomById(RoomId(any())) } returns flow { emit(chatroom1) }
             coEvery { it.getRoomByTemplateId(TemplateId(any())) } returns listOf(chatroom1)
             coEvery { it.addComment(any(), RoomId(any())) } returns Unit
             coEvery { it.updateComments(any()) } returns Unit
         }
-        useCase = ChatUseCaseImp(chatDataBaseRepository, testScope, testDispatcher)
+        useCase = ChatUseCaseImp(localChatRepository, testScope, testDispatcher)
     }
 
     @ExperimentalCoroutinesApi
@@ -98,7 +90,7 @@ class ChatUseCaseImpTest {
     fun updateRoom() {
         runBlocking {
             useCase.updateRoom(chatroom1)
-            coVerify(exactly = 1) { (chatDataBaseRepository).updateRoom(chatroom1) }
+            coVerify(exactly = 1) { (localChatRepository).updateRoom(chatroom1) }
         }
     }
 
@@ -110,7 +102,7 @@ class ChatUseCaseImpTest {
     @Test
     fun getRoomAll() {
         useCase.getRoomAll()
-        coVerify(exactly = 1) { (chatDataBaseRepository).getRoomAll() }
+        coVerify(exactly = 1) { (localChatRepository).getRoomAll() }
     }
 
     /**
@@ -122,7 +114,7 @@ class ChatUseCaseImpTest {
     fun deleteRoom() {
         runBlocking {
             useCase.deleteRoom(roomId1)
-            coVerify(exactly = 1) { (chatDataBaseRepository).deleteRoom(roomId1) }
+            coVerify(exactly = 1) { (localChatRepository).deleteRoom(roomId1) }
         }
     }
 
@@ -135,7 +127,7 @@ class ChatUseCaseImpTest {
     fun createRoom() {
         runBlocking {
             useCase.createRoom(chatroom1)
-            coVerify(exactly = 1) { (chatDataBaseRepository).createRoom(chatroom1) }
+            coVerify(exactly = 1) { (localChatRepository).createRoom(chatroom1) }
         }
     }
 
@@ -148,7 +140,7 @@ class ChatUseCaseImpTest {
     fun getNextRoomId() {
         runBlocking {
             useCase.getNextRoomId()
-            coVerify(exactly = 1) { (chatDataBaseRepository).getNextRoomId() }
+            coVerify(exactly = 1) { (localChatRepository).getNextRoomId() }
         }
     }
 
@@ -160,7 +152,7 @@ class ChatUseCaseImpTest {
     @Test
     fun getChatRoomByRoomById() {
         useCase.getChatRoomByRoomById(roomId1)
-        coVerify(exactly = 1) { (chatDataBaseRepository).getRoomById(roomId1) }
+        coVerify(exactly = 1) { (localChatRepository).getRoomById(roomId1) }
     }
 
     /**
@@ -175,7 +167,7 @@ class ChatUseCaseImpTest {
         runBlocking {
             val result = useCase.reverseAllCommentUser(commentList)
             assertEquals(reCommentList, result)
-            coVerify(exactly = 1) { (chatDataBaseRepository).updateComments(reCommentList) }
+            coVerify(exactly = 1) { (localChatRepository).updateComments(reCommentList) }
         }
     }
 
@@ -192,7 +184,7 @@ class ChatUseCaseImpTest {
             val result = useCase.addComment(comment1.message, roomId1)
             assertEquals(comment1.message, result.message)
             assertEquals(comment1.user, result.user)
-            coVerify(exactly = 1) { (chatDataBaseRepository).addComment(result, roomId1) }
+            coVerify(exactly = 1) { (localChatRepository).addComment(result, roomId1) }
         }
     }
 
@@ -210,7 +202,7 @@ class ChatUseCaseImpTest {
             val result = useCase.addTemplateComment(templateConfiguration1, roomId1)
             val expectedPositoin = 1
             val expectedMessage = templateConfiguration1.template.templateMessageList[0]
-            coVerify(exactly = 1) { (chatDataBaseRepository).addComment(result.second, roomId1) }
+            coVerify(exactly = 1) { (localChatRepository).addComment(result.second, roomId1) }
             assertEquals(expectedPositoin, (result.first.templateMode as TemplateMode.Order).position)
             assertEquals(expectedMessage.massage, result.second.message)
         }
@@ -247,7 +239,7 @@ class ChatUseCaseImpTest {
             val result = useCase.addTemplateComment(templateConfiguration2, roomId1)
             val position = (result.first.templateMode as TemplateMode.Randam).position.first()
             val expectedMessage = templateConfiguration1.template.templateMessageList[position]
-            coVerify(exactly = 1) { (chatDataBaseRepository).addComment(result.second, roomId1) }
+            coVerify(exactly = 1) { (localChatRepository).addComment(result.second, roomId1) }
             assertEquals(1, (result.first.templateMode as TemplateMode.Randam).position.size)
             assertEquals(expectedMessage.massage, result.second.message)
         }

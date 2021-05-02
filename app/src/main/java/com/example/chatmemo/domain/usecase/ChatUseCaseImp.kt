@@ -1,43 +1,43 @@
 package com.example.chatmemo.domain.usecase
 
-import androidx.lifecycle.LiveData
-import com.example.chatmemo.data.repository.ChatDataBaseRepository
+import com.example.chatmemo.data.repository.LocalChatRepository
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.value.*
+import java.time.LocalDateTime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 class ChatUseCaseImp(
-    private val chatDataBaseRepository: ChatDataBaseRepository,
+    private val localChatRepository: LocalChatRepository,
     private val externalScope: CoroutineScope,
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : ChatUseCase {
 
     override suspend fun updateRoom(chatRoom: ChatRoom) {
-        chatDataBaseRepository.updateRoom(chatRoom)
+        localChatRepository.updateRoom(chatRoom)
     }
 
-    override fun getRoomAll(): LiveData<List<ChatRoom>> {
-        return chatDataBaseRepository.getRoomAll()
+    override fun getRoomAll(): Flow<List<ChatRoom>> {
+        return localChatRepository.getRoomAll()
     }
 
     override suspend fun deleteRoom(roomId: RoomId) {
-        chatDataBaseRepository.deleteRoom(roomId)
+        localChatRepository.deleteRoom(roomId)
     }
 
     override suspend fun createRoom(chatRoom: ChatRoom) {
-        chatDataBaseRepository.createRoom(chatRoom)
+        localChatRepository.createRoom(chatRoom)
     }
 
     override suspend fun getNextRoomId(): RoomId {
-        return chatDataBaseRepository.getNextRoomId()
+        return localChatRepository.getNextRoomId()
     }
 
-    override fun getChatRoomByRoomById(roomId: RoomId): LiveData<ChatRoom> {
-        return chatDataBaseRepository.getRoomById(roomId)
+    override fun getChatRoomByRoomById(roomId: RoomId): Flow<ChatRoom> {
+        return localChatRepository.getRoomById(roomId)
     }
 
     override suspend fun reverseAllCommentUser(commentList: List<Comment>): List<Comment> {
@@ -48,13 +48,14 @@ class ChatUseCaseImp(
             }
         }
         externalScope.launch(defaultDispatcher) {
-            chatDataBaseRepository.updateComments(reverseCommentList)
+            localChatRepository.updateComments(reverseCommentList)
         }
         return reverseCommentList
     }
 
     override suspend fun addTemplateComment(
-        templateConfiguration: TemplateConfiguration, roomId: RoomId
+        templateConfiguration: TemplateConfiguration,
+        roomId: RoomId
     ): Pair<TemplateConfiguration, Comment> {
         when (val templateMode = templateConfiguration.templateMode) {
             is TemplateMode.Order -> {
@@ -67,7 +68,7 @@ class ChatUseCaseImp(
                 }
                 val comment = Comment(templateMessage, User.WHITE, templateMessageDate)
                 externalScope.launch(defaultDispatcher) {
-                    chatDataBaseRepository.addComment(comment, roomId)
+                    localChatRepository.addComment(comment, roomId)
                 }
                 return Pair(templateConfiguration, comment)
             }
@@ -85,7 +86,7 @@ class ChatUseCaseImp(
                 }
                 val comment = Comment(templateMessage, User.WHITE, templateMessageDate)
                 externalScope.launch(defaultDispatcher) {
-                    chatDataBaseRepository.addComment(comment, roomId)
+                    localChatRepository.addComment(comment, roomId)
                 }
                 return Pair(templateConfiguration, comment)
             }
@@ -96,7 +97,7 @@ class ChatUseCaseImp(
         val date = CommentDateTime(LocalDateTime.now())
         val comment = Comment(message, User.BLACK, date)
         externalScope.launch(defaultDispatcher) {
-            chatDataBaseRepository.addComment(comment, roomId)
+            localChatRepository.addComment(comment, roomId)
         }
         return comment
     }

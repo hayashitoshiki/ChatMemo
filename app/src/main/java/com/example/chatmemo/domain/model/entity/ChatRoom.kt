@@ -5,7 +5,7 @@ import com.example.chatmemo.domain.model.value.RoomId
 import com.example.chatmemo.domain.model.value.TemplateConfiguration
 import java.io.Serializable
 
-class ChatRoom(
+data class ChatRoom(
     // 部屋のID
     val roomId: RoomId,
     // 部屋名
