@@ -67,7 +67,9 @@ class MyApplication : Application() {
         factory<ChatUseCase> { ChatUseCaseImp(get(), applicationScope) }
         factory<TemplateUseCase> { TemplateUseCaseImp(get(), get()) }
 
-        factory<LocalChatRepository> { LocalChatRepositoryImp() }
-        factory<LocalTemplateRepository> { LocalTemplateRepositoryImp() }
+        factory<LocalTemplateRepository> { LocalTemplateRepositoryImp(database.templateDao(), database.phraseDao()) }
+        factory<LocalChatRepository> {
+            LocalChatRepositoryImp(database.roomDao(), database.commentDao(), database.templateDao(), database.phraseDao())
+        }
     }
 }

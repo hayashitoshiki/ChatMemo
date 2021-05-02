@@ -4,7 +4,7 @@ import com.example.chatmemo.domain.model.value.TemplateId
 import com.example.chatmemo.domain.model.value.TemplateMessage
 import java.io.Serializable
 
-class Template(
+data class Template(
     // テンプレートID
     val templateId: TemplateId,
     // タイトル

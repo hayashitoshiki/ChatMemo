@@ -1,4 +1,4 @@
-package com.example.chatmemo.ui.utils
+package com.example.chatmemo.ui.utils.expansion
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

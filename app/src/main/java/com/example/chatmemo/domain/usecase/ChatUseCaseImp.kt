@@ -1,14 +1,14 @@
 package com.example.chatmemo.domain.usecase
 
-import androidx.lifecycle.LiveData
 import com.example.chatmemo.data.repository.LocalChatRepository
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.value.*
+import java.time.LocalDateTime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 class ChatUseCaseImp(
     private val localChatRepository: LocalChatRepository,
@@ -20,7 +20,7 @@ class ChatUseCaseImp(
         localChatRepository.updateRoom(chatRoom)
     }
 
-    override fun getRoomAll(): LiveData<List<ChatRoom>> {
+    override fun getRoomAll(): Flow<List<ChatRoom>> {
         return localChatRepository.getRoomAll()
     }
 
@@ -36,7 +36,7 @@ class ChatUseCaseImp(
         return localChatRepository.getNextRoomId()
     }
 
-    override fun getChatRoomByRoomById(roomId: RoomId): LiveData<ChatRoom> {
+    override fun getChatRoomByRoomById(roomId: RoomId): Flow<ChatRoom> {
         return localChatRepository.getRoomById(roomId)
     }
 
@@ -54,7 +54,8 @@ class ChatUseCaseImp(
     }
 
     override suspend fun addTemplateComment(
-        templateConfiguration: TemplateConfiguration, roomId: RoomId
+        templateConfiguration: TemplateConfiguration,
+        roomId: RoomId
     ): Pair<TemplateConfiguration, Comment> {
         when (val templateMode = templateConfiguration.templateMode) {
             is TemplateMode.Order -> {

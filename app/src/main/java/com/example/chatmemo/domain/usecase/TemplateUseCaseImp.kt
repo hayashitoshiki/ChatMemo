@@ -1,12 +1,13 @@
 package com.example.chatmemo.domain.usecase
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.chatmemo.data.repository.LocalChatRepository
 import com.example.chatmemo.data.repository.LocalTemplateRepository
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.TemplateId
 import com.example.chatmemo.domain.model.value.TemplateMessage
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 
 class TemplateUseCaseImp(
     private val localChatRepository: LocalChatRepository,
@@ -30,19 +31,18 @@ class TemplateUseCaseImp(
         return localTemplateRepository.updateTemplate(template)
     }
 
-    override fun getTemplateAll(): LiveData<List<Template>> {
+    override fun getTemplateAll(): Flow<List<Template>> {
         return localTemplateRepository.getTemplateAll()
     }
 
-    override fun getSpinnerTemplateAll(): LiveData<List<Template>> {
-        val templateList = MutableLiveData<List<Template>>()
-        val templateLiveData = localTemplateRepository.getTemplateAll()
-        templateLiveData.observeForever {
-            val list = arrayListOf(Template(TemplateId(0), "選択なし", listOf()))
-            list.addAll(it)
-            templateList.postValue(list)
+    override fun getSpinnerTemplateAll(): Flow<List<Template>> {
+        return flow<List<Template>> {
+            localTemplateRepository.getTemplateAll().collect {
+                val list = arrayListOf(Template(TemplateId(0), "選択なし", listOf()))
+                list.addAll(it)
+                emit(list)
+            }
         }
-        return templateList
     }
 
     override suspend fun getNextTemplateId(): TemplateId {

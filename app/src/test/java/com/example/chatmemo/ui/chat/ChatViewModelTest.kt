@@ -1,8 +1,8 @@
 package com.example.chatmemo.ui.chat
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.example.chatmemo.BaseUnitTest
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.*
@@ -11,9 +11,11 @@ import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import java.time.LocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -23,12 +25,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import java.time.LocalDateTime
 
 /**
  * チャット画面　ロジック仕様
  */
-class ChatViewModelTest {
+class ChatViewModelTest : BaseUnitTest() {
 
     // LiveData用
     @Rule
@@ -76,9 +77,9 @@ class ChatViewModelTest {
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
         chatUseCase = mockk<ChatUseCase>().also {
-            coEvery { it.getChatRoomByRoomById(RoomId(1)) } returns MutableLiveData(chatroom1)
-            coEvery { it.getChatRoomByRoomById(RoomId(2)) } returns MutableLiveData(chatroom2)
-            coEvery { it.getChatRoomByRoomById(RoomId(3)) } returns MutableLiveData(chatroom3)
+            coEvery { it.getChatRoomByRoomById(RoomId(1)) } returns flow { emit(chatroom1) }
+            coEvery { it.getChatRoomByRoomById(RoomId(2)) } returns flow { emit(chatroom2) }
+            coEvery { it.getChatRoomByRoomById(RoomId(3)) } returns flow { emit(chatroom3) }
             coEvery { it.reverseAllCommentUser(any()) } returns reCommentList
             coEvery { it.deleteRoom(RoomId(any())) } returns Unit
             coEvery { it.updateRoom(any()) } returns Unit
@@ -86,6 +87,10 @@ class ChatViewModelTest {
             coEvery { it.addTemplateComment(any(), RoomId(any())) } returns Pair(templateConfiguration1, comment1)
         }
         viewModel = ChatViewModel(roomId1, chatUseCase)
+        observerInit()
+    }
+
+    private fun observerInit() {
         viewModel.commentList.observeForever(observerComment)
         viewModel.commentText.observeForever(observerString)
         viewModel.isEnableSubmitButton.observeForever(observerBoolean)
@@ -113,10 +118,12 @@ class ChatViewModelTest {
     fun submitByTemplateNon() {
         runBlocking {
             viewModel = ChatViewModel(roomId1, chatUseCase)
+            observerInit()
             val oldCommentListSize = commentList.size
             viewModel.commentText.value = "test"
             viewModel.submit()
-            delay(300)
+
+            delay(400)
             val newCommentListSize = viewModel.commentList.value!!.size
             assertEquals(oldCommentListSize, newCommentListSize - 1)
             coVerify(exactly = 1) { (chatUseCase).addComment(any(), RoomId(any())) }
@@ -137,6 +144,7 @@ class ChatViewModelTest {
     fun submitByTemplateOrderAndList() {
         runBlocking {
             viewModel = ChatViewModel(roomId2, chatUseCase)
+            observerInit()
             val oldCommentListSize = commentList.size
             viewModel.commentText.value = "test"
             viewModel.submit()
@@ -161,6 +169,7 @@ class ChatViewModelTest {
     fun submitByTemplatRandam() {
         runBlocking {
             viewModel = ChatViewModel(roomId3, chatUseCase)
+            observerInit()
             val oldCommentListSize = commentList.size
             viewModel.commentText.value = "test"
             viewModel.submit()

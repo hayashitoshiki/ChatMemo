@@ -3,6 +3,7 @@ package com.example.chatmemo.ui.chat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.value.TemplateConfiguration
 import com.example.chatmemo.domain.model.value.TemplateMode
@@ -18,10 +19,12 @@ import com.example.chatmemo.ui.utils.expansion.ViewModelLiveData
  * @property chatUseCase Chatに関するUseCase
  */
 class RoomPhraseEditViewModel(
-    private var chatRoom: ChatRoom, private val templateUseCase: TemplateUseCase, private val chatUseCase: ChatUseCase
+    private var chatRoom: ChatRoom,
+    private val templateUseCase: TemplateUseCase,
+    private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
 
-    val templateTitleList = templateUseCase.getSpinnerTemplateAll()
+    val templateTitleList = templateUseCase.getSpinnerTemplateAll().asLiveData()
     val templateTitleValue = MutableLiveData<String>()
     val templateModeList = ViewModelLiveData<List<TemplateMode>>()
     val templateModeValue = MediatorLiveData<String>()

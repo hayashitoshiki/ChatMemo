@@ -2,6 +2,7 @@ package com.example.chatmemo.ui.chat
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.example.chatmemo.BaseUnitTest
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.value.Comment
 import com.example.chatmemo.domain.model.value.CommentDateTime
@@ -10,6 +11,7 @@ import com.example.chatmemo.domain.model.value.User
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.mockk
+import java.time.LocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
@@ -20,12 +22,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import java.time.LocalDateTime
 
 /**
  * ルーム名変更ダイアログ　ロジック仕様
  */
-class ChatRoomTitleEditViewModelTest {
+class ChatRoomTitleEditViewModelTest : BaseUnitTest() {
 
     // LiveData用
     @Rule

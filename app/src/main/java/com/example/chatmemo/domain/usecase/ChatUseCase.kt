@@ -1,10 +1,10 @@
 package com.example.chatmemo.domain.usecase
 
-import androidx.lifecycle.LiveData
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.value.Comment
 import com.example.chatmemo.domain.model.value.RoomId
 import com.example.chatmemo.domain.model.value.TemplateConfiguration
+import kotlinx.coroutines.flow.Flow
 
 /**
  * チャットルームに関するビジネスロジック
@@ -33,14 +33,14 @@ interface ChatUseCase {
      * 全てのチャットルーム取得
      * @return 全てのチャットルーム
      */
-    fun getRoomAll(): LiveData<List<ChatRoom>>
+    fun getRoomAll(): Flow<List<ChatRoom>>
 
     /**
      * RoomIDに紐づくチャットルーム取得
      * @property roomId 取得するチャットルームのID
      * @return IDni紐づくチャットルーム
      */
-    fun getChatRoomByRoomById(roomId: RoomId): LiveData<ChatRoom>
+    fun getChatRoomByRoomById(roomId: RoomId): Flow<ChatRoom>
 
     /**
      * 次のチャットルームの連番取得

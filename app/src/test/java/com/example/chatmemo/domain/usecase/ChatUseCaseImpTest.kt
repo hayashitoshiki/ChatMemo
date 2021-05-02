@@ -1,7 +1,7 @@
 package com.example.chatmemo.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
+import com.example.chatmemo.BaseUnitTest
 import com.example.chatmemo.data.repository.LocalChatRepository
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.entity.Template
@@ -9,11 +9,11 @@ import com.example.chatmemo.domain.model.value.*
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import java.time.LocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -22,21 +22,13 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import java.time.LocalDateTime
 
-class ChatUseCaseImpTest {
+class ChatUseCaseImpTest : BaseUnitTest() {
 
     // LiveData用
     @Rule
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
-
-    @ExperimentalCoroutinesApi
-    private val testDispatcher = TestCoroutineDispatcher()
-
-    @ExperimentalCoroutinesApi
-    private val testScope = TestCoroutineScope(testDispatcher)
-
 
     private lateinit var localChatRepository: LocalChatRepository
     private lateinit var useCase: ChatUseCaseImp
@@ -74,8 +66,8 @@ class ChatUseCaseImpTest {
             coEvery { it.createRoom(any()) } returns Unit
             coEvery { it.deleteRoom(RoomId(any())) } returns Unit
             coEvery { it.updateRoom(any()) } returns Unit
-            coEvery { it.getRoomAll() } returns MutableLiveData(listOf(chatroom1))
-            coEvery { it.getRoomById(RoomId(any())) } returns MutableLiveData(chatroom1)
+            coEvery { it.getRoomAll() } returns flow { emit(listOf(chatroom1)) }
+            coEvery { it.getRoomById(RoomId(any())) } returns flow { emit(chatroom1) }
             coEvery { it.getRoomByTemplateId(TemplateId(any())) } returns listOf(chatroom1)
             coEvery { it.addComment(any(), RoomId(any())) } returns Unit
             coEvery { it.updateComments(any()) } returns Unit

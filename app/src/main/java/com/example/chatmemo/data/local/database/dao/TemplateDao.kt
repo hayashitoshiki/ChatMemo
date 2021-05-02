@@ -1,8 +1,8 @@
 package com.example.chatmemo.data.local.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.chatmemo.data.local.database.entity.TemplateEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * 定型文用クエリ管理
@@ -26,7 +26,7 @@ interface TemplateDao {
     suspend fun deleteByTemplateId(templateId: Long)
 
     @Query("SELECT * FROM template")
-    fun getAll(): LiveData<List<TemplateEntity>>
+    fun getAll(): Flow<List<TemplateEntity>>
 
     @Query("SELECT * FROM template WHERE id = :id")
     suspend fun getTemplateById(id: Long): TemplateEntity

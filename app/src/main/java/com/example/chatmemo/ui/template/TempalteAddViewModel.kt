@@ -19,7 +19,8 @@ import kotlinx.coroutines.launch
  * @property templateUseCase テンプレート用UseCase
  */
 class TempalteAddViewModel(
-    private val template: Template?, private val templateUseCase: TemplateUseCase
+    private val template: Template?,
+    private val templateUseCase: TemplateUseCase
 ) : BaseViewModel() {
 
     val titleText = MutableLiveData("")

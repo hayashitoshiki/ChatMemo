@@ -1,16 +1,18 @@
 package com.example.chatmemo.data.repository
 
-import androidx.lifecycle.LiveData
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.value.Comment
 import com.example.chatmemo.domain.model.value.RoomId
 import com.example.chatmemo.domain.model.value.TemplateId
+import kotlinx.coroutines.flow.Flow
 
 /**
  * チャットに関するDataBaseCRUD用Repository
  */
 interface LocalChatRepository {
+
     // region ルーム
+
     /**
      * 次のID連番の値を返す
      * @return チャットルームDBのの次の連番
@@ -39,14 +41,14 @@ interface LocalChatRepository {
      * チャットルームリスト取得
      * @return 全ルームリスト
      */
-    fun getRoomAll(): LiveData<List<ChatRoom>>
+    fun getRoomAll(): Flow<List<ChatRoom>>
 
     /**
      * RoomIdに一致するルーム取得
      * @param roomId 取得するルームID
      * @return RoomIdに紐づいたルーム
      */
-    fun getRoomById(roomId: RoomId): LiveData<ChatRoom>
+    fun getRoomById(roomId: RoomId): Flow<ChatRoom>
 
     /**
      * 指定したテンプレートが使用されているルーム取得

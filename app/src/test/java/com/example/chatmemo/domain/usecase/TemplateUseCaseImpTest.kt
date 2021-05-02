@@ -1,7 +1,7 @@
 package com.example.chatmemo.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
+import com.example.chatmemo.BaseUnitTest
 import com.example.chatmemo.data.repository.LocalChatRepository
 import com.example.chatmemo.data.repository.LocalTemplateRepository
 import com.example.chatmemo.domain.model.entity.ChatRoom
@@ -10,8 +10,11 @@ import com.example.chatmemo.domain.model.value.*
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import java.time.LocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -21,9 +24,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import java.time.LocalDateTime
 
-class TemplateUseCaseImpTest {
+class TemplateUseCaseImpTest : BaseUnitTest() {
 
     // LiveData用
     @Rule
@@ -61,7 +63,7 @@ class TemplateUseCaseImpTest {
             coEvery { it.deleteTemplate(TemplateId(any())) } returns true
             coEvery { it.updateTemplate(any()) } returns true
             coEvery { it.getNextTemplateId() } returns TemplateId(1)
-            coEvery { it.getTemplateAll() } returns MutableLiveData(templateList)
+            coEvery { it.getTemplateAll() } returns flow { emit(templateList) }
             coEvery { it.getTemplateMessageById(TemplateId(any())) } returns listOf(templateMessage)
         }
         useCase = TemplateUseCaseImp(localChatRepository, localTemplateRepository)
@@ -151,10 +153,12 @@ class TemplateUseCaseImpTest {
      */
     @Test
     fun getSpinnerTemplateAll() {
-        val result = useCase.getSpinnerTemplateAll()
-        coVerify(exactly = 1) { (localTemplateRepository).getTemplateAll() }
-        assertEquals(templateList.size + 1, result.value!!.size)
-        assertEquals(templateList[0], result.value!![1])
+        runBlocking {
+            val result = useCase.getSpinnerTemplateAll().first()
+            coVerify(exactly = 1) { (localTemplateRepository).getTemplateAll() }
+            assertEquals(templateList.size + 1, result.size)
+            assertEquals(templateList[0], result[1])
+        }
     }
 
     /**

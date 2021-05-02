@@ -2,6 +2,7 @@ package com.example.chatmemo.ui.template
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.example.chatmemo.BaseUnitTest
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.TemplateId
 import com.example.chatmemo.domain.model.value.TemplateMessage
@@ -24,7 +25,7 @@ import org.junit.rules.TestRule
 /**
  * 定型文追加・編集画面　ロジック仕様
  */
-class FixedPhraseAddViewModelTest {
+class FixedPhraseAddViewModelTest : BaseUnitTest() {
 
     // LiveData用
     @Rule
