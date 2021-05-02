@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.data.database.dao](../index.md) / [RoomDao](index.md) / [getRoomByTitle](./get-room-by-title.md)
+[app](../../index.md) / [com.example.chatmemo.data.local.database.dao](../index.md) / [RoomDao](index.md) / [getRoomByTitle](./get-room-by-title.md)
 
 # getRoomByTitle
 

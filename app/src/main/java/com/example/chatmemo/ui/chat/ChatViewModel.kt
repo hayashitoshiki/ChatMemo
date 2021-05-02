@@ -8,7 +8,7 @@ import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.value.Comment
 import com.example.chatmemo.domain.model.value.RoomId
 import com.example.chatmemo.domain.usecase.ChatUseCase
-import com.example.chatmemo.ui.utils.BaseViewModel
+import com.example.chatmemo.ui.utils.expansion.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -18,8 +18,7 @@ import kotlinx.coroutines.launch
  * @property chatUseCase チャットルームに関するビジネスロジック
  */
 class ChatViewModel(
-    id: RoomId,
-    private val chatUseCase: ChatUseCase
+    id: RoomId, private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
 
     val chatRoom = chatUseCase.getChatRoomByRoomById(id)
@@ -52,9 +51,7 @@ class ChatViewModel(
 
                 delay(300)
                 room.templateConfiguration?.let { templateConfiguration ->
-                    val (configuretion, templateComment) = chatUseCase.addTemplateComment(
-                        templateConfiguration, roomId
-                    )
+                    val (configuretion, templateComment) = chatUseCase.addTemplateComment(templateConfiguration, roomId)
                     room.templateConfiguration = configuretion
                     room.commentList.add(templateComment)
                 }

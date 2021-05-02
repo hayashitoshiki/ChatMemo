@@ -9,7 +9,7 @@ import com.example.chatmemo.domain.model.value.TemplateId
 /**
  * チャットに関するDataBaseCRUD用Repository
  */
-interface ChatDataBaseRepository {
+interface LocalChatRepository {
     // region ルーム
     /**
      * 次のID連番の値を返す

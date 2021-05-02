@@ -8,8 +8,8 @@ import com.example.chatmemo.domain.model.value.TemplateConfiguration
 import com.example.chatmemo.domain.model.value.TemplateMode
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.example.chatmemo.domain.usecase.TemplateUseCase
-import com.example.chatmemo.ui.utils.BaseViewModel
-import com.example.chatmemo.ui.utils.ViewModelLiveData
+import com.example.chatmemo.ui.utils.expansion.BaseViewModel
+import com.example.chatmemo.ui.utils.expansion.ViewModelLiveData
 
 /**
  * ルームの定型文設定変更ダイアログ_ロジック
@@ -18,9 +18,7 @@ import com.example.chatmemo.ui.utils.ViewModelLiveData
  * @property chatUseCase Chatに関するUseCase
  */
 class RoomPhraseEditViewModel(
-    private var chatRoom: ChatRoom,
-    private val templateUseCase: TemplateUseCase,
-    private val chatUseCase: ChatUseCase
+    private var chatRoom: ChatRoom, private val templateUseCase: TemplateUseCase, private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
 
     val templateTitleList = templateUseCase.getSpinnerTemplateAll()

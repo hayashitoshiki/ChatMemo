@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.data.database.dao](../index.md) / [TemplateDao](index.md) / [getTemplateById](./get-template-by-id.md)
+[app](../../index.md) / [com.example.chatmemo.data.local.database.dao](../index.md) / [TemplateDao](index.md) / [getTemplateById](./get-template-by-id.md)
 
 # getTemplateById
 

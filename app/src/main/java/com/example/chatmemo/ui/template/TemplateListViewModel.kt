@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.usecase.TemplateUseCase
-import com.example.chatmemo.ui.utils.BaseViewModel
+import com.example.chatmemo.ui.utils.expansion.BaseViewModel
 import kotlinx.coroutines.launch
 
 /**

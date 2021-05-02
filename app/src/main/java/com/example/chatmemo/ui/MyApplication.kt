@@ -3,11 +3,11 @@ package com.example.chatmemo.ui
 import android.app.Application
 import android.util.Log
 import androidx.room.Room
-import com.example.chatmemo.data.database.dao.AppDatabase
-import com.example.chatmemo.data.repository.ChatDataBaseRepository
-import com.example.chatmemo.data.repository.ChatDataBaseRepositoryImp
-import com.example.chatmemo.data.repository.TemplateDataBaseRepository
-import com.example.chatmemo.data.repository.TemplateDataBaseRepositoryImp
+import com.example.chatmemo.data.local.database.dao.AppDatabase
+import com.example.chatmemo.data.repository.LocalChatRepository
+import com.example.chatmemo.data.repository.LocalChatRepositoryImp
+import com.example.chatmemo.data.repository.LocalTemplateRepository
+import com.example.chatmemo.data.repository.LocalTemplateRepositoryImp
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.RoomId
@@ -67,7 +67,7 @@ class MyApplication : Application() {
         factory<ChatUseCase> { ChatUseCaseImp(get(), applicationScope) }
         factory<TemplateUseCase> { TemplateUseCaseImp(get(), get()) }
 
-        factory<ChatDataBaseRepository> { ChatDataBaseRepositoryImp() }
-        factory<TemplateDataBaseRepository> { TemplateDataBaseRepositoryImp() }
+        factory<LocalChatRepository> { LocalChatRepositoryImp() }
+        factory<LocalTemplateRepository> { LocalTemplateRepositoryImp() }
     }
 }

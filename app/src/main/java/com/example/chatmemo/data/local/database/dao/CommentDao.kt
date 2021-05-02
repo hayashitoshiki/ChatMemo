@@ -1,10 +1,10 @@
-package com.example.chatmemo.data.database.dao
+package com.example.chatmemo.data.local.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.chatmemo.data.database.entity.CommentEntity
+import com.example.chatmemo.data.local.database.entity.CommentEntity
 
 /**
  * コメント用クエリ管理

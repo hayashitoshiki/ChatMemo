@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatmemo.R
 import com.example.chatmemo.databinding.FragmentChatBinding
 import com.example.chatmemo.domain.model.value.Comment
-import com.example.chatmemo.ui.adapter.ChatRecyclerAdapter
 import com.example.chatmemo.ui.utils.transition.PlayTransition
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf

@@ -2,8 +2,8 @@ package com.example.chatmemo.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.chatmemo.data.database.entity.ChatRoomEntity
-import com.example.chatmemo.data.database.entity.CommentEntity
+import com.example.chatmemo.data.local.database.entity.ChatRoomEntity
+import com.example.chatmemo.data.local.database.entity.CommentEntity
 import com.example.chatmemo.domain.model.entity.ChatRoom
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.*
@@ -14,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-class ChatDataBaseRepositoryImp(private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : ChatDataBaseRepository {
+class LocalChatRepositoryImp(private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : LocalChatRepository {
 
     private val roomDao = MyApplication.database.roomDao()
     private val commentDao = MyApplication.database.commentDao()

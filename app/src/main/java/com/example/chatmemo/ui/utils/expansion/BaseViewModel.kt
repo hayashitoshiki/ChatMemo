@@ -1,4 +1,4 @@
-package com.example.chatmemo.ui.utils
+package com.example.chatmemo.ui.utils.expansion
 
 import androidx.lifecycle.ViewModel
 

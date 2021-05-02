@@ -2,8 +2,8 @@ package com.example.chatmemo.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.chatmemo.data.database.entity.PhraseEntity
-import com.example.chatmemo.data.database.entity.TemplateEntity
+import com.example.chatmemo.data.local.database.entity.PhraseEntity
+import com.example.chatmemo.data.local.database.entity.TemplateEntity
 import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.TemplateId
 import com.example.chatmemo.domain.model.value.TemplateMessage
@@ -12,8 +12,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class TemplateDataBaseRepositoryImp(private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) :
-    TemplateDataBaseRepository {
+class LocalTemplateRepositoryImp(private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) :
+    LocalTemplateRepository {
 
     private val templateDao = MyApplication.database.templateDao()
     private val phraseDao = MyApplication.database.phraseDao()

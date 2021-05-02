@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.data.database.entity](../index.md) / [ChatRoomEntity](index.md) / [commentTime](./comment-time.md)
+[app](../../index.md) / [com.example.chatmemo.data.local.database.entity](../index.md) / [ChatRoomEntity](index.md) / [commentTime](./comment-time.md)
 
 # commentTime
 

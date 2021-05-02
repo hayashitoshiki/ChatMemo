@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.data.database.entity](../index.md) / [PhraseEntity](index.md) / [text](./text.md)
+[app](../../index.md) / [com.example.chatmemo.data.local.database.entity](../index.md) / [PhraseEntity](index.md) / [text](./text.md)
 
 # text
 

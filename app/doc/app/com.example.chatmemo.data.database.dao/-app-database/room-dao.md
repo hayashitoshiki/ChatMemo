@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.data.database.dao](../index.md) / [AppDatabase](index.md) / [roomDao](./room-dao.md)
+[app](../../index.md) / [com.example.chatmemo.data.local.database.dao](../index.md) / [AppDatabase](index.md) / [roomDao](./room-dao.md)
 
 # roomDao
 

@@ -1,11 +1,11 @@
-package com.example.chatmemo.data.database.dao
+package com.example.chatmemo.data.local.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.chatmemo.data.database.entity.ChatRoomEntity
+import com.example.chatmemo.data.local.database.entity.ChatRoomEntity
 
 /**
  * 定型文用クエリ管理

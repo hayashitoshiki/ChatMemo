@@ -26,8 +26,8 @@ MVVM + Clean Architecture + DDD
 
 | Name | Summary |
 |---|---|
-| [com.example.chatmemo.data.database.dao](com.example.chatmemo.data.database.dao/index.md) | DBクエリ管理 |
-| [com.example.chatmemo.data.database.entity](com.example.chatmemo.data.database.entity/index.md) | DBのテーブル構成管理 |
+| [com.example.chatmemo.data.local.database.dao](com.example.chatmemo.data.database.dao/index.md) | DBクエリ管理 |
+| [com.example.chatmemo.data.local.database.entity](com.example.chatmemo.data.database.entity/index.md) | DBのテーブル構成管理 |
 | [com.example.chatmemo.data.repository](com.example.chatmemo.data.repository/index.md) | DB・APIへのCRUD管理 |
 | [com.example.chatmemo.domain.model.entity](com.example.chatmemo.domain.model.entity/index.md) | エンティティ管理 |
 | [com.example.chatmemo.domain.model.value](com.example.chatmemo.domain.model.value/index.md) | 値オブジェクト管理 |

@@ -5,7 +5,7 @@ import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.TemplateId
 import com.example.chatmemo.domain.model.value.TemplateMessage
 
-interface TemplateDataBaseRepository {
+interface LocalTemplateRepository {
 
     // region 定型文タイトル
 

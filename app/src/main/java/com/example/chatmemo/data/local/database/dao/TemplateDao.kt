@@ -1,8 +1,8 @@
-package com.example.chatmemo.data.database.dao
+package com.example.chatmemo.data.local.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.chatmemo.data.database.entity.TemplateEntity
+import com.example.chatmemo.data.local.database.entity.TemplateEntity
 
 /**
  * 定型文用クエリ管理

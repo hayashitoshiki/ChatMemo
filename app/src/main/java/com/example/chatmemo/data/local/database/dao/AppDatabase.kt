@@ -1,11 +1,11 @@
-package com.example.chatmemo.data.database.dao
+package com.example.chatmemo.data.local.database.dao
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.chatmemo.data.database.entity.ChatRoomEntity
-import com.example.chatmemo.data.database.entity.CommentEntity
-import com.example.chatmemo.data.database.entity.PhraseEntity
-import com.example.chatmemo.data.database.entity.TemplateEntity
+import com.example.chatmemo.data.local.database.entity.ChatRoomEntity
+import com.example.chatmemo.data.local.database.entity.CommentEntity
+import com.example.chatmemo.data.local.database.entity.PhraseEntity
+import com.example.chatmemo.data.local.database.entity.TemplateEntity
 
 /**
  * DB定義

@@ -18,10 +18,10 @@ MVVM + Clean Architecture + DDD
     * Utils 共通部分管理
     * ○○　○○タブ内の画面管理
 
-# Package com.example.chatmemo.data.database.dao
+# Package com.example.chatmemo.data.local.database.dao
 DBクエリ管理
 
-# Package com.example.chatmemo.data.database.entity
+# Package com.example.chatmemo.data.local.database.entity
 DBのテーブル構成管理
 
 # Package com.example.chatmemo.data.repository

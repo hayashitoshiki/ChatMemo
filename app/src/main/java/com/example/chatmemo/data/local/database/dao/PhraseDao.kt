@@ -1,7 +1,7 @@
-package com.example.chatmemo.data.database.dao
+package com.example.chatmemo.data.local.database.dao
 
 import androidx.room.*
-import com.example.chatmemo.data.database.entity.PhraseEntity
+import com.example.chatmemo.data.local.database.entity.PhraseEntity
 
 /**
  * 定型文用クエリ管理

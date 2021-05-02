@@ -10,8 +10,8 @@ import com.example.chatmemo.domain.model.value.TemplateConfiguration
 import com.example.chatmemo.domain.model.value.TemplateMode
 import com.example.chatmemo.domain.usecase.ChatUseCase
 import com.example.chatmemo.domain.usecase.TemplateUseCase
-import com.example.chatmemo.ui.utils.BaseViewModel
-import com.example.chatmemo.ui.utils.ViewModelLiveData
+import com.example.chatmemo.ui.utils.expansion.BaseViewModel
+import com.example.chatmemo.ui.utils.expansion.ViewModelLiveData
 
 /**
  * 新規ルーム作成画面_ロジック
@@ -19,8 +19,7 @@ import com.example.chatmemo.ui.utils.ViewModelLiveData
  * @property chatUseCase Chatに関するUseCase
  */
 class RoomAddViewModel(
-    private val templateUseCase: TemplateUseCase,
-    private val chatUseCase: ChatUseCase
+    private val templateUseCase: TemplateUseCase, private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
 
     val titleText = MutableLiveData("")

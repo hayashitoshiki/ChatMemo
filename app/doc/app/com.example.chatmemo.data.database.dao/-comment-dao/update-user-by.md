@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.data.database.dao](../index.md) / [CommentDao](index.md) / [updateUserBy](./update-user-by.md)
+[app](../../index.md) / [com.example.chatmemo.data.local.database.dao](../index.md) / [CommentDao](index.md) / [updateUserBy](./update-user-by.md)
 
 # updateUserBy
 

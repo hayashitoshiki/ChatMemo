@@ -8,8 +8,8 @@ import com.example.chatmemo.domain.model.entity.Template
 import com.example.chatmemo.domain.model.value.TemplateId
 import com.example.chatmemo.domain.model.value.TemplateMessage
 import com.example.chatmemo.domain.usecase.TemplateUseCase
-import com.example.chatmemo.ui.utils.BaseViewModel
-import com.example.chatmemo.ui.utils.ViewModelLiveData
+import com.example.chatmemo.ui.utils.expansion.BaseViewModel
+import com.example.chatmemo.ui.utils.expansion.ViewModelLiveData
 import kotlinx.coroutines.launch
 
 /**
@@ -19,8 +19,7 @@ import kotlinx.coroutines.launch
  * @property templateUseCase テンプレート用UseCase
  */
 class TempalteAddViewModel(
-    private val template: Template?,
-    private val templateUseCase: TemplateUseCase
+    private val template: Template?, private val templateUseCase: TemplateUseCase
 ) : BaseViewModel() {
 
     val titleText = MutableLiveData("")
