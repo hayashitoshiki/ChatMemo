@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.chatmemo.ui.template.TempalteAddViewModel" />
+            type="com.myapp.chatmemo.ui.template.TempalteAddViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

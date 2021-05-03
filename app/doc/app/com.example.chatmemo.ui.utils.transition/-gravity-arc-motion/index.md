@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.ui.utils.transition](../index.md) / [GravityArcMotion](./index.md)
+[app](../../index.md) / [com.myapp.chatmemo.ui.utils.transition](../index.md) / [GravityArcMotion](./index.md)
 
 # GravityArcMotion
 

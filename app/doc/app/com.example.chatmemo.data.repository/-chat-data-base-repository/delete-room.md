@@ -1,8 +1,8 @@
-[app](../../index.md) / [com.example.chatmemo.data.repository](../index.md) / [ChatDataBaseRepository](index.md) / [deleteRoom](./delete-room.md)
+[app](../../index.md) / [com.myapp.chatmemo.data.repository](../index.md) / [ChatDataBaseRepository](index.md) / [deleteRoom](./delete-room.md)
 
 # deleteRoom
 
-`abstract suspend fun deleteRoom(roomId: `[`RoomId`](../../com.example.chatmemo.domain.model.value/-room-id/index.md)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`abstract suspend fun deleteRoom(roomId: `[`RoomId`](../../com.myapp.chatmemo.domain.model.value/-room-id/index.md)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
 
 チャットルーム削除
 

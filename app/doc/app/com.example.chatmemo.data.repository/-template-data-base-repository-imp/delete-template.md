@@ -1,8 +1,8 @@
-[app](../../index.md) / [com.example.chatmemo.data.repository](../index.md) / [TemplateDataBaseRepositoryImp](index.md) / [deleteTemplate](./delete-template.md)
+[app](../../index.md) / [com.myapp.chatmemo.data.repository](../index.md) / [TemplateDataBaseRepositoryImp](index.md) / [deleteTemplate](./delete-template.md)
 
 # deleteTemplate
 
-`suspend fun deleteTemplate(templateId: `[`TemplateId`](../../com.example.chatmemo.domain.model.value/-template-id/index.md)`): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)
+`suspend fun deleteTemplate(templateId: `[`TemplateId`](../../com.myapp.chatmemo.domain.model.value/-template-id/index.md)`): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)
 
 Overrides [TemplateDataBaseRepository.deleteTemplate](../-template-data-base-repository/delete-template.md)
 

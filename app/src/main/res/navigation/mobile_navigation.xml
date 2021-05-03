@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.chatmemo.ui.chat.HomeFragment"
+        android:name="com.myapp.chatmemo.ui.chat.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
@@ -23,17 +23,17 @@
 
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.example.chatmemo.ui.chat.ChatFragment"
+        android:name="com.myapp.chatmemo.ui.chat.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat">
         <argument
             android:name="data"
-            app:argType="com.example.chatmemo.domain.model.entity.ChatRoom" />
+            app:argType="com.myapp.chatmemo.domain.model.entity.ChatRoom" />
     </fragment>
 
     <fragment
         android:id="@+id/templateListFragment"
-        android:name="com.example.chatmemo.ui.template.TtemplateListFragment"
+        android:name="com.myapp.chatmemo.ui.template.TtemplateListFragment"
         android:label="fragment_template_list"
         tools:layout="@layout/fragment_template_list">
         <action
@@ -43,17 +43,17 @@
 
     <fragment
         android:id="@+id/templateAddFragment"
-        android:name="com.example.chatmemo.ui.template.TemplateAddFragment"
+        android:name="com.myapp.chatmemo.ui.template.TemplateAddFragment"
         android:label="fragment_template_add">
         <argument
             android:name="data"
-            app:argType="com.example.chatmemo.domain.model.entity.Template"
+            app:argType="com.myapp.chatmemo.domain.model.entity.Template"
             app:nullable="true" />
     </fragment>
 
     <fragment
         android:id="@+id/roomAddFragment"
-        android:name="com.example.chatmemo.ui.chat.RoomAddFragment"
+        android:name="com.myapp.chatmemo.ui.chat.RoomAddFragment"
         android:label="RoomAddFragment"
         tools:layout="@layout/fragment_room_add">
         <action

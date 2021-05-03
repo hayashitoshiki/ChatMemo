@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.data.local.database.dao](../index.md) / [PhraseDao](index.md) / [deleteByTemplateId](./delete-by-template-id.md)
+[app](../../index.md) / [com.myapp.chatmemo.data.local.database.dao](../index.md) / [PhraseDao](index.md) / [deleteByTemplateId](./delete-by-template-id.md)
 
 # deleteByTemplateId
 

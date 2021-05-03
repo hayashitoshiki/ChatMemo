@@ -18,38 +18,38 @@ MVVM + Clean Architecture + DDD
     * Utils 共通部分管理
     * ○○　○○タブ内の画面管理
 
-# Package com.example.chatmemo.data.local.database.dao
+# Package com.myapp.chatmemo.data.local.database.dao
 DBクエリ管理
 
-# Package com.example.chatmemo.data.local.database.entity
+# Package com.myapp.chatmemo.data.local.database.entity
 DBのテーブル構成管理
 
-# Package com.example.chatmemo.data.repository
+# Package com.myapp.chatmemo.data.repository
 DB・APIへのCRUD管理
 
-# Package com.example.chatmemo.domain.model.entity
+# Package com.myapp.chatmemo.domain.model.entity
 エンティティ管理
 
-# Package  com.example.chatmemo.domain.model.value
+# Package  com.myapp.chatmemo.domain.model.value
 値オブジェクト管理
 
-# Package com.example.chatmemo.domain.usecase
+# Package com.myapp.chatmemo.domain.usecase
 ビジネスロジック管理
 
-# Package com.example.chatmemo.ui
+# Package com.myapp.chatmemo.ui
 UIベース画面管理
 
-# Package com.example.chatmemo.ui.chat
+# Package com.myapp.chatmemo.ui.chat
 チャットタブ画面管理
 
-# Package com.example.chatmemo.ui.phrase
+# Package com.myapp.chatmemo.ui.phrase
 テンプレート文設定タブ画面管理
 
-# Package com.example.chatmemo.ui.adapter
+# Package com.myapp.chatmemo.ui.adapter
 アダプター管理
 
-# Package com.example.chatmemo.ui.utils
+# Package com.myapp.chatmemo.ui.utils
 UI共通処理管理
 
-# Package com.example.chatmemo.ui.transition
+# Package com.myapp.chatmemo.ui.transition
 アニメーション管理

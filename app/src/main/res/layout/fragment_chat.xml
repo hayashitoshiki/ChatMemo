@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.chatmemo.ui.chat.ChatViewModel" />
+            type="com.myapp.chatmemo.ui.chat.ChatViewModel" />
 
     </data>
 

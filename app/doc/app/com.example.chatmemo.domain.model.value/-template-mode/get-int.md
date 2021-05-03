@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.domain.model.value](../index.md) / [TemplateMode](index.md) / [getInt](./get-int.md)
+[app](../../index.md) / [com.myapp.chatmemo.domain.model.value](../index.md) / [TemplateMode](index.md) / [getInt](./get-int.md)
 
 # getInt
 

@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.chatmemo.ui.chat.RoomAddViewModel" />
+            type="com.myapp.chatmemo.ui.chat.RoomAddViewModel" />
 
     </data>
 

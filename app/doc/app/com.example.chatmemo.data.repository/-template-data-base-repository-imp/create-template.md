@@ -1,8 +1,8 @@
-[app](../../index.md) / [com.example.chatmemo.data.repository](../index.md) / [TemplateDataBaseRepositoryImp](index.md) / [createTemplate](./create-template.md)
+[app](../../index.md) / [com.myapp.chatmemo.data.repository](../index.md) / [TemplateDataBaseRepositoryImp](index.md) / [createTemplate](./create-template.md)
 
 # createTemplate
 
-`suspend fun createTemplate(template: `[`Template`](../../com.example.chatmemo.domain.model.entity/-template/index.md)`): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)
+`suspend fun createTemplate(template: `[`Template`](../../com.myapp.chatmemo.domain.model.entity/-template/index.md)`): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)
 
 Overrides [TemplateDataBaseRepository.createTemplate](../-template-data-base-repository/create-template.md)
 

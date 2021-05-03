@@ -1,8 +1,8 @@
-[app](../../index.md) / [com.example.chatmemo.data.repository](../index.md) / [TemplateDataBaseRepositoryImp](index.md) / [getTemplateAll](./get-template-all.md)
+[app](../../index.md) / [com.myapp.chatmemo.data.repository](../index.md) / [TemplateDataBaseRepositoryImp](index.md) / [getTemplateAll](./get-template-all.md)
 
 # getTemplateAll
 
-`fun getTemplateAll(): LiveData<`[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Template`](../../com.example.chatmemo.domain.model.entity/-template/index.md)`>>`
+`fun getTemplateAll(): LiveData<`[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Template`](../../com.myapp.chatmemo.domain.model.entity/-template/index.md)`>>`
 
 Overrides [TemplateDataBaseRepository.getTemplateAll](../-template-data-base-repository/get-template-all.md)
 

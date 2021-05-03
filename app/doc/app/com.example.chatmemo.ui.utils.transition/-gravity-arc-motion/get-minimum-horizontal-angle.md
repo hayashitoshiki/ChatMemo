@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.ui.utils.transition](../index.md) / [GravityArcMotion](index.md) / [getMinimumHorizontalAngle](./get-minimum-horizontal-angle.md)
+[app](../../index.md) / [com.myapp.chatmemo.ui.utils.transition](../index.md) / [GravityArcMotion](index.md) / [getMinimumHorizontalAngle](./get-minimum-horizontal-angle.md)
 
 # getMinimumHorizontalAngle
 

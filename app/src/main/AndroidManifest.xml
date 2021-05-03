@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.chatmemo">
+    package="com.myapp.chatmemo">
 
     <application
-        android:name=".ui.MyApplication"
+        android:name="com.myapp.chatmemo.ui.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChatMemo">
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.myapp.chatmemo.ui.MainActivity"
             android:screenOrientation="portrait"
             android:fitsSystemWindows="true"
             android:windowSoftInputMode="adjustPan">

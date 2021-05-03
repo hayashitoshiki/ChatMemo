@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.example.chatmemo.domain.model.value](../index.md) / [TemplateId](index.md) / [&lt;init&gt;](./-init-.md)
+[app](../../index.md) / [com.myapp.chatmemo.domain.model.value](../index.md) / [TemplateId](index.md) / [&lt;init&gt;](./-init-.md)
 
 # &lt;init&gt;
 
