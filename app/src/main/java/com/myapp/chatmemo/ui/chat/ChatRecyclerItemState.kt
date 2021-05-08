@@ -1,0 +1,20 @@
+package com.myapp.chatmemo.ui.chat
+
+import com.myapp.chatmemo.domain.model.value.Comment
+
+/**
+ * コメントリストの表示制御
+ * @param beforeComment １つ前のリストに表示されるコメント
+ * @param comment 現在のリストに表示されるコメント
+ */
+class ChatRecyclerItemState(beforeComment: Comment?, comment: Comment) {
+
+    var isHeader1: Boolean
+        private set
+
+    init {
+        val commentDate = comment.time.toSectionDate()
+        val beforCcommentDate = beforeComment?.time?.toSectionDate()
+        isHeader1 = beforCcommentDate == null || beforCcommentDate != commentDate
+    }
+}
