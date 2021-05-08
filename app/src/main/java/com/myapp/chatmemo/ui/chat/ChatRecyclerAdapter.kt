@@ -70,7 +70,7 @@ class ChatRecyclerAdapter(private val context: Context, private val lifecycleOwn
         val state = ChatRecyclerItemState(beforComment, comment)
         when (holder.binding) {
             is ItemCommentBlackBinding -> {
-                holder.binding.txtDate.visibility = if (state.isHeader1) View.VISIBLE else View.GONE
+                holder.binding.txtDate.visibility = if (state.isHeader) View.VISIBLE else View.GONE
                 holder.binding.txtDate.text = comment.time.toSectionDate()
                 holder.binding.txtDateBlack.text = comment.time.toMessageDate()
                 holder.binding.txtCommentBlack.text = comment.message
@@ -82,7 +82,7 @@ class ChatRecyclerAdapter(private val context: Context, private val lifecycleOwn
                 }
             }
             is ItemCommentWhiteBinding -> {
-                holder.binding.txtDate.visibility = if (state.isHeader1) View.VISIBLE else View.GONE
+                holder.binding.txtDate.visibility = if (state.isHeader) View.VISIBLE else View.GONE
                 holder.binding.txtDate.text = comment.time.toSectionDate()
                 holder.binding.txtDateWhite.text = comment.time.toMessageDate()
                 holder.binding.txtCommentWhite.text = comment.message

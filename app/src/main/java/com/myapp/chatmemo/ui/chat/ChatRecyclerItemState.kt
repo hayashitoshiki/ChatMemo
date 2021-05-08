@@ -9,12 +9,12 @@ import com.myapp.chatmemo.domain.model.value.Comment
  */
 class ChatRecyclerItemState(beforeComment: Comment?, comment: Comment) {
 
-    var isHeader1: Boolean
+    var isHeader: Boolean
         private set
 
     init {
         val commentDate = comment.time.toSectionDate()
         val beforCcommentDate = beforeComment?.time?.toSectionDate()
-        isHeader1 = beforCcommentDate == null || beforCcommentDate != commentDate
+        isHeader = beforCcommentDate == null || beforCcommentDate != commentDate
     }
 }
