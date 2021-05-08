@@ -79,7 +79,7 @@ object Converter {
                     templateMode.position.toString()
                 }
                 is TemplateMode.Randam -> {
-                    templateMode.position.joinToString()
+                    templateMode.position.joinToString(",")
                 }
             }
             mode = templateConfiguration.templateMode.getInt()
@@ -115,7 +115,21 @@ object Converter {
 
         val templateConfiguration = if (chatRoomEntity.templateId != null && templateEntity != null && phraseList != null) {
             val template = templateFromTemplateEntityAndPhraseEntity(templateEntity, phraseList)
-            val templateMode = TemplateMode.toStatus(chatRoomEntity.templateMode!!)
+            val templateMode = when (TemplateMode.toStatus(chatRoomEntity.templateMode!!)) {
+                is TemplateMode.Order -> {
+                    TemplateMode.Order("順番", chatRoomEntity.phrasePoint!!.toInt())
+                }
+                is TemplateMode.Randam -> {
+                    if (!chatRoomEntity.phrasePoint.isNullOrEmpty()) {
+                        val position = chatRoomEntity.phrasePoint!!.split(",").map {
+                            it.toInt()
+                        }.toMutableList()
+                        TemplateMode.Randam("ランダム", position)
+                    } else {
+                        TemplateMode.Randam()
+                    }
+                }
+            }
             TemplateConfiguration(template, templateMode)
         } else {
             null

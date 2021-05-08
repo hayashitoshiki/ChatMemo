@@ -44,19 +44,22 @@ class ChatViewModel(
                 val roomId = room.roomId
                 val message = commentText.value!!
                 val comment = chatUseCase.addComment(message, roomId)
-                room.commentList.add(comment)
-                delay(300)
+                val commentList: MutableList<Comment> = _commentList.value!!.toMutableList()
+                commentList.add(comment)
+                room.commentList = commentList
                 room.templateConfiguration?.let { templateConfiguration ->
+                    delay(300)
                     val (configuretion, templateComment) = chatUseCase.addTemplateComment(templateConfiguration, roomId)
                     room.templateConfiguration = configuretion
-                    room.commentList.add(templateComment)
+                    commentList.add(templateComment)
+                    room.commentList = commentList
                 }
 
                 chatUseCase.updateRoom(room)
+                _commentList.value = commentList
+                commentText.value = ""
             }
         }
-        _commentList.postValue(chatRoom.value!!.commentList)
-        commentText.postValue("")
     }
 
     // ルーム削除
@@ -69,10 +72,8 @@ class ChatViewModel(
     // 立場変更
     fun changeUser() {
         commentList.value?.let { comments ->
-            viewModelScope.launch {
-                val newCommentList = chatUseCase.reverseAllCommentUser(comments)
-                _commentList.postValue(newCommentList)
-            }
+            val newCommentList = chatUseCase.reverseAllCommentUser(comments)
+            _commentList.value = newCommentList
         }
     }
 

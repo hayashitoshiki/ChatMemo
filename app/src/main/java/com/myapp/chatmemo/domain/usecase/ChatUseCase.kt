@@ -53,7 +53,7 @@ interface ChatUseCase {
      * @property commentList 変更するコメントリスト
      * @return ユーザを反転させたコメントリスト
      */
-    suspend fun reverseAllCommentUser(commentList: List<Comment>): List<Comment>
+    fun reverseAllCommentUser(commentList: List<Comment>): List<Comment>
 
     /**
      * テンプレートメッセージ送信
@@ -61,7 +61,7 @@ interface ChatUseCase {
      * @property roomId チャットルームのID
      * @return テンプレートメッセージ出力後のテンプレートの詳細設定とテンプレートコメント
      */
-    suspend fun addTemplateComment(
+    fun addTemplateComment(
         templateConfiguration: TemplateConfiguration, roomId: RoomId
     ): Pair<TemplateConfiguration, Comment>
 
@@ -71,5 +71,5 @@ interface ChatUseCase {
      * @property roomId チャットルームのID
      * @return 送信されたコメント
      */
-    suspend fun addComment(message: String, roomId: RoomId): Comment
+    fun addComment(message: String, roomId: RoomId): Comment
 }
