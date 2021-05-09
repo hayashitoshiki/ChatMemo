@@ -70,9 +70,10 @@ class LocalTemplateRepositoryImp(
     override fun getTemplateAll(): Flow<List<Template>> {
         return templateDao.getAll()
             .map { templateEntityList ->
-                templateEntityList.map { templateEntity ->
-                    Template(TemplateId(templateEntity.id!!.toInt()), templateEntity.title, listOf())
-                }
+                templateEntityList.sortedByDescending { it.updateAt }
+                    .map { templateEntity ->
+                        Template(TemplateId(templateEntity.id!!.toInt()), templateEntity.title, listOf())
+                    }
             }
     }
 
