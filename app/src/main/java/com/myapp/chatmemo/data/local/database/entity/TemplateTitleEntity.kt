@@ -9,6 +9,6 @@ import androidx.room.PrimaryKey
  * @property title 定型文のタイトル
  */
 @Entity(tableName = "template")
-data class TemplateEntity(
+data class TemplateTitleEntity(
     @PrimaryKey(autoGenerate = true) val id: Long?, var title: String
 ) : java.io.Serializable

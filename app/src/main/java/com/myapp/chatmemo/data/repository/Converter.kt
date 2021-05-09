@@ -2,8 +2,8 @@ package com.myapp.chatmemo.data.repository
 
 import com.myapp.chatmemo.data.local.database.entity.ChatRoomEntity
 import com.myapp.chatmemo.data.local.database.entity.CommentEntity
-import com.myapp.chatmemo.data.local.database.entity.PhraseEntity
-import com.myapp.chatmemo.data.local.database.entity.TemplateEntity
+import com.myapp.chatmemo.data.local.database.entity.TemplateMessageEntity
+import com.myapp.chatmemo.data.local.database.entity.TemplateTitleEntity
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.*
@@ -14,32 +14,32 @@ object Converter {
     // region テンプレート関連
 
     // テンプレート文Entityからテンプレート文オブジェクトへ変換
-    fun templateMessageFromPharaseEntity(phrase: PhraseEntity): TemplateMessage {
-        val message = phrase.text
+    fun templateMessageFromPharaseEntity(templateMessage: TemplateMessageEntity): TemplateMessage {
+        val message = templateMessage.text
         return TemplateMessage(message)
     }
 
     // テンプレートオブジェクトとテンプレート文オブジェクトからテンプレート文Entityへ変換
-    fun praseEntityFromTemplateAndMessage(template: Template, message: TemplateMessage): PhraseEntity {
+    fun praseEntityFromTemplateAndMessage(template: Template, message: TemplateMessage): TemplateMessageEntity {
         val templateId = template.templateId.value.toLong()
         val phraseTitle = message.massage
-        return PhraseEntity(null, phraseTitle, templateId)
+        return TemplateMessageEntity(null, phraseTitle, templateId)
     }
 
     // テンプレートオブジェクトからテンプレートEntityへ変換
-    fun templateEntityFromTemplate(template: Template): TemplateEntity {
+    fun templateEntityFromTemplate(template: Template): TemplateTitleEntity {
         val templateId = template.templateId.value.toLong()
         val templateTitle = template.title
-        return TemplateEntity(templateId, templateTitle)
+        return TemplateTitleEntity(templateId, templateTitle)
     }
 
     // テンプレートEntityとテンプレート文Entityからテンプレートオブジェクトへ変換
     fun templateFromTemplateEntityAndPhraseEntity(
-        templateEntity: TemplateEntity, phraseEntityList: List<PhraseEntity>
+        templateTitleEntity: TemplateTitleEntity, templateMessageEntityList: List<TemplateMessageEntity>
     ): Template {
-        val templateId = TemplateId(templateEntity.id!!.toInt())
-        val tempalteTitle = templateEntity.title
-        val templateMessageList = phraseEntityList.map { templateMessageFromPharaseEntity(it) }
+        val templateId = TemplateId(templateTitleEntity.id!!.toInt())
+        val tempalteTitle = templateTitleEntity.title
+        val templateMessageList = templateMessageEntityList.map { templateMessageFromPharaseEntity(it) }
         return Template(templateId, tempalteTitle, templateMessageList)
     }
 
@@ -100,8 +100,8 @@ object Converter {
     fun chatFromBy(
         chatRoomEntity: ChatRoomEntity,
         commentEntityList: List<CommentEntity>,
-        templateEntity: TemplateEntity?,
-        phraseList: List<PhraseEntity>?
+        templateTitleEntity: TemplateTitleEntity?,
+        templateMessageList: List<TemplateMessageEntity>?
     ): ChatRoom {
         val roomId = RoomId(chatRoomEntity.id!!.toInt())
         val roomTitle = chatRoomEntity.title
@@ -109,28 +109,29 @@ object Converter {
             commentEntityList.map { commentEntity -> commentFromCommentEntity(commentEntity) }
                 .toMutableList()
 
-        val templateConfiguration = if (chatRoomEntity.templateId != null && templateEntity != null && phraseList != null) {
-            val template = templateFromTemplateEntityAndPhraseEntity(templateEntity, phraseList)
-            val templateMode = when (TemplateMode.toStatus(chatRoomEntity.templateMode!!)) {
-                is TemplateMode.Order -> {
-                    TemplateMode.Order("順番", chatRoomEntity.phrasePoint!!.toInt())
-                }
-                is TemplateMode.Randam -> {
-                    if (!chatRoomEntity.phrasePoint.isNullOrEmpty()) {
-                        val position = chatRoomEntity.phrasePoint!!.split(",")
-                            .filter { it.isNotEmpty() }
-                            .map { it.toInt() }
-                            .toMutableList()
-                        TemplateMode.Randam("ランダム", position)
-                    } else {
-                        TemplateMode.Randam()
+        val templateConfiguration =
+            if (chatRoomEntity.templateId != null && templateTitleEntity != null && templateMessageList != null) {
+                val template = templateFromTemplateEntityAndPhraseEntity(templateTitleEntity, templateMessageList)
+                val templateMode = when (TemplateMode.toStatus(chatRoomEntity.templateMode!!)) {
+                    is TemplateMode.Order -> {
+                        TemplateMode.Order("順番", chatRoomEntity.phrasePoint!!.toInt())
+                    }
+                    is TemplateMode.Randam -> {
+                        if (!chatRoomEntity.phrasePoint.isNullOrEmpty()) {
+                            val position = chatRoomEntity.phrasePoint!!.split(",")
+                                .filter { it.isNotEmpty() }
+                                .map { it.toInt() }
+                                .toMutableList()
+                            TemplateMode.Randam("ランダム", position)
+                        } else {
+                            TemplateMode.Randam()
+                        }
                     }
                 }
+                TemplateConfiguration(template, templateMode)
+            } else {
+                null
             }
-            TemplateConfiguration(template, templateMode)
-        } else {
-            null
-        }
         return ChatRoom(roomId, roomTitle, templateConfiguration, commentList)
     }
 

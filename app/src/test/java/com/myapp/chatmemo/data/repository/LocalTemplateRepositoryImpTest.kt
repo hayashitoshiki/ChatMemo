@@ -3,7 +3,7 @@ package com.myapp.chatmemo.data.repository
 import com.myapp.chatmemo.BaseUnitTest
 import com.myapp.chatmemo.data.local.database.dao.PhraseDao
 import com.myapp.chatmemo.data.local.database.dao.TemplateDao
-import com.myapp.chatmemo.data.local.database.entity.PhraseEntity
+import com.myapp.chatmemo.data.local.database.entity.TemplateMessageEntity
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.TemplateId
 import com.myapp.chatmemo.domain.model.value.TemplateMessage
@@ -31,8 +31,8 @@ class LocalTemplateRepositoryImpTest : BaseUnitTest() {
 
     // data
     private val templateTableSize = 3
-    private val templateMessageEntity1 = PhraseEntity(1, "message1", 1)
-    private val templateMessageEntity2 = PhraseEntity(2, "message2", 1)
+    private val templateMessageEntity1 = TemplateMessageEntity(1, "message1", 1)
+    private val templateMessageEntity2 = TemplateMessageEntity(2, "message2", 1)
     private val templateMessageEntityList = listOf(templateMessageEntity1, templateMessageEntity2)
     private val templateMessage1 = TemplateMessage("message1")
     private val templateMessage2 = TemplateMessage("message2")
@@ -164,7 +164,8 @@ class LocalTemplateRepositoryImpTest : BaseUnitTest() {
     @Test
     fun getTemplateAll() {
         runBlocking {
-            val resultList = repository.getTemplateAll().first()
+            val resultList = repository.getTemplateAll()
+                .first()
             resultList.forEachIndexed { index, template ->
                 assertEquals(templateList[index], template)
             }

@@ -11,6 +11,6 @@ import androidx.room.PrimaryKey
  * @property templateId 定型文タイトルのId
  */
 @Entity(tableName = "phrases")
-data class PhraseEntity(
+data class TemplateMessageEntity(
     @PrimaryKey(autoGenerate = true) val id: Long?, var text: String, @ColumnInfo(name = "template_id") var templateId: Long
 )

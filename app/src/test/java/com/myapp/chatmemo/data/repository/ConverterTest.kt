@@ -3,8 +3,8 @@ package com.myapp.chatmemo.data.repository
 import com.myapp.chatmemo.BaseUnitTest
 import com.myapp.chatmemo.data.local.database.entity.ChatRoomEntity
 import com.myapp.chatmemo.data.local.database.entity.CommentEntity
-import com.myapp.chatmemo.data.local.database.entity.PhraseEntity
-import com.myapp.chatmemo.data.local.database.entity.TemplateEntity
+import com.myapp.chatmemo.data.local.database.entity.TemplateMessageEntity
+import com.myapp.chatmemo.data.local.database.entity.TemplateTitleEntity
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.*
@@ -23,13 +23,13 @@ class ConverterTest : BaseUnitTest() {
     private val converter = Converter
 
     // data
-    private val phraseEntity1 = PhraseEntity(1, "phraseEntity1", 1)
+    private val phraseEntity1 = TemplateMessageEntity(1, "phraseEntity1", 1)
     private val phraseEntityList = listOf(phraseEntity1)
     private val templateMessage1 = TemplateMessage("message1")
     private val templateMessage2 = TemplateMessage("message2")
     private val templateMessageList = listOf(templateMessage1, templateMessage2)
     private val template = Template(TemplateId(1), "Template1", templateMessageList)
-    private val templateTitleEntity = TemplateEntity(1, "templateTitle1")
+    private val templateTitleEntity = TemplateTitleEntity(1, "templateTitle1")
     private val template1 = Template(TemplateId(1), "template1", templateMessageList)
     private val stringDatatime = "2020/04/30 12:20:30.666"
     private val datatime = stringDatatime.toLocalDateTime()

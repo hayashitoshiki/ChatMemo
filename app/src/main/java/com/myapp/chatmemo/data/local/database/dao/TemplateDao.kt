@@ -1,7 +1,7 @@
 package com.myapp.chatmemo.data.local.database.dao
 
 import androidx.room.*
-import com.myapp.chatmemo.data.local.database.entity.TemplateEntity
+import com.myapp.chatmemo.data.local.database.entity.TemplateTitleEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -14,23 +14,23 @@ interface TemplateDao {
     suspend fun getNextId(): Long?
 
     @Insert
-    suspend fun insert(template: TemplateEntity)
+    suspend fun insert(templateTitle: TemplateTitleEntity)
 
     @Update
-    suspend fun update(template: TemplateEntity)
+    suspend fun update(templateTitle: TemplateTitleEntity)
 
     @Delete
-    suspend fun delete(template: TemplateEntity)
+    suspend fun delete(templateTitle: TemplateTitleEntity)
 
     @Query("delete from template WHERE id = :templateId")
     suspend fun deleteByTemplateId(templateId: Long)
 
     @Query("SELECT * FROM template")
-    fun getAll(): Flow<List<TemplateEntity>>
+    fun getAll(): Flow<List<TemplateTitleEntity>>
 
     @Query("SELECT * FROM template WHERE id = :id")
-    suspend fun getTemplateById(id: Long): TemplateEntity
+    suspend fun getTemplateById(id: Long): TemplateTitleEntity
 
     @Query("SELECT * FROM template WHERE title = :title")
-    suspend fun getAllByTitle(title: String): List<TemplateEntity>
+    suspend fun getAllByTitle(title: String): List<TemplateTitleEntity>
 }
