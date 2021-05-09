@@ -58,26 +58,29 @@ class LocalChatRepositoryImp(
 
     // 全チャットルーム種奥
     override fun getRoomAll(): Flow<List<ChatRoom>> {
-        return roomDao.getAll().filterNotNull().map { chatRoomEntitiyList ->
-            chatRoomEntitiyList.map { chatRoomEntity ->
-                chatRoomFromChatRoomEntity(chatRoomEntity)
+        return roomDao.getAll()
+            .filterNotNull()
+            .map { chatRoomEntitiyList ->
+                chatRoomEntitiyList.map { chatRoomEntity -> chatRoomFromChatRoomEntity(chatRoomEntity) }
             }
-        }
     }
 
     // ルームIDに紐づくチャットルーム取得
     override fun getRoomById(roomId: RoomId): Flow<ChatRoom> {
-        return roomDao.getRoomById(roomId.value.toLong()).filterNotNull().map { chatRoomEntity ->
-            chatRoomFromChatRoomEntity(chatRoomEntity)
-        }
+        return roomDao.getRoomById(roomId.value.toLong())
+            .filterNotNull()
+            .map { chatRoomEntity ->
+                chatRoomFromChatRoomEntity(chatRoomEntity)
+            }
     }
 
     // テンプレートIDに紐づくチャットルーム取得
     override suspend fun getRoomByTemplateId(templateId: TemplateId): List<ChatRoom> {
         return withContext(ioDispatcher) {
-            return@withContext roomDao.getRoomByTemplateId(templateId.value.toLong()).map { chatRoomEntity ->
-                chatRoomFromChatRoomEntity(chatRoomEntity)
-            }
+            return@withContext roomDao.getRoomByTemplateId(templateId.value.toLong())
+                .map { chatRoomEntity ->
+                    chatRoomFromChatRoomEntity(chatRoomEntity)
+                }
         }
     }
 

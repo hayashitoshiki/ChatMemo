@@ -19,6 +19,13 @@ object Converter {
         return TemplateMessage(message)
     }
 
+    // テンプレートオブジェクトとテンプレート文オブジェクトからテンプレート文Entityへ変換
+    fun praseEntityFromTemplateAndMessage(template: Template, message: TemplateMessage): PhraseEntity {
+        val templateId = template.templateId.value.toLong()
+        val phraseTitle = message.massage
+        return PhraseEntity(null, phraseTitle, templateId)
+    }
+
     // テンプレートオブジェクトからテンプレートEntityへ変換
     fun templateEntityFromTemplate(template: Template): TemplateEntity {
         val templateId = template.templateId.value.toLong()
@@ -26,15 +33,8 @@ object Converter {
         return TemplateEntity(templateId, templateTitle)
     }
 
-    // テンプレート文Entityからテンプレートオブジェクトへ変換
-    fun praseEntityFromTemplateAndMessage(template: Template, message: TemplateMessage): PhraseEntity {
-        val templateId = template.templateId.value.toLong()
-        val phraseTitle = message.massage
-        return PhraseEntity(null, phraseTitle, templateId)
-    }
-
     // テンプレートEntityとテンプレート文Entityからテンプレートオブジェクトへ変換
-    private fun templateFromTemplateEntityAndPhraseEntity(
+    fun templateFromTemplateEntityAndPhraseEntity(
         templateEntity: TemplateEntity, phraseEntityList: List<PhraseEntity>
     ): Template {
         val templateId = TemplateId(templateEntity.id!!.toInt())
@@ -57,7 +57,7 @@ object Converter {
     }
 
     // コメントEntityからコメントオブジェクトへ変換
-    private fun commentFromCommentEntity(commentEntity: CommentEntity): Comment {
+    fun commentFromCommentEntity(commentEntity: CommentEntity): Comment {
         val message = commentEntity.text
         val user = User.getUser(commentEntity.user)
         val commentDate = CommentDateTime(commentEntity.createdAt.toLocalDateTime())
@@ -75,12 +75,8 @@ object Converter {
         if (templateConfiguration != null) {
             templateId = templateConfiguration.template.templateId.value.toLong()
             point = when (val templateMode = templateConfiguration.templateMode) {
-                is TemplateMode.Order -> {
-                    templateMode.position.toString()
-                }
-                is TemplateMode.Randam -> {
-                    templateMode.position.joinToString(",")
-                }
+                is TemplateMode.Order -> templateMode.position.toString()
+                is TemplateMode.Randam -> templateMode.position.joinToString(",")
             }
             mode = templateConfiguration.templateMode.getInt()
         } else {
@@ -109,9 +105,9 @@ object Converter {
     ): ChatRoom {
         val roomId = RoomId(chatRoomEntity.id!!.toInt())
         val roomTitle = chatRoomEntity.title
-        val commentList: MutableList<Comment> = commentEntityList.map { commentEntity ->
-            commentFromCommentEntity(commentEntity)
-        }.toMutableList()
+        val commentList: MutableList<Comment> =
+            commentEntityList.map { commentEntity -> commentFromCommentEntity(commentEntity) }
+                .toMutableList()
 
         val templateConfiguration = if (chatRoomEntity.templateId != null && templateEntity != null && phraseList != null) {
             val template = templateFromTemplateEntityAndPhraseEntity(templateEntity, phraseList)
@@ -121,9 +117,10 @@ object Converter {
                 }
                 is TemplateMode.Randam -> {
                     if (!chatRoomEntity.phrasePoint.isNullOrEmpty()) {
-                        val position = chatRoomEntity.phrasePoint!!.split(",").map {
-                            it.toInt()
-                        }.toMutableList()
+                        val position = chatRoomEntity.phrasePoint!!.split(",")
+                            .filter { it.isNotEmpty() }
+                            .map { it.toInt() }
+                            .toMutableList()
                         TemplateMode.Randam("ランダム", position)
                     } else {
                         TemplateMode.Randam()
