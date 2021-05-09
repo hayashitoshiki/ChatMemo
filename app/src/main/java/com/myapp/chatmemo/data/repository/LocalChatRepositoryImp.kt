@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
@@ -51,12 +52,17 @@ class LocalChatRepositoryImp(
     // チャットルーム更新
     override suspend fun updateRoom(chatRoom: ChatRoom) {
         return withContext(ioDispatcher) {
-            val chatRoomEntity = Converter.chatEntityFromChat(chatRoom)
-            return@withContext roomDao.update(chatRoomEntity)
+            val newChatRoomEntity = Converter.chatEntityFromChat(chatRoom)
+            val oldChatRoomEntity = withContext(Dispatchers.Default) {
+                roomDao.getRoomById(chatRoom.roomId.value.toLong())
+                    .first()
+            }
+            oldChatRoomEntity.update(newChatRoomEntity)
+            return@withContext roomDao.update(oldChatRoomEntity)
         }
     }
 
-    // 全チャットルーム種奥
+    // 全チャットルーム取得
     override fun getRoomAll(): Flow<List<ChatRoom>> {
         return roomDao.getAll()
             .filterNotNull()
@@ -96,9 +102,10 @@ class LocalChatRepositoryImp(
     override suspend fun updateComments(commentList: List<Comment>) {
         withContext(ioDispatcher) {
             commentList.forEach {
-                val user = it.user.chageInt()
-                val commentDate = it.time.toDataBaseDate()
-                commentDao.updateUserBy(user, commentDate)
+                val oldComment = commentDao.getCommentByDate(it.time.date)
+                val newCommentEntity = Converter.commentEntityFromComment(it, RoomId(oldComment.roomId.toInt()))
+                oldComment.update(newCommentEntity)
+                commentDao.update(oldComment)
             }
         }
     }

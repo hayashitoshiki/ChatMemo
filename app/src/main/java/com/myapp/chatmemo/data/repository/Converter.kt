@@ -7,7 +7,7 @@ import com.myapp.chatmemo.data.local.database.entity.TemplateTitleEntity
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.*
-import com.myapp.chatmemo.ui.utils.expansion.toLocalDateTime
+import java.time.LocalDateTime
 
 object Converter {
 
@@ -20,7 +20,7 @@ object Converter {
     }
 
     // テンプレートオブジェクトとテンプレート文オブジェクトからテンプレート文Entityへ変換
-    fun praseEntityFromTemplateAndMessage(template: Template, message: TemplateMessage): TemplateMessageEntity {
+    fun templateMessageEntityFromTemplateAndMessage(template: Template, message: TemplateMessage): TemplateMessageEntity {
         val templateId = template.templateId.value.toLong()
         val phraseTitle = message.massage
         return TemplateMessageEntity(null, phraseTitle, templateId)
@@ -51,7 +51,7 @@ object Converter {
     fun commentEntityFromComment(comment: Comment, roomId: RoomId): CommentEntity {
         val message = comment.message
         val user = comment.user.chageInt()
-        val date = comment.time.toDataBaseDate()
+        val date = comment.time.date
         val roomIdLong = roomId.value.toLong()
         return CommentEntity(null, message, user, date, roomIdLong)
     }
@@ -60,7 +60,7 @@ object Converter {
     fun commentFromCommentEntity(commentEntity: CommentEntity): Comment {
         val message = commentEntity.text
         val user = User.getUser(commentEntity.user)
-        val commentDate = CommentDateTime(commentEntity.createdAt.toLocalDateTime())
+        val commentDate = CommentDateTime(commentEntity.commentTime)
         return Comment(message, user, commentDate)
     }
 
@@ -85,10 +85,10 @@ object Converter {
             mode = null
         }
         val commentLast: String?
-        val commentLastTime: String?
+        val commentLastTime: LocalDateTime?
         if (chatRoom.commentList.size != 0) {
             commentLast = chatRoom.commentList.last().message
-            commentLastTime = chatRoom.commentList.last().time.toDataBaseDate()
+            commentLastTime = chatRoom.commentList.last().time.date
         } else {
             commentLast = null
             commentLastTime = null

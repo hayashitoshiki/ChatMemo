@@ -3,6 +3,7 @@ package com.myapp.chatmemo.domain.usecase
 import com.myapp.chatmemo.data.repository.LocalChatRepository
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.value.*
+import com.myapp.chatmemo.ui.utils.expansion.getDateTimeNow
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -93,7 +94,7 @@ class ChatUseCaseImp(
     }
 
     override fun addComment(message: String, roomId: RoomId): Comment {
-        val date = CommentDateTime(LocalDateTime.now())
+        val date = CommentDateTime(getDateTimeNow())
         val comment = Comment(message, User.BLACK, date)
         externalScope.launch(defaultDispatcher) {
             localChatRepository.addComment(comment, roomId)

@@ -8,11 +8,11 @@ import com.myapp.chatmemo.data.local.database.entity.TemplateTitleEntity
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.*
-import com.myapp.chatmemo.ui.utils.expansion.toLocalDateTime
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDateTime
 
 /**
  * ドメインモデルのコンバーターのロジック仕様
@@ -31,13 +31,13 @@ class ConverterTest : BaseUnitTest() {
     private val template = Template(TemplateId(1), "Template1", templateMessageList)
     private val templateTitleEntity = TemplateTitleEntity(1, "templateTitle1")
     private val template1 = Template(TemplateId(1), "template1", templateMessageList)
-    private val stringDatatime = "2020/04/30 12:20:30.666"
-    private val datatime = stringDatatime.toLocalDateTime()
+    private val stringDatatime = "2020-04-30T12:20:30.666"
+    private val datatime = LocalDateTime.parse(stringDatatime)
     private val chatRoomId1 = RoomId(1)
     private val comment1 = Comment("comment1", User.BLACK, CommentDateTime(datatime))
     private val commentList = mutableListOf(comment1)
     private val commentListByEmpty = mutableListOf<Comment>()
-    private val commentEntity1 = CommentEntity(1, "commentEntity1", 1, stringDatatime, 1)
+    private val commentEntity1 = CommentEntity(1, "commentEntity1", 1, datatime, 1)
     private val commentEntityList = listOf(commentEntity1)
     private val templateByOrder = TemplateMode.Order("順番")
     private val templateByRandam = TemplateMode.Randam("ランダム")
@@ -49,15 +49,14 @@ class ConverterTest : BaseUnitTest() {
     private val chatRoomByCommentNull = ChatRoom(RoomId(4), "CommentNull", templateConfigurationByOrder, commentListByEmpty)
     private val chatRoomByCommentNotNull = ChatRoom(RoomId(4), "CommentNotNull", templateConfigurationByOrder, commentList)
     private val chatRoomEntityByTemplateNull =
-        ChatRoomEntity(1, "templateNull", null, null, null, comment1.message, comment1.time.toDataBaseDate())
+        ChatRoomEntity(1, "templateNull", null, null, null, comment1.message, comment1.time.date)
     private val chatRoomEntityByOrder =
         ChatRoomEntity(1, "templateOrder", 1, templateByOrder.getInt(), templateByOrder.position.toString(), comment1.message,
-            comment1.time.toDataBaseDate())
+            comment1.time.date)
     private val chatRoomEntityByRandamInit =
-        ChatRoomEntity(1, "templateRandam", 1, templateByRandam.getInt(), "", comment1.message, comment1.time.toDataBaseDate())
+        ChatRoomEntity(1, "templateRandam", 1, templateByRandam.getInt(), "", comment1.message, comment1.time.date)
     private val chatRoomEntityByRandam =
-        ChatRoomEntity(1, "templateRandam", 1, templateByRandam.getInt(), ",2", comment1.message,
-            comment1.time.toDataBaseDate())
+        ChatRoomEntity(1, "templateRandam", 1, templateByRandam.getInt(), ",2", comment1.message, comment1.time.date)
 
     @Before
     fun setUp() {
@@ -96,7 +95,7 @@ class ConverterTest : BaseUnitTest() {
      */
     @Test
     fun praseEntityFromTemplateAndMessage() {
-        val result = converter.praseEntityFromTemplateAndMessage(template1, templateMessage1)
+        val result = converter.templateMessageEntityFromTemplateAndMessage(template1, templateMessage1)
         assertEquals(null, result.id)
         assertEquals(templateMessage1.massage, result.text)
         assertEquals(template1.templateId.value.toLong(), result.templateId)
@@ -163,7 +162,7 @@ class ConverterTest : BaseUnitTest() {
         assertEquals(null, result.id)
         assertEquals(comment1.message, result.text)
         assertEquals(comment1.user.chageInt(), result.user)
-        assertEquals(comment1.time.toDataBaseDate(), result.createdAt)
+        assertEquals(comment1.time.date, result.commentTime)
         assertEquals(chatRoomId1.value.toLong(), result.roomId)
     }
 
@@ -184,7 +183,7 @@ class ConverterTest : BaseUnitTest() {
         val result = converter.commentFromCommentEntity(commentEntity1)
         assertEquals(commentEntity1.text, result.message)
         assertEquals(User.getUser(commentEntity1.user), result.user)
-        assertEquals(commentEntity1.createdAt, result.time.toDataBaseDate())
+        assertEquals(commentEntity1.commentTime, result.time.date)
     }
 
     // endregion
@@ -213,7 +212,7 @@ class ConverterTest : BaseUnitTest() {
         val templateMode = null
         val templatePosition = null
         val lastCommentMessage = chatRoomByTemplateNull.commentList.last().message
-        val lastCommentTime = chatRoomByTemplateNull.commentList.last().time.toDataBaseDate()
+        val lastCommentTime = chatRoomByTemplateNull.commentList.last().time.date
         assertEquals(id, result.id)
         assertEquals(title, result.title)
         assertEquals(templateId, result.templateId)
@@ -245,7 +244,7 @@ class ConverterTest : BaseUnitTest() {
         val templateMode = chatRoomByOrder.templateConfiguration!!.templateMode.getInt()
         val templatePosition = (chatRoomByOrder.templateConfiguration!!.templateMode as TemplateMode.Order).position.toString()
         val lastCommentMessage = chatRoomByOrder.commentList.last().message
-        val lastCommentTime = chatRoomByOrder.commentList.last().time.toDataBaseDate()
+        val lastCommentTime = chatRoomByOrder.commentList.last().time.date
         assertEquals(id, result.id)
         assertEquals(title, result.title)
         assertEquals(templateId, result.templateId)
@@ -278,7 +277,7 @@ class ConverterTest : BaseUnitTest() {
         val templatePosition =
             (chatRoomByRandam.templateConfiguration!!.templateMode as TemplateMode.Randam).position.joinToString(",")
         val lastCommentMessage = chatRoomByRandam.commentList.last().message
-        val lastCommentTime = chatRoomByRandam.commentList.last().time.toDataBaseDate()
+        val lastCommentTime = chatRoomByRandam.commentList.last().time.date
         assertEquals(id, result.id)
         assertEquals(title, result.title)
         assertEquals(templateId, result.templateId)
@@ -311,7 +310,7 @@ class ConverterTest : BaseUnitTest() {
         val templatePosition =
             (chatRoomByCommentNotNull.templateConfiguration!!.templateMode as TemplateMode.Order).position.toString()
         val lastCommentMessage = chatRoomByCommentNotNull.commentList.last().message
-        val lastCommentTime = chatRoomByCommentNotNull.commentList.last().time.toDataBaseDate()
+        val lastCommentTime = chatRoomByCommentNotNull.commentList.last().time.date
         assertEquals(id, result.id)
         assertEquals(title, result.title)
         assertEquals(templateId, result.templateId)

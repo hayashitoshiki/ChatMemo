@@ -1,7 +1,10 @@
 package com.myapp.chatmemo.data.local.database.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.myapp.chatmemo.ui.utils.expansion.getDateTimeNow
+import java.time.LocalDateTime
 
 /**
  * 定型文タイトルテーブル
@@ -10,5 +13,14 @@ import androidx.room.PrimaryKey
  */
 @Entity(tableName = "template")
 data class TemplateTitleEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long?, var title: String
-) : java.io.Serializable
+    @PrimaryKey(autoGenerate = true) val id: Long?,
+    var title: String,
+    @ColumnInfo(name = "create_at") val createAt: LocalDateTime = getDateTimeNow(),
+    @ColumnInfo(name = "update_at") var updateAt: LocalDateTime = getDateTimeNow()
+) : java.io.Serializable {
+    fun update(templateTitleEntity: TemplateTitleEntity) {
+        title = templateTitleEntity.title
+        updateAt = getDateTimeNow()
+    }
+}
+

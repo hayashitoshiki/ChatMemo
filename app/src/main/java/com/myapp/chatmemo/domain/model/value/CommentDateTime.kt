@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -16,8 +18,10 @@ inline class CommentDateTime(val date: LocalDateTime) {
      * yyyy/MM/dd
      */
     fun toSectionDate(): String {
+        val systemDateTime = LocalDateTime.ofInstant(date.toInstant(ZoneOffset.UTC), ZoneId.systemDefault())
         val df = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss")
-        val sectionData = df.format(date).substring(0, 10)
+        val sectionData = df.format(systemDateTime)
+            .substring(0, 10)
         return getDataString(sectionData)
     }
 
@@ -26,17 +30,10 @@ inline class CommentDateTime(val date: LocalDateTime) {
      * hh:mm
      */
     fun toMessageDate(): String {
+        val systemDateTime = LocalDateTime.ofInstant(date.toInstant(ZoneOffset.UTC), ZoneId.systemDefault())
         val df = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss")
-        return df.format(date).substring(11, 16)
-    }
-
-    /**
-     * データベース保存用の日時文字列を返す
-     * yyyy/MM/dd hh:mm:ss.SSS
-     */
-    fun toDataBaseDate(): String {
-        val df = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss.SSS")
-        return df.format(date)
+        return df.format(systemDateTime)
+            .substring(11, 16)
     }
 
     // 日時変換

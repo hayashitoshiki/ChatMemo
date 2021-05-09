@@ -4,11 +4,11 @@ import com.myapp.chatmemo.BaseUnitTest
 import com.myapp.chatmemo.domain.model.value.Comment
 import com.myapp.chatmemo.domain.model.value.CommentDateTime
 import com.myapp.chatmemo.domain.model.value.User
-import com.myapp.chatmemo.ui.utils.expansion.toLocalDateTime
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDateTime
 
 /**
  * チャット画面_コメントリストアイテム ロジック使用
@@ -19,10 +19,10 @@ class ChatRecyclerItemStateTest : BaseUnitTest() {
     private lateinit var chatRecyclerItemState: ChatRecyclerItemState
 
     // data
-    private val stringDatatime1 = "2020/04/29 12:20:30.666"
-    private val stringDatatime2 = "2020/04/30 12:20:30.666"
-    private val datatime1 = stringDatatime1.toLocalDateTime()
-    private val datatime2 = stringDatatime2.toLocalDateTime()
+    private val stringDatatime1 = "2020-04-29T12:20:30.666"
+    private val stringDatatime2 = "2020-04-30T12:20:30.666"
+    private val datatime1 = LocalDateTime.parse(stringDatatime1)
+    private val datatime2 = LocalDateTime.parse(stringDatatime2)
     private val commentday1 = Comment("day1", User.BLACK, CommentDateTime(datatime1))
     private val commentday2 = Comment("day2", User.BLACK, CommentDateTime(datatime2))
 
