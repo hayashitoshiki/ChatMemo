@@ -7,25 +7,19 @@ import com.myapp.chatmemo.ui.utils.expansion.getDateTimeNow
 import java.time.LocalDateTime
 
 /**
- * コメントテーブル
+ * 定型文タイトルテーブル
  * @property id プライマリーキー
- * @property text コメント
- * @property user ユーザー
- * @property roomId 紐づいているルームID
+ * @property title 定型文のタイトル
  */
-@Entity(tableName = "comments")
-data class CommentEntity(
+@Entity(tableName = "template")
+data class TemplateTitleEntity(
     @PrimaryKey(autoGenerate = true) val id: Long?,
-    var text: String,
-    var user: Int,
-    @ColumnInfo(name = "coment_time") val commentTime: LocalDateTime,
-    @ColumnInfo(name = "room_id") val roomId: Long,
+    var title: String,
     @ColumnInfo(name = "create_at") val createAt: LocalDateTime = getDateTimeNow(),
     @ColumnInfo(name = "update_at") var updateAt: LocalDateTime = getDateTimeNow()
 ) : java.io.Serializable {
-    fun update(commentEntity: CommentEntity) {
-        text = commentEntity.text
-        user = commentEntity.user
+    fun update(templateTitleEntity: TemplateTitleEntity) {
+        title = templateTitleEntity.title
         updateAt = getDateTimeNow()
     }
 }

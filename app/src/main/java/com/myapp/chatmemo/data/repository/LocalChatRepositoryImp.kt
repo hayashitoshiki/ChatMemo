@@ -10,9 +10,7 @@ import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.value.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 
 class LocalChatRepositoryImp(
@@ -51,33 +49,42 @@ class LocalChatRepositoryImp(
     // チャットルーム更新
     override suspend fun updateRoom(chatRoom: ChatRoom) {
         return withContext(ioDispatcher) {
-            val chatRoomEntity = Converter.chatEntityFromChat(chatRoom)
-            return@withContext roomDao.update(chatRoomEntity)
+            val newChatRoomEntity = Converter.chatEntityFromChat(chatRoom)
+            val oldChatRoomEntity = withContext(Dispatchers.Default) {
+                roomDao.getRoomById(chatRoom.roomId.value.toLong())
+                    .first()
+            }
+            oldChatRoomEntity.update(newChatRoomEntity)
+            return@withContext roomDao.update(oldChatRoomEntity)
         }
     }
 
-    // 全チャットルーム種奥
+    // 全チャットルーム取得
     override fun getRoomAll(): Flow<List<ChatRoom>> {
-        return roomDao.getAll().filterNotNull().map { chatRoomEntitiyList ->
-            chatRoomEntitiyList.map { chatRoomEntity ->
-                chatRoomFromChatRoomEntity(chatRoomEntity)
+        return roomDao.getAll()
+            .filterNotNull()
+            .map { chatRoomEntitiyList ->
+                chatRoomEntitiyList.sortedByDescending { it.updateAt }
+                    .map { chatRoomEntity -> chatRoomFromChatRoomEntity(chatRoomEntity) }
             }
-        }
     }
 
     // ルームIDに紐づくチャットルーム取得
     override fun getRoomById(roomId: RoomId): Flow<ChatRoom> {
-        return roomDao.getRoomById(roomId.value.toLong()).filterNotNull().map { chatRoomEntity ->
-            chatRoomFromChatRoomEntity(chatRoomEntity)
-        }
+        return roomDao.getRoomById(roomId.value.toLong())
+            .filterNotNull()
+            .map { chatRoomEntity ->
+                chatRoomFromChatRoomEntity(chatRoomEntity)
+            }
     }
 
     // テンプレートIDに紐づくチャットルーム取得
     override suspend fun getRoomByTemplateId(templateId: TemplateId): List<ChatRoom> {
         return withContext(ioDispatcher) {
-            return@withContext roomDao.getRoomByTemplateId(templateId.value.toLong()).map { chatRoomEntity ->
-                chatRoomFromChatRoomEntity(chatRoomEntity)
-            }
+            return@withContext roomDao.getRoomByTemplateId(templateId.value.toLong())
+                .map { chatRoomEntity ->
+                    chatRoomFromChatRoomEntity(chatRoomEntity)
+                }
         }
     }
 
@@ -93,9 +100,10 @@ class LocalChatRepositoryImp(
     override suspend fun updateComments(commentList: List<Comment>) {
         withContext(ioDispatcher) {
             commentList.forEach {
-                val user = it.user.chageInt()
-                val commentDate = it.time.toDataBaseDate()
-                commentDao.updateUserBy(user, commentDate)
+                val oldComment = commentDao.getCommentByDate(it.time.date)
+                val newCommentEntity = Converter.commentEntityFromComment(it, RoomId(oldComment.roomId.toInt()))
+                oldComment.update(newCommentEntity)
+                commentDao.update(oldComment)
             }
         }
     }

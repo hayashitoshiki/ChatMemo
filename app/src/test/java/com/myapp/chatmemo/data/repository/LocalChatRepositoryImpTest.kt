@@ -8,7 +8,6 @@ import com.myapp.chatmemo.data.local.database.dao.TemplateDao
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.*
-import com.myapp.chatmemo.ui.utils.expansion.toLocalDateTime
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -19,6 +18,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDateTime
 
 class LocalChatRepositoryImpTest : BaseUnitTest() {
 
@@ -32,8 +32,8 @@ class LocalChatRepositoryImpTest : BaseUnitTest() {
     // data
     private val templateTableSize = 3
     private val roomId1 = RoomId(1)
-    private val stringDatatime = "2020/04/30 12:20:30.666"
-    private val datatime = stringDatatime.toLocalDateTime()
+    private val stringDatatime = "2020-04-30T12:20:30.666"
+    private val datatime = LocalDateTime.parse(stringDatatime)
     private val comment1 = Comment("comment1", User.BLACK, CommentDateTime(datatime))
     private val comment2 = Comment("comment2", User.WHITE, CommentDateTime(datatime))
     private val commentEntity1 = Converter.commentEntityFromComment(comment1, roomId1)
@@ -44,8 +44,8 @@ class LocalChatRepositoryImpTest : BaseUnitTest() {
     private val templateMessage2 = TemplateMessage("message2")
     private val templateMessageList = listOf(templateMessage1, templateMessage2)
     private val template = Template(TemplateId(1), "Template1", templateMessageList)
-    private val tempalteMessageEntity1 = Converter.praseEntityFromTemplateAndMessage(template, templateMessage1)
-    private val tempalteMessageEntity2 = Converter.praseEntityFromTemplateAndMessage(template, templateMessage2)
+    private val tempalteMessageEntity1 = Converter.templateMessageEntityFromTemplateAndMessage(template, templateMessage1)
+    private val tempalteMessageEntity2 = Converter.templateMessageEntityFromTemplateAndMessage(template, templateMessage2)
     private val templateMessageEntityList = listOf(tempalteMessageEntity1, tempalteMessageEntity2)
     private val templateEntity = Converter.templateEntityFromTemplate(template)
     private val templateConfiguration = TemplateConfiguration(template, TemplateMode.Order("順番"))
@@ -69,9 +69,10 @@ class LocalChatRepositoryImpTest : BaseUnitTest() {
         }
         commentDao = mockk<CommentDao>().also {
             coEvery { it.insert(any()) } returns Unit
+            coEvery { it.getCommentByDate(any()) } returns commentEntity1
             coEvery { it.deleteById(any()) } returns Unit
             coEvery { it.getAllCommentByRoom(any()) } returns commentEntityList
-            coEvery { it.updateUserBy(any(), any()) } returns Unit
+            coEvery { it.update(any()) } returns Unit
         }
         templateDao = mockk<TemplateDao>().also {
             coEvery { it.getTemplateById(any()) } returns templateEntity
@@ -118,7 +119,7 @@ class LocalChatRepositoryImpTest : BaseUnitTest() {
     fun createRoom() {
         runBlocking {
             repository.createRoom(chatRoom)
-            coVerify(exactly = 1) { (roomDao).insert(chatRoomEntity) }
+            coVerify(exactly = 1) { (roomDao).insert(any()) }
         }
     }
 
@@ -181,7 +182,8 @@ class LocalChatRepositoryImpTest : BaseUnitTest() {
     @Test
     fun getRoomById() {
         runBlocking {
-            val result = repository.getRoomById(chatRoom.roomId).first()
+            val result = repository.getRoomById(chatRoom.roomId)
+                .first()
             assertEquals(chatRoom, result)
         }
     }
@@ -201,7 +203,8 @@ class LocalChatRepositoryImpTest : BaseUnitTest() {
     @Test
     fun getRoomByTemplateId() {
         runBlocking {
-            val result = repository.getRoomByTemplateId(template.templateId).first()
+            val result = repository.getRoomByTemplateId(template.templateId)
+                .first()
             assertEquals(chatRoom, result)
         }
     }
@@ -217,7 +220,8 @@ class LocalChatRepositoryImpTest : BaseUnitTest() {
     @Test
     fun getRoomAll() {
         runBlocking {
-            val result = repository.getRoomAll().first()
+            val result = repository.getRoomAll()
+                .first()
             result.forEachIndexed { index, chatRoom ->
                 assertEquals(chatRoomList[index], chatRoom)
             }
@@ -240,7 +244,7 @@ class LocalChatRepositoryImpTest : BaseUnitTest() {
     fun addComment() {
         runBlocking {
             repository.addComment(comment1, chatRoom.roomId)
-            coVerify(exactly = 1) { (commentDao).insert(commentEntity1) }
+            coVerify(exactly = 1) { (commentDao).insert(any()) }
         }
     }
 
@@ -259,9 +263,7 @@ class LocalChatRepositoryImpTest : BaseUnitTest() {
     fun updateComments() {
         runBlocking {
             repository.updateComments(commentList)
-            commentList.forEach {
-                coVerify(exactly = 1) { (commentDao).updateUserBy(it.user.chageInt(), it.time.toDataBaseDate()) }
-            }
+            coVerify(exactly = commentList.size) { (commentDao).update(any()) }
         }
     }
 

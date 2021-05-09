@@ -3,6 +3,8 @@ package com.myapp.chatmemo.data.local.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.myapp.chatmemo.ui.utils.expansion.getDateTimeNow
+import java.time.LocalDateTime
 
 /**
  * トークルーム
@@ -22,5 +24,16 @@ data class ChatRoomEntity(
     @ColumnInfo(name = "template_mode") var templateMode: Int?,
     @ColumnInfo(name = "phrase_point") var phrasePoint: String?,
     @ColumnInfo(name = "comment_last") var commentLast: String?,
-    @ColumnInfo(name = "comment_time") var commentTime: String?
-) : java.io.Serializable
+    @ColumnInfo(name = "comment_time") var commentTime: LocalDateTime?,
+    @ColumnInfo(name = "create_at") val createAt: LocalDateTime = getDateTimeNow(),
+    @ColumnInfo(name = "update_at") var updateAt: LocalDateTime = getDateTimeNow()
+) : java.io.Serializable {
+    fun update(chatEoomEntity: ChatRoomEntity) {
+        templateId = chatEoomEntity.templateId
+        templateMode = chatEoomEntity.templateMode
+        phrasePoint = chatEoomEntity.phrasePoint
+        commentLast = chatEoomEntity.commentLast
+        commentTime = chatEoomEntity.commentTime
+        updateAt = getDateTimeNow()
+    }
+}

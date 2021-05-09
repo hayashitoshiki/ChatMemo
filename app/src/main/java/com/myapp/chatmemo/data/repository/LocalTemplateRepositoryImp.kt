@@ -31,8 +31,8 @@ class LocalTemplateRepositoryImp(
             val templateEntity = Converter.templateEntityFromTemplate(template)
             templateDao.insert(templateEntity)
             template.templateMessageList.forEach {
-                val phrase = Converter.praseEntityFromTemplateAndMessage(template, it)
-                phraseDao.insert(phrase)
+                val templateMessageEntity = Converter.templateMessageEntityFromTemplateAndMessage(template, it)
+                phraseDao.insert(templateMessageEntity)
             }
             return@withContext true
         }
@@ -42,12 +42,14 @@ class LocalTemplateRepositoryImp(
     override suspend fun updateTemplate(template: Template): Boolean {
         return withContext(ioDispatcher) {
             val templateId = template.templateId.value.toLong()
-            val templateEntity = Converter.templateEntityFromTemplate(template)
-            templateDao.update(templateEntity)
+            val oldTemplateEntity = templateDao.getTemplateById(templateId)
+            val newTemplateEntity = Converter.templateEntityFromTemplate(template)
+            oldTemplateEntity.update(newTemplateEntity)
+            templateDao.update(oldTemplateEntity)
             phraseDao.deleteByTemplateId(templateId)
             template.templateMessageList.forEach {
-                val phrase = Converter.praseEntityFromTemplateAndMessage(template, it)
-                phraseDao.insert(phrase)
+                val templateMessageEntity = Converter.templateMessageEntityFromTemplateAndMessage(template, it)
+                phraseDao.insert(templateMessageEntity)
             }
             return@withContext true
         }
@@ -64,20 +66,25 @@ class LocalTemplateRepositoryImp(
         }
     }
 
+    // 全テンプレート取得
     override fun getTemplateAll(): Flow<List<Template>> {
-        return templateDao.getAll().map { templateEntityList ->
-            templateEntityList.map { templateEntity ->
-                Template(TemplateId(templateEntity.id!!.toInt()), templateEntity.title, listOf())
+        return templateDao.getAll()
+            .map { templateEntityList ->
+                templateEntityList.sortedByDescending { it.updateAt }
+                    .map { templateEntity ->
+                        Template(TemplateId(templateEntity.id!!.toInt()), templateEntity.title, listOf())
+                    }
             }
-        }
     }
 
+    // テンプレートIDに紐づくテンプレートメッセージ取得
     override suspend fun getTemplateMessageById(templateId: TemplateId): List<TemplateMessage> {
         return withContext(ioDispatcher) {
             val id = templateId.value.toLong()
-            return@withContext phraseDao.getAllByTitle(id).map {
-                Converter.templateMessageFromPharaseEntity(it)
-            }
+            return@withContext phraseDao.getAllByTitle(id)
+                .map {
+                    Converter.templateMessageFromPharaseEntity(it)
+                }
         }
     }
 }

@@ -3,6 +3,7 @@ package com.myapp.chatmemo.domain.usecase
 import com.myapp.chatmemo.data.repository.LocalChatRepository
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.value.*
+import com.myapp.chatmemo.ui.utils.expansion.getDateTimeNow
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +41,7 @@ class ChatUseCaseImp(
         return localChatRepository.getRoomById(roomId)
     }
 
-    override suspend fun reverseAllCommentUser(commentList: List<Comment>): List<Comment> {
+    override fun reverseAllCommentUser(commentList: List<Comment>): List<Comment> {
         val reverseCommentList = commentList.map {
             when (it.user) {
                 User.WHITE -> Comment(it.message, User.BLACK, it.time)
@@ -53,7 +54,7 @@ class ChatUseCaseImp(
         return reverseCommentList
     }
 
-    override suspend fun addTemplateComment(
+    override fun addTemplateComment(
         templateConfiguration: TemplateConfiguration, roomId: RoomId
     ): Pair<TemplateConfiguration, Comment> {
         when (val templateMode = templateConfiguration.templateMode) {
@@ -61,9 +62,9 @@ class ChatUseCaseImp(
                 val templateMessage = templateConfiguration.template.templateMessageList[templateMode.position].massage
                 val templateMessageDate = CommentDateTime(LocalDateTime.now())
                 if (templateMode.position == templateConfiguration.template.templateMessageList.size - 1) {
-                    templateMode.position = 0
+                    (templateConfiguration.templateMode as TemplateMode.Order).position = 0
                 } else {
-                    templateMode.position++
+                    (templateConfiguration.templateMode as TemplateMode.Order).position++
                 }
                 val comment = Comment(templateMessage, User.WHITE, templateMessageDate)
                 externalScope.launch(defaultDispatcher) {
@@ -92,8 +93,8 @@ class ChatUseCaseImp(
         }
     }
 
-    override suspend fun addComment(message: String, roomId: RoomId): Comment {
-        val date = CommentDateTime(LocalDateTime.now())
+    override fun addComment(message: String, roomId: RoomId): Comment {
+        val date = CommentDateTime(getDateTimeNow())
         val comment = Comment(message, User.BLACK, date)
         externalScope.launch(defaultDispatcher) {
             localChatRepository.addComment(comment, roomId)

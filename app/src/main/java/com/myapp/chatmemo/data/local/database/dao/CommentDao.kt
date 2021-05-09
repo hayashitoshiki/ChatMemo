@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.myapp.chatmemo.data.local.database.entity.CommentEntity
+import java.time.LocalDateTime
 
 /**
  * コメント用クエリ管理
@@ -24,6 +25,6 @@ interface CommentDao {
     @Query("delete from comments WHERE room_id = :roomId")
     suspend fun deleteById(roomId: Long)
 
-    @Query("update comments SET user = :user WHERE created_at = :createAt")
-    suspend fun updateUserBy(user: Int, createAt: String)
+    @Query("SELECT  * from comments WHERE coment_time = :commentTim")
+    suspend fun getCommentByDate(commentTim: LocalDateTime): CommentEntity
 }

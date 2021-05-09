@@ -56,12 +56,12 @@ class ChatFragment : Fragment() {
             (activity as AppCompatActivity).supportActionBar?.title = it.title
         })
 
-        val adapter = ChatRecyclerAdapter(requireContext(), listOf())
+        val adapter = ChatRecyclerAdapter(requireContext(), viewLifecycleOwner)
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = layoutManager
-
+        
         // 文字入力
         viewModel.commentText.observe(viewLifecycleOwner, Observer {
             // 高さ自動統制
@@ -158,8 +158,9 @@ class ChatFragment : Fragment() {
     // データ反映
     private fun viewUpDate(data: List<Comment>) {
         val adapter = binding.recyclerView.adapter as ChatRecyclerAdapter
-        adapter.setData(data)
-        adapter.notifyDataSetChanged()
-        binding.recyclerView.scrollToPosition(adapter.itemCount - 1)
+        adapter.submitList(data)
+        //        adapter.setData(data)
+        //        adapter.notifyDataSetChanged()
+        //        binding.recyclerView.scrollToPosition(adapter.itemCount - 1)
     }
 }

@@ -3,7 +3,7 @@ package com.myapp.chatmemo.data.repository
 import com.myapp.chatmemo.BaseUnitTest
 import com.myapp.chatmemo.data.local.database.dao.PhraseDao
 import com.myapp.chatmemo.data.local.database.dao.TemplateDao
-import com.myapp.chatmemo.data.local.database.entity.PhraseEntity
+import com.myapp.chatmemo.data.local.database.entity.TemplateMessageEntity
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.TemplateId
 import com.myapp.chatmemo.domain.model.value.TemplateMessage
@@ -31,8 +31,8 @@ class LocalTemplateRepositoryImpTest : BaseUnitTest() {
 
     // data
     private val templateTableSize = 3
-    private val templateMessageEntity1 = PhraseEntity(1, "message1", 1)
-    private val templateMessageEntity2 = PhraseEntity(2, "message2", 1)
+    private val templateMessageEntity1 = TemplateMessageEntity(1, "message1", 1)
+    private val templateMessageEntity2 = TemplateMessageEntity(2, "message2", 1)
     private val templateMessageEntityList = listOf(templateMessageEntity1, templateMessageEntity2)
     private val templateMessage1 = TemplateMessage("message1")
     private val templateMessage2 = TemplateMessage("message2")
@@ -50,6 +50,7 @@ class LocalTemplateRepositoryImpTest : BaseUnitTest() {
             coEvery { it.getNextId() } returns templateTableSize.toLong()
             coEvery { it.insert(any()) } returns Unit
             coEvery { it.update(any()) } returns Unit
+            coEvery { it.getTemplateById(any()) } returns templateEntity
             coEvery { it.deleteByTemplateId(any()) } returns Unit
             coEvery { it.getAll() } returns flow { emit(templateEntityList) }
         }
@@ -98,11 +99,8 @@ class LocalTemplateRepositoryImpTest : BaseUnitTest() {
     fun createTemplate() {
         runBlocking {
             repository.createTemplate(template)
-            coVerify(exactly = 1) { (templateDao).insert(templateEntity) }
-            template.templateMessageList.forEach {
-                val templateEntity = Converter.praseEntityFromTemplateAndMessage(template, it)
-                coVerify(exactly = 1) { (phraseDao).insert(templateEntity) }
-            }
+            coVerify(exactly = 1) { (templateDao).insert(any()) }
+            coVerify(exactly = template.templateMessageList.size) { (phraseDao).insert(any()) }
         }
     }
 
@@ -120,12 +118,10 @@ class LocalTemplateRepositoryImpTest : BaseUnitTest() {
     fun updateTemplate() {
         runBlocking {
             repository.updateTemplate(template)
-            coVerify(exactly = 1) { (templateDao).update(templateEntity) }
-            template.templateMessageList.forEach {
-                val templateEntity = Converter.praseEntityFromTemplateAndMessage(template, it)
-                coVerify(exactly = 1) { (phraseDao).insert(templateEntity) }
-                coVerify(exactly = 1) { (phraseDao).deleteByTemplateId(template.templateId.value.toLong()) }
-            }
+            coVerify(exactly = 1) { (templateDao).update(any()) }
+            coVerify(exactly = template.templateMessageList.size) { (phraseDao).insert(any()) }
+            coVerify(exactly = 1) { (phraseDao).deleteByTemplateId(template.templateId.value.toLong()) }
+            
         }
     }
 
@@ -164,7 +160,8 @@ class LocalTemplateRepositoryImpTest : BaseUnitTest() {
     @Test
     fun getTemplateAll() {
         runBlocking {
-            val resultList = repository.getTemplateAll().first()
+            val resultList = repository.getTemplateAll()
+                .first()
             resultList.forEachIndexed { index, template ->
                 assertEquals(templateList[index], template)
             }
