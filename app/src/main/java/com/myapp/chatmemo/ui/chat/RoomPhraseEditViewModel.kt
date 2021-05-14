@@ -22,8 +22,9 @@ class RoomPhraseEditViewModel(
     private var chatRoom: ChatRoom, private val templateUseCase: TemplateUseCase, private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
 
-    val templateTitleList = templateUseCase.getSpinnerTemplateAll().asLiveData()
-    val templateTitleValue = MutableLiveData<String>()
+    val templateTitleList = templateUseCase.getSpinnerTemplateAll()
+        .asLiveData()
+    val templateTitleValue = MutableLiveData("")
     val templateModeList = ViewModelLiveData<List<TemplateMode>>()
     val templateModeValue = MediatorLiveData<String>()
     private val _isEnableTemplateMode = MediatorLiveData<Boolean>()
@@ -62,15 +63,22 @@ class RoomPhraseEditViewModel(
     private fun changeSubmitButton() {
         val title = templateTitleValue.value
         val mode = templateModeValue.value
+        val templateList = templateTitleList.value
 
-        _isEnableSubmitButton.value = if (chatRoom.templateConfiguration == null) {
+        _isEnableSubmitButton.value = when {
+            // テンプレートが存在しないされていない場合
+            templateList == null || templateList.size == 1 -> false
             // 現在、テンプレートが設定されていない場合
-            templateTitleList.value != null && title != templateTitleList.value!![0].title && mode != null
-        } else {
+            chatRoom.templateConfiguration == null -> {
+                val emptyTitle = templateList[0].title
+                title!!.isNotEmpty() && title != emptyTitle && !mode.isNullOrEmpty()
+            }
             // 現在、テンプレートが設定されている場合
-            val oldTitle = chatRoom.templateConfiguration!!.template.title
-            val oldMode = chatRoom.templateConfiguration!!.templateMode.massage
-            title == null || (mode != null && !(title == oldTitle && mode == oldMode))
+            else -> {
+                val oldTitle = chatRoom.templateConfiguration!!.template.title
+                val oldMode = chatRoom.templateConfiguration!!.templateMode.massage
+                title == null || (mode != null && !(title == oldTitle && mode == oldMode))
+            }
         }
     }
 

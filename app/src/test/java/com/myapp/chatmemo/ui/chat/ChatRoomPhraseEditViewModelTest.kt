@@ -10,6 +10,7 @@ import com.myapp.chatmemo.domain.usecase.ChatUseCase
 import com.myapp.chatmemo.domain.usecase.TemplateUseCase
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,6 +49,7 @@ class ChatRoomPhraseEditViewModelTest : BaseUnitTest() {
     private val template1 = Template(TemplateId(1), "testTemplate1", listOf())
     private val template2 = Template(TemplateId(2), "testTemplate2", listOf())
     private val templateList = listOf(templateNon, template1, template2)
+    private val templateListEmpty = listOf(templateNon)
 
     private val roomId1 = RoomId(1)
     private val roomId2 = RoomId(2)
@@ -71,7 +73,9 @@ class ChatRoomPhraseEditViewModelTest : BaseUnitTest() {
             coEvery { it.getSpinnerTemplateAll() } returns flow { emit(templateList) }
             coEvery { it.getTemplateAll() } returns flow { emit(templateList) }
         }
-        chatUseCase = mockk()
+        chatUseCase = mockk<ChatUseCase>().also {
+            coEvery { it.updateRoom(any()) } returns Unit
+        }
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
@@ -108,10 +112,10 @@ class ChatRoomPhraseEditViewModelTest : BaseUnitTest() {
     @Test
     fun initByNone() {
         setChatRoom1()
-        assertEquals(null, viewModel.templateTitleValue.value)
-        assertEquals(null, viewModel.templateModeValue.value)
-        assertEquals(null, viewModel.isEnableTemplateMode.value)
-        assertEquals(null, viewModel.isEnableSubmitButton.value)
+        assertEquals("", viewModel.templateTitleValue.value)
+        assertEquals("", viewModel.templateModeValue.value)
+        assertEquals(false, viewModel.isEnableTemplateMode.value)
+        assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -130,17 +134,61 @@ class ChatRoomPhraseEditViewModelTest : BaseUnitTest() {
 
     // endregion
 
+    // region 送信処理
+
+    /**
+     * 送信処理
+     *
+     * 条件：テンプレート設定なし
+     * 結果：テンプレートが設定されていない状態で更新メソッドが呼ばれること
+     */
+    @Test
+    fun submitByNotTemplate() {
+        runBlocking {
+            setChatRoom1()
+            val resultMock = chatroom1
+            resultMock.templateConfiguration = null
+            viewModel.templateTitleValue.value = templateNon.title
+            viewModel.submit()
+            coVerify { (chatUseCase).updateRoom(resultMock) }
+        }
+    }
+
+    /**
+     * 送信処理
+     *
+     * 条件：テンプレート設定あり
+     * 結果：テンプレートが設定されている状態で更新メソッドが呼ばれること
+     */
+    @Test
+    fun submitByTemplate() {
+        runBlocking {
+            setChatRoom1()
+            val template = templateList.first { it.title == templateList[2].title }
+            val templateMode = TemplateMode.Order()
+            val templateConfiguration = TemplateConfiguration(template, templateMode)
+            val resultMock = chatroom1
+            resultMock.templateConfiguration = templateConfiguration
+            viewModel.templateTitleValue.value = templateList[2].title
+            viewModel.templateModeValue.value = "順番"
+            viewModel.submit()
+            coVerify { (chatUseCase).updateRoom(resultMock) }
+        }
+    }
+
+    // endregion
+
     // region 新規作成ボタンのバリデート
 
     /**
      * 新規作成ボタン活性バリデート
      * 条件：選択なしの場合の初期状態
-     * 結果：nullが設定される
+     * 結果：falseが設定される
      */
     @Test
     fun validateInitByNone() {
         setChatRoom1()
-        assertEquals(null, viewModel.isEnableSubmitButton.value)
+        assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -155,8 +203,23 @@ class ChatRoomPhraseEditViewModelTest : BaseUnitTest() {
     }
 
     /**
+     * テンプレート選択のバリデート
+     *
+     * 条件：初期状態でテンプレートリストが存在しない
+     * 結果：falseが設定される
+     */
+    @Test
+    fun validateInitByTemplateListEmpty() {
+        templateUseCase = mockk<TemplateUseCase>().also {
+            coEvery { it.getSpinnerTemplateAll() } returns flow { emit(templateListEmpty) }
+        }
+        setChatRoom1()
+        assertEquals(false, viewModel.isEnableSubmitButton.value)
+    }
+
+    /**
      * 新規作成ボタン活性バリデート
-     * 条件：初期状態が選択なしの状態でテンプレートは選択なしが選択されている
+     * 条件：初期状態が選択なしの状態から、テンプレートは選択なしが選択されている
      * 結果：falseが設定される
      */
     @Test
@@ -168,7 +231,7 @@ class ChatRoomPhraseEditViewModelTest : BaseUnitTest() {
 
     /**
      * 新規作成ボタン活性バリデート
-     * 条件：初期状態が選択なしの状態でテンプレートが設定されていて表示形式が選択されていない
+     * 条件：初期状態が選択なしの状態から、テンプレートが設定されて表示形式が選択されていない
      * 結果：falseが設定される
      */
     @Test
@@ -180,7 +243,7 @@ class ChatRoomPhraseEditViewModelTest : BaseUnitTest() {
 
     /**
      * 新規作成ボタン活性バリデート
-     * 条件：初期状態が選択なしの状態でテンプレートが設定されていて表示形式も選択されている
+     * 条件：初期状態が選択なしの状態から、テンプレートが設定されていて表示形式も選択されている
      * 結果：trueが設定される
      */
     @Test
@@ -276,11 +339,25 @@ class ChatRoomPhraseEditViewModelTest : BaseUnitTest() {
 
     /**
      * テンプレート選択のバリデート
+     *
+     * 条件：初期状態
+     * 結果：テンプレート表示形式が空になり非活性状態になる
+     */
+    @Test
+    fun changedTemplateTitleValueByInit() {
+        setChatRoom1()
+        assertEquals("", viewModel.templateModeValue.value)
+        assertEquals(false, viewModel.isEnableTemplateMode.value)
+    }
+
+    /**
+     * テンプレート選択のバリデート
+     *
      * 条件：テンプレート表示形式が選択されている状態でテンプレート選択蘭で選択なし以外を選択
      * 結果：テンプレート表示形式が空になり活性状態になる
      */
     @Test
-    fun changedTemplateTitleByNotNone() {
+    fun changedTemplateTitleValueByNotNone() {
         setChatRoom1()
         viewModel.templateTitleValue.value = "testTemplate1"
         viewModel.templateModeValue.value = "順番"
@@ -291,11 +368,29 @@ class ChatRoomPhraseEditViewModelTest : BaseUnitTest() {
 
     /**
      * テンプレート選択のバリデート
-     * 条件：テンプレート表示形式が選択されている状態でテンプレート選択蘭で選択なしを選択
+     *
+     * 条件：初期状態でテンプレートリストが存在しない
      * 結果：テンプレート表示形式が空になり非活性状態になる
      */
     @Test
-    fun changedTemplateTitleValueByNonr() {
+    fun changedTemplateTitleValueByInitAndTemplateListEmpty() {
+        templateUseCase = mockk<TemplateUseCase>().also {
+            coEvery { it.getSpinnerTemplateAll() } returns flow { emit(templateListEmpty) }
+        }
+        setChatRoom1()
+        assertEquals("", viewModel.templateModeValue.value)
+        assertEquals(false, viewModel.isEnableTemplateMode.value)
+    }
+
+
+    /**
+     * テンプレート選択のバリデート
+     *
+     * 条件：テンプレート表示形式が選択されている状態から、テンプレート選択蘭で選択なしを選択
+     * 結果：テンプレート表示形式が空になり非活性状態になる
+     */
+    @Test
+    fun changedTemplateTitleValueByNone() {
         setChatRoom1()
         viewModel.templateTitleValue.value = "testTemplate1"
         viewModel.templateModeValue.value = "順番"
