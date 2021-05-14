@@ -15,11 +15,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -49,6 +51,8 @@ class ChatViewModelTest : BaseUnitTest() {
     private val roomId1 = RoomId(1)
     private val roomId2 = RoomId(2)
     private val roomId3 = RoomId(3)
+    private val roomId4 = RoomId(4)
+    private val roomId5 = RoomId(5)
     private val title = "testRoom"
     private val templateMessage1 = TemplateMessage("testMessge1")
     private val templateMessage2 = TemplateMessage("testMessge2")
@@ -62,14 +66,17 @@ class ChatViewModelTest : BaseUnitTest() {
     private val comment1 = Comment("testComment1", User.BLACK, CommentDateTime(LocalDateTime.now()))
     private val comment2 = Comment("testComment2", User.WHITE, CommentDateTime(LocalDateTime.now()))
     private val comment3 = Comment("testComment3", User.BLACK, CommentDateTime(LocalDateTime.now()))
-    private val commentList = mutableListOf(comment1, comment2, comment3)
+    private val commentList1 = mutableListOf(comment1, comment2, comment3)
+    private val commentList2 = mutableListOf(comment2, comment2, comment2)
+    private val commentListEmpty = mutableListOf<Comment>()
     private val reComment1 = Comment("testComment1", User.BLACK, CommentDateTime(LocalDateTime.now()))
     private val reComment2 = Comment("testComment2", User.WHITE, CommentDateTime(LocalDateTime.now()))
     private val reComment3 = Comment("testComment3", User.BLACK, CommentDateTime(LocalDateTime.now()))
     private val reCommentList = mutableListOf(reComment1, reComment2, reComment3)
-    private val chatroom1 = ChatRoom(roomId1, title, null, commentList)
-    private val chatroom2 = ChatRoom(roomId2, title, templateConfiguration1, commentList)
-    private val chatroom3 = ChatRoom(roomId3, title, templateConfiguration2, commentList)
+    private val chatroom1 = ChatRoom(roomId1, title, null, commentList1)
+    private val chatroom2 = ChatRoom(roomId2, title, templateConfiguration1, commentList2)
+    private val chatroom3 = ChatRoom(roomId3, title, templateConfiguration2, commentList1)
+    private val chatroomEmpty = ChatRoom(roomId5, title, templateConfiguration2, commentListEmpty)
     private val userComment = Comment("test", User.BLACK, CommentDateTime(LocalDateTime.now()))
 
     @ExperimentalCoroutinesApi
@@ -77,9 +84,11 @@ class ChatViewModelTest : BaseUnitTest() {
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
         chatUseCase = mockk<ChatUseCase>().also {
+            coEvery { it.getChatRoomByRoomById(RoomId(4)) } returns flowOf(chatroom1, chatroom2)
             coEvery { it.getChatRoomByRoomById(RoomId(1)) } returns flow { emit(chatroom1) }
             coEvery { it.getChatRoomByRoomById(RoomId(2)) } returns flow { emit(chatroom2) }
             coEvery { it.getChatRoomByRoomById(RoomId(3)) } returns flow { emit(chatroom3) }
+            coEvery { it.getChatRoomByRoomById(RoomId(5)) } returns flow { emit(chatroomEmpty) }
             coEvery { it.reverseAllCommentUser(any()) } returns reCommentList
             coEvery { it.deleteRoom(RoomId(any())) } returns Unit
             coEvery { it.updateRoom(any()) } returns Unit
@@ -103,6 +112,36 @@ class ChatViewModelTest : BaseUnitTest() {
         Dispatchers.resetMain()
     }
 
+    // region コメントリスト設定
+
+    /**
+     * コメントリスト更新
+     *
+     * 条件：コメントリストがnull(初期状態)であること
+     * 結果：取得したチャットルームのコメントリストが格納されること
+     */
+    @Test
+    fun updateCommentListByInit() {
+        val result = viewModel.commentList.value
+        assertEquals(chatroom1.commentList, result)
+    }
+
+    /**
+     * コメントリスト更新
+     *
+     * 条件：コメントリストが存在すること
+     * 結果：取得したチャットルームのコメントリストが格納されないこと
+     */
+    @Test
+    fun updateCommentListByRoomUpdate() {
+        viewModel = ChatViewModel(roomId4, chatUseCase)
+        observerInit()
+        val result = viewModel.commentList.value
+        assertEquals(chatroom1.commentList, result)
+        assertNotEquals(chatroom2.commentList, result)
+    }
+    // endregion
+
     // region コメント送信
 
     /**
@@ -119,7 +158,7 @@ class ChatViewModelTest : BaseUnitTest() {
         runBlocking {
             viewModel = ChatViewModel(roomId1, chatUseCase)
             observerInit()
-            val oldCommentListSize = commentList.size
+            val oldCommentListSize = commentList1.size
             viewModel.commentText.value = "test"
             viewModel.submit()
 
@@ -145,7 +184,7 @@ class ChatViewModelTest : BaseUnitTest() {
         runBlocking {
             viewModel = ChatViewModel(roomId2, chatUseCase)
             observerInit()
-            val oldCommentListSize = commentList.size
+            val oldCommentListSize = commentList2.size
             viewModel.commentText.value = "test"
             viewModel.submit()
             delay(400)
@@ -170,7 +209,7 @@ class ChatViewModelTest : BaseUnitTest() {
         runBlocking {
             viewModel = ChatViewModel(roomId3, chatUseCase)
             observerInit()
-            val oldCommentListSize = commentList.size
+            val oldCommentListSize = commentList1.size
             viewModel.commentText.value = "test"
             viewModel.submit()
             delay(400)
@@ -203,14 +242,48 @@ class ChatViewModelTest : BaseUnitTest() {
 
     /**
      * ユーザーチェンジ
-     * 条件：なし
-     * 結果：コメント変換メソッドが１回呼ばれ、コメントリストの中の値が変化することること
+     * 条件：コメントリストがNull(設定されていない)
+     * 結果：
+     * ・コメント変換メソッドが呼ばれないこと
+     * ・コメントリストの中の値が変化しないこと
+     */
+    @Test
+    fun changeUserByNullComment() {
+        viewModel = ChatViewModel(roomId5, chatUseCase)
+        viewModel.commentText.observeForever(observerString)
+        viewModel.isEnableSubmitButton.observeForever(observerBoolean)
+        viewModel.chatRoom.observeForever(observerRoom)
+        coVerify(exactly = 0) { (chatUseCase).reverseAllCommentUser(any()) }
+        assertEquals(null, viewModel.commentList.value)
+    }
+
+    /**
+     * ユーザーチェンジ
+     * 条件：コメントなし
+     * 結果：
+     * ・コメント変換メソッドが呼ばれないこと
+     * ・コメントリストの中の値が変化しないこと
+     */
+    @Test
+    fun changeUserByNotComment() {
+        viewModel = ChatViewModel(roomId5, chatUseCase)
+        observerInit()
+        coVerify(exactly = 0) { (chatUseCase).reverseAllCommentUser(any()) }
+        assertEquals(chatroomEmpty.commentList, viewModel.commentList.value)
+    }
+
+    /**
+     * ユーザーチェンジ
+     * 条件：コメントあり
+     * 結果：
+     * ・コメント変換メソッドが１回呼ばれること
+     * ・コメントリストの中の値が変化することること
      */
     @Test
     fun changeUser() {
         viewModel.changeUser()
         coVerify(exactly = 1) { (chatUseCase).reverseAllCommentUser(any()) }
-        assertEquals(reCommentList, viewModel.commentList.value!!)
+        assertEquals(reCommentList, viewModel.commentList.value)
     }
 
     // endregion

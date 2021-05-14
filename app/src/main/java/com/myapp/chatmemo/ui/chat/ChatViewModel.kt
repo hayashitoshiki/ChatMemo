@@ -18,7 +18,8 @@ class ChatViewModel(
     id: RoomId, private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
 
-    val chatRoom = chatUseCase.getChatRoomByRoomById(id).asLiveData()
+    val chatRoom = chatUseCase.getChatRoomByRoomById(id)
+        .asLiveData()
     val commentText = MutableLiveData("")
     private val _commentList = MediatorLiveData<List<Comment>>()
     val commentList: LiveData<List<Comment>> = _commentList
@@ -32,7 +33,7 @@ class ChatViewModel(
 
     // ルーム更新
     private fun updateRoom(chatRoom: ChatRoom) {
-        if (_commentList.value == null || _commentList.value!!.isEmpty()) {
+        if (commentList.value == null) {
             _commentList.value = chatRoom.commentList
         }
     }
@@ -71,8 +72,8 @@ class ChatViewModel(
 
     // 立場変更
     fun changeUser() {
-        commentList.value?.let { comments ->
-            val newCommentList = chatUseCase.reverseAllCommentUser(comments)
+        if (!commentList.value.isNullOrEmpty()) {
+            val newCommentList = chatUseCase.reverseAllCommentUser(commentList.value!!)
             _commentList.value = newCommentList
         }
     }
