@@ -9,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,7 +30,9 @@ class ChatFragment : Fragment() {
     private val viewModel: ChatViewModel by inject { parametersOf(args.data.roomId) }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_chat, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -39,44 +40,32 @@ class ChatFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
-        val trans = PlayTransition(resources.getColor(R.color.white, null))
+        val trans = PlayTransition(requireContext(), resources.getColor(R.color.white, null))
         sharedElementEnterTransition = trans
         sharedElementReturnTransition = trans
         val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
         binding.layoutInput.startAnimation(anim1)
 
-        (activity as AppCompatActivity).supportActionBar?.title = args.data.title
+        setNavigationTitle(args.data.title)
         setHasOptionsMenu(true)
 
-        viewModel.commentList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
-        viewModel.chatRoom.observe(viewLifecycleOwner, Observer {
-            (activity as AppCompatActivity).supportActionBar?.title = it.title
-        })
+        viewModel.commentList.observe(viewLifecycleOwner, { viewUpDate(it) })
+        viewModel.chatRoom.observe(viewLifecycleOwner, { setNavigationTitle(it.title) })
 
         val adapter = ChatRecyclerAdapter(requireContext(), viewLifecycleOwner)
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = layoutManager
-        
+
         // 文字入力
-        viewModel.commentText.observe(viewLifecycleOwner, Observer {
-            // 高さ自動統制
-            binding.editText.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    binding.editText.viewTreeObserver.removeOnPreDrawListener(this)
-                    if (binding.editText.lineCount in 1..4) {
-                        val scrollViewLayoutParam = binding.scrollView.layoutParams as ViewGroup.MarginLayoutParams
-                        scrollViewLayoutParam.height = binding.editText.height
-                        binding.scrollView.layoutParams = scrollViewLayoutParam
-                    }
-                    return true
-                }
-            })
-        })
+        viewModel.commentText.observe(viewLifecycleOwner, { setAutoHeigth() })
 
         // キーボード表示時のスクロール
         binding.container.viewTreeObserver.addOnGlobalLayoutListener {
@@ -117,7 +106,10 @@ class ChatFragment : Fragment() {
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(
+        menu: Menu,
+        inflater: MenuInflater
+    ) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.action_bar_menu, menu)
         menu.findItem(R.id.menu_edit_room_phrase).isVisible = true
@@ -145,14 +137,38 @@ class ChatFragment : Fragment() {
             }
             // 新規作成ボタン
             R.id.menu_delete_room -> {
-                AlertDialog.Builder(requireActivity()).setTitle("ルームを削除しますか？").setPositiveButton("はい") { dialog, _ ->
-                    viewModel.deleteRoom()
-                    findNavController().popBackStack()
-                    dialog.dismiss()
-                }.setNegativeButton("いいえ", null).show()
+                AlertDialog.Builder(requireActivity())
+                    .setTitle("ルームを削除しますか？")
+                    .setPositiveButton("はい") { dialog, _ ->
+                        viewModel.deleteRoom()
+                        findNavController().popBackStack()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("いいえ", null)
+                    .show()
             }
         }
         return true
+    }
+
+    // ナビゲーションタイトル設定
+    private fun setNavigationTitle(title: String) {
+        (activity as AppCompatActivity).supportActionBar?.title = title
+    }
+
+    // 高さ自動統制
+    private fun setAutoHeigth() {
+        binding.editText.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                binding.editText.viewTreeObserver.removeOnPreDrawListener(this)
+                if (binding.editText.lineCount in 1..4) {
+                    val scrollViewLayoutParam = binding.scrollView.layoutParams as ViewGroup.MarginLayoutParams
+                    scrollViewLayoutParam.height = binding.editText.height
+                    binding.scrollView.layoutParams = scrollViewLayoutParam
+                }
+                return true
+            }
+        })
     }
 
     // データ反映

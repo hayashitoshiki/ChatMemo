@@ -29,4 +29,3 @@ data class CommentEntity(
         updateAt = getDateTimeNow()
     }
 }
-

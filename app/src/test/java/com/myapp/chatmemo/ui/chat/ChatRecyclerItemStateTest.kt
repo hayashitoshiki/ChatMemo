@@ -4,11 +4,11 @@ import com.myapp.chatmemo.BaseUnitTest
 import com.myapp.chatmemo.domain.model.value.Comment
 import com.myapp.chatmemo.domain.model.value.CommentDateTime
 import com.myapp.chatmemo.domain.model.value.User
+import java.time.LocalDateTime
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import java.time.LocalDateTime
 
 /**
  * チャット画面_コメントリストアイテム ロジック使用

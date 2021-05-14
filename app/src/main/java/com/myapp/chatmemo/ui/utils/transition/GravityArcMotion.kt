@@ -16,9 +16,11 @@ class GravityArcMotion : ArcMotion {
     private var mMinimumVerticalTangent = 0f
     private var mMaximumTangent = DEFAULT_MAX_TANGENT
 
-    constructor() {}
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-    }
+    constructor()
+    constructor(
+        context: Context?,
+        attrs: AttributeSet?
+    ) : super(context, attrs)
 
     /**
      * @inheritDoc
@@ -66,7 +68,10 @@ class GravityArcMotion : ArcMotion {
     }
 
     override fun getPath(
-        startX: Float, startY: Float, endX: Float, endY: Float
+        startX: Float,
+        startY: Float,
+        endX: Float,
+        endY: Float
     ): Path {
         // Here's a little ascii art to show how this is calculated:
         // c---------- b
@@ -162,7 +167,7 @@ class GravityArcMotion : ArcMotion {
     }
 
     companion object {
-        private const val DEFAULT_MIN_ANGLE_DEGREES = 0f
+        //        private const val DEFAULT_MIN_ANGLE_DEGREES = 0f
         private const val DEFAULT_MAX_ANGLE_DEGREES = 70f
         private val DEFAULT_MAX_TANGENT = tan(Math.toRadians(DEFAULT_MAX_ANGLE_DEGREES / 2.toDouble())).toFloat()
 

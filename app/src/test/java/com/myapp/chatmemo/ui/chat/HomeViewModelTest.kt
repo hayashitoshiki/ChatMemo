@@ -12,13 +12,13 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -78,10 +78,8 @@ class HomeViewModelTest : BaseUnitTest() {
      */
     @Test
     fun getRoomList() {
-        //        runBlockingTest {
         val result = viewModel.chatRoomEntityList.value
         assertEquals(chatRoomList, result)
-        //        }
     }
 
     // endregion

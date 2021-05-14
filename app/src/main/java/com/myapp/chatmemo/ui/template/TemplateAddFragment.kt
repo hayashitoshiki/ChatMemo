@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -38,7 +37,9 @@ class TemplateAddFragment : Fragment() {
     private val viewModel: TempalteAddViewModel by inject { parametersOf(args.data) }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_template_add, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -46,7 +47,10 @@ class TemplateAddFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_offset_300_anim)
@@ -71,24 +75,10 @@ class TemplateAddFragment : Fragment() {
 
         (activity as AppCompatActivity).supportActionBar?.title = "定型文作成"
 
-        viewModel.submitState.observe(viewLifecycleOwner, Observer { back(it) })
-        viewModel.phraseList.observe(viewLifecycleOwner, Observer { viewUpDate(it) })
+        viewModel.submitState.observe(viewLifecycleOwner, { back(it) })
+        viewModel.phraseList.observe(viewLifecycleOwner, { viewUpDate(it) })
+        viewModel.phraseText.observe(viewLifecycleOwner, { setAutoHeigth() })
 
-        // 文字入力
-        viewModel.phraseText.observe(viewLifecycleOwner, Observer {
-            // 高さ自動統制
-            binding.editPharase.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    binding.editPharase.viewTreeObserver.removeOnPreDrawListener(this)
-                    if (binding.editPharase.lineCount in 1..4) {
-                        val scrollViewLayoutParam = binding.scrollView.layoutParams as ViewGroup.MarginLayoutParams
-                        scrollViewLayoutParam.height = binding.editPharase.height
-                        binding.scrollView.layoutParams = scrollViewLayoutParam
-                    }
-                    return true
-                }
-            })
-        })
         // 定型文リスト
         val adapter = PhraseListAdapter(arrayListOf())
         val layoutManager = LinearLayoutManager(requireContext())
@@ -100,7 +90,9 @@ class TemplateAddFragment : Fragment() {
         binding.recyclerView.addItemDecoration(itemDecoration)
         adapter.setOnItemClickListener(object : PhraseListAdapter.OnItemClickListener {
             override fun onItemClickListener(
-                view: View, position: Int, items: MutableList<TemplateMessage>
+                view: View,
+                position: Int,
+                items: MutableList<TemplateMessage>
             ) {
                 when (view.id) {
                     R.id.btn_delete -> {
@@ -146,8 +138,24 @@ class TemplateAddFragment : Fragment() {
         when (result) {
             true -> findNavController().popBackStack()
             false -> {
-                Toast.makeText(requireContext(), R.string.error_phrase_title, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.error_phrase_title, Toast.LENGTH_SHORT)
+                    .show()
             }
         }
+    }
+
+    // 高さ自動統制
+    private fun setAutoHeigth() {
+        binding.editPharase.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                binding.editPharase.viewTreeObserver.removeOnPreDrawListener(this)
+                if (binding.editPharase.lineCount in 1..4) {
+                    val scrollViewLayoutParam = binding.scrollView.layoutParams as ViewGroup.MarginLayoutParams
+                    scrollViewLayoutParam.height = binding.editPharase.height
+                    binding.scrollView.layoutParams = scrollViewLayoutParam
+                }
+                return true
+            }
+        })
     }
 }

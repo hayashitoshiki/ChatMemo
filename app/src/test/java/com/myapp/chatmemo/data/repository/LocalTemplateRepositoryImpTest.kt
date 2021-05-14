@@ -121,7 +121,6 @@ class LocalTemplateRepositoryImpTest : BaseUnitTest() {
             coVerify(exactly = 1) { (templateDao).update(any()) }
             coVerify(exactly = template.templateMessageList.size) { (phraseDao).insert(any()) }
             coVerify(exactly = 1) { (phraseDao).deleteByTemplateId(template.templateId.value.toLong()) }
-            
         }
     }
 

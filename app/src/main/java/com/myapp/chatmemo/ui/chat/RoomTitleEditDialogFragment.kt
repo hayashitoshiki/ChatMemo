@@ -27,7 +27,9 @@ class RoomTitleEditDialogFragment : DialogFragment() {
     private lateinit var binding: DialogRoomTitleEditBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_room_title_edit, container, false)
         binding.lifecycleOwner = viewLifecycleOwner

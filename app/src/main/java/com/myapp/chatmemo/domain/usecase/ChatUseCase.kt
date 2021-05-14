@@ -62,7 +62,8 @@ interface ChatUseCase {
      * @return テンプレートメッセージ出力後のテンプレートの詳細設定とテンプレートコメント
      */
     fun addTemplateComment(
-        templateConfiguration: TemplateConfiguration, roomId: RoomId
+        templateConfiguration: TemplateConfiguration,
+        roomId: RoomId
     ): Pair<TemplateConfiguration, Comment>
 
     /**

@@ -35,7 +35,8 @@ object Converter {
 
     // テンプレートEntityとテンプレート文Entityからテンプレートオブジェクトへ変換
     fun templateFromTemplateEntityAndPhraseEntity(
-        templateTitleEntity: TemplateTitleEntity, templateMessageEntityList: List<TemplateMessageEntity>
+        templateTitleEntity: TemplateTitleEntity,
+        templateMessageEntityList: List<TemplateMessageEntity>
     ): Template {
         val templateId = TemplateId(templateTitleEntity.id!!.toInt())
         val tempalteTitle = templateTitleEntity.title

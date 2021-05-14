@@ -19,7 +19,9 @@ import com.myapp.chatmemo.ui.utils.expansion.ViewModelLiveData
  * @property chatUseCase Chatに関するUseCase
  */
 class RoomPhraseEditViewModel(
-    private var chatRoom: ChatRoom, private val templateUseCase: TemplateUseCase, private val chatUseCase: ChatUseCase
+    private var chatRoom: ChatRoom,
+    private val templateUseCase: TemplateUseCase,
+    private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
 
     val templateTitleList = templateUseCase.getSpinnerTemplateAll()

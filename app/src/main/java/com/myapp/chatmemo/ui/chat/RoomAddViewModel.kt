@@ -20,11 +20,13 @@ import com.myapp.chatmemo.ui.utils.expansion.ViewModelLiveData
  * @property chatUseCase Chatに関するUseCase
  */
 class RoomAddViewModel(
-    private val templateUseCase: TemplateUseCase, private val chatUseCase: ChatUseCase
+    private val templateUseCase: TemplateUseCase,
+    private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
 
     val titleText = MutableLiveData("")
-    val templateTitleList: LiveData<List<Template>> = templateUseCase.getSpinnerTemplateAll().asLiveData()
+    val templateTitleList: LiveData<List<Template>> = templateUseCase.getSpinnerTemplateAll()
+        .asLiveData()
     val templateTitleValue = MutableLiveData<String>()
     val templateModeList = ViewModelLiveData<List<TemplateMode>>()
     val templateModeValue = MediatorLiveData<String>()
@@ -39,7 +41,7 @@ class RoomAddViewModel(
         _isEnableSubmitButton.addSource(titleText) { changeSubmitButton() }
         _isEnableSubmitButton.addSource(templateTitleValue) { changeSubmitButton() }
         _isEnableSubmitButton.addSource(templateModeValue) { changeSubmitButton() }
-        templateTitleList.observeForever({})
+        templateTitleList.observeForever {}
 
         val modeList = listOf(TemplateMode.Order("順番"), TemplateMode.Randam("ランダム"))
         templateModeList.setValue(modeList)

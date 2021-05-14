@@ -8,11 +8,11 @@ import com.myapp.chatmemo.data.local.database.entity.TemplateTitleEntity
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.*
+import java.time.LocalDateTime
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import java.time.LocalDateTime
 
 /**
  * ドメインモデルのコンバーターのロジック仕様
@@ -51,8 +51,10 @@ class ConverterTest : BaseUnitTest() {
     private val chatRoomEntityByTemplateNull =
         ChatRoomEntity(1, "templateNull", null, null, null, comment1.message, comment1.time.date)
     private val chatRoomEntityByOrder =
-        ChatRoomEntity(1, "templateOrder", 1, templateByOrder.getInt(), templateByOrder.position.toString(), comment1.message,
-            comment1.time.date)
+        ChatRoomEntity(
+            1, "templateOrder", 1, templateByOrder.getInt(), templateByOrder.position.toString(), comment1.message,
+            comment1.time.date
+        )
     private val chatRoomEntityByRandamInit =
         ChatRoomEntity(1, "templateRandam", 1, templateByRandam.getInt(), "", comment1.message, comment1.time.date)
     private val chatRoomEntityByRandam =
@@ -319,7 +321,6 @@ class ConverterTest : BaseUnitTest() {
         assertEquals(lastCommentMessage, result.commentLast)
         assertEquals(lastCommentTime, result.commentTime)
     }
-
 
     /**
      * ChatRoomモデルからChatRoomEntityへ変換

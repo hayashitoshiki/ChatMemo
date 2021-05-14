@@ -15,7 +15,8 @@ import kotlinx.coroutines.launch
  * @property chatUseCase チャットルームに関するビジネスロジック
  */
 class ChatViewModel(
-    id: RoomId, private val chatUseCase: ChatUseCase
+    id: RoomId,
+    private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
 
     val chatRoom = chatUseCase.getChatRoomByRoomById(id)

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -41,7 +40,7 @@
                 android:layout_marginEnd="8dp"
                 android:src="@drawable/ic_dust_box_24"
                 android:tint="@color/white"
-                android:background="@drawable/btn_circle_red_10"/>
+                android:background="@drawable/btn_circle_red_10" />
 
         </LinearLayout>
 
@@ -80,7 +79,6 @@
                     android:paddingTop="4dp"
                     android:paddingBottom="4dp"
                     android:singleLine="true"
-                    android:text="部屋名"
                     android:textColor="@color/text_color_dark_primary"
                     android:textSize="@dimen/item_list_main"
                     android:textStyle="italic"
@@ -97,7 +95,6 @@
                     android:layout_marginEnd="8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="メッセージ"
                     android:textColor="@color/text_color_dark_secondary"
                     android:textSize="@dimen/item_list_sub"
                     app:layout_constraintEnd_toStartOf="@+id/txt_date"
@@ -109,7 +106,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="○月○日 00:00"
                     android:textColor="@color/text_color_dark_secondary"
                     android:textSize="@dimen/item_list_date"
                     app:layout_constraintBottom_toBottomOf="@+id/txt_comment"

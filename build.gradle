@@ -26,7 +26,7 @@ subprojects { // 配下のモジュール全てに適用される
 
     configurations { ktlint }
 
-    dependencies { ktlint "com.pinterest:ktlint:0.39.0" }
+    dependencies { ktlint "com.pinterest:ktlint:0.41.0" }
 
     task ktlint(type: JavaExec, group: "verification") {
         description = "Check Kotlin code style."
@@ -48,7 +48,6 @@ subprojects { // 配下のモジュール全てに適用される
         check.dependsOn ktlint
     }
 }
-
 
 
 task clean(type: Delete) {

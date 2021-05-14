@@ -5,7 +5,10 @@ import android.widget.AutoCompleteTextView
 import androidx.databinding.BindingAdapter
 
 @BindingAdapter("android:text")
-fun setText(view: AutoCompleteTextView, text: CharSequence?) {
+fun setText(
+    view: AutoCompleteTextView,
+    text: CharSequence?
+) {
     val oldText = view.text
     if (text === oldText || text == null && oldText.isEmpty()) {
         return
@@ -21,7 +24,8 @@ fun setText(view: AutoCompleteTextView, text: CharSequence?) {
 }
 
 private fun haveContentsChanged(
-    str1: CharSequence?, str2: CharSequence?
+    str1: CharSequence?,
+    str2: CharSequence?
 ): Boolean {
     if (str1 == null != (str2 == null)) {
         return true

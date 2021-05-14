@@ -20,20 +20,27 @@ import kotlin.math.sqrt
 
 class PlayTransition : Transition {
     var color = Color.parseColor("#6c1622")
+    private var context: Context
 
-    constructor(@ColorInt fabColor: Int) {
+    constructor(
+        context: Context,
+        @ColorInt fabColor: Int
+    ) {
+        this.context = context
         color = fabColor
     }
 
     constructor(
-        context: Context, attrs: AttributeSet?
+        context: Context,
+        attrs: AttributeSet?
     ) : super(context, attrs) {
+        this.context = context
         // val a = context.obtainStyledAttributes(attrs, R.styleable.PlayTransition)
         // color = a.getColor(R.styleable.PlayTransition_colorCT, color)
         // a.recycle()
     }
 
-    override fun getTransitionProperties(): Array<String>? {
+    override fun getTransitionProperties(): Array<String> {
         return TRANSITION_PROPERTIES
     }
 
@@ -66,7 +73,9 @@ class PlayTransition : Transition {
     }
 
     override fun createAnimator(
-        sceneRoot: ViewGroup, startValues: TransitionValues?, endValues: TransitionValues?
+        sceneRoot: ViewGroup,
+        startValues: TransitionValues?,
+        endValues: TransitionValues?
     ): Animator? {
         if (startValues == null || endValues == null) {
             return null
@@ -77,7 +86,7 @@ class PlayTransition : Transition {
             return null
         }
         val startImage = startValues.values[PROPERTY_IMAGE] as Bitmap?
-        val startBackground: Drawable = BitmapDrawable(startImage)
+        val startBackground: Drawable = BitmapDrawable(context.resources, startImage)
         val startView = addViewToOverlay(sceneRoot, startImage!!.width, startImage.height, startBackground)
         val shrinkingBackground: Drawable = ColorDrawable(color)
         val shrinkingView = addViewToOverlay(sceneRoot, startImage.width, startImage.height, shrinkingBackground)
@@ -153,7 +162,10 @@ class PlayTransition : Transition {
     }
 
     private fun addViewToOverlay(
-        sceneRoot: ViewGroup, width: Int, height: Int, background: Drawable
+        sceneRoot: ViewGroup,
+        width: Int,
+        height: Int,
+        background: Drawable
     ): View {
         val view: View = NoOverlapView(sceneRoot.context)
         view.background = background
@@ -166,7 +178,9 @@ class PlayTransition : Transition {
     }
 
     private fun createCircularReveal(
-        view: View, startRadius: Float, endRadius: Float
+        view: View,
+        startRadius: Float,
+        endRadius: Float
     ): Animator {
         val centerX = view.width / 2
         val centerY = view.height / 2
@@ -265,7 +279,8 @@ class PlayTransition : Transition {
     }
 
     private class AnimatorListenerWrapper(
-        private val mAnimator: Animator, private val mListener: Animator.AnimatorListener
+        private val mAnimator: Animator,
+        private val mListener: Animator.AnimatorListener
     ) : Animator.AnimatorListener {
         override fun onAnimationStart(animator: Animator) {
             mListener.onAnimationStart(mAnimator)

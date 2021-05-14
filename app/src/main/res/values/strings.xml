@@ -38,6 +38,11 @@
     <string name="bottom_home">ホーム</string>
     <string name="bottom_phrase">定型文</string>
 
+    <!-- menu Label -->
+    <string name="menu_label_edit_room_phrase">テンプレート変更</string>
+    <string name="menu_label_edit_room_name">ルーム名変更</string>
+    <string name="menu_label_delete_room">ルーム削除</string>
+
     <!-- Error Message -->
     <string name="error_nothing_room">新しくチャットルームを作成しよう!</string>
     <string name="error_nothing_phrase">定型文リストを作成しよう！</string>

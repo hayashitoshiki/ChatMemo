@@ -11,8 +11,10 @@ import com.myapp.chatmemo.data.local.database.entity.TemplateTitleEntity
 /**
  * DB定義
  */
-@Database(entities = [CommentEntity::class, TemplateMessageEntity::class, ChatRoomEntity::class, TemplateTitleEntity::class],
-    version = 2, exportSchema = false)
+@Database(
+    entities = [CommentEntity::class, TemplateMessageEntity::class, ChatRoomEntity::class, TemplateTitleEntity::class],
+    version = 2, exportSchema = false
+)
 @TypeConverters(DataBaseConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun commentDao(): CommentDao

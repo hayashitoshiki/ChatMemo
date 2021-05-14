@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.transition.ChangeTransform
@@ -20,6 +19,8 @@ import androidx.transition.TransitionSet
 import com.myapp.chatmemo.R
 import com.myapp.chatmemo.databinding.FragmentRoomAddBinding
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
+import com.myapp.chatmemo.domain.model.entity.Template
+import com.myapp.chatmemo.domain.model.value.TemplateMode
 import com.myapp.chatmemo.ui.MainActivity
 import com.myapp.chatmemo.ui.utils.transition.FabTransform
 import kotlinx.coroutines.delay
@@ -37,7 +38,9 @@ class RoomAddFragment : Fragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_room_add, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -45,7 +48,10 @@ class RoomAddFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         val transition = TransitionSet().apply {
@@ -57,18 +63,8 @@ class RoomAddFragment : Fragment() {
 
         (activity as AppCompatActivity).supportActionBar?.title = "ルーム作成"
 
-        viewModel.templateTitleList.observe(viewLifecycleOwner, Observer { templateList ->
-            val templateTitleList = templateList.map { it.title }
-            val arrayAdapter: ArrayAdapter<String> =
-                ArrayAdapter(requireActivity(), android.R.layout.simple_dropdown_item_1line, templateTitleList)
-            binding.spinnerTitle.setAdapter(arrayAdapter)
-        })
-        viewModel.templateModeList.observe(viewLifecycleOwner, Observer { modeList ->
-            val modeTitleList = modeList.map { it.massage }
-            val arrayAdapter: ArrayAdapter<String> =
-                ArrayAdapter(requireActivity(), android.R.layout.simple_dropdown_item_1line, modeTitleList)
-            binding.spinnerMode.setAdapter(arrayAdapter)
-        })
+        viewModel.templateTitleList.observe(viewLifecycleOwner, { setTemplateTitleSpiner(it) })
+        viewModel.templateModeList.observe(viewLifecycleOwner, { setTemplateModeSpiner(it) })
 
         // spinner 設定
         binding.spinnerTitle.let { spinner ->
@@ -88,7 +84,10 @@ class RoomAddFragment : Fragment() {
                 val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
                 binding.container.startAnimation(anim1)
                 binding.container.visibility = View.GONE
-                delay(resources.getInteger(R.integer.fade_out_time).toLong())
+                delay(
+                    resources.getInteger(R.integer.fade_out_time)
+                        .toLong()
+                )
                 val chatRoom: ChatRoom = viewModel.createRoom()
                 val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(chatRoom)
                 findNavController().navigate(action)
@@ -105,5 +104,21 @@ class RoomAddFragment : Fragment() {
             binding.root.requestFocus()
             v?.onTouchEvent(event) ?: true
         }
+    }
+
+    // テンプレートタイトルスピナー設定
+    private fun setTemplateTitleSpiner(templateList: List<Template>) {
+        val templateTitleList = templateList.map { it.title }
+        val arrayAdapter: ArrayAdapter<String> =
+            ArrayAdapter(requireActivity(), android.R.layout.simple_dropdown_item_1line, templateTitleList)
+        binding.spinnerTitle.setAdapter(arrayAdapter)
+    }
+
+    // テンプレートモードスピナー設定
+    private fun setTemplateModeSpiner(templateModeList: List<TemplateMode>) {
+        val modeTitleList = templateModeList.map { it.massage }
+        val arrayAdapter: ArrayAdapter<String> =
+            ArrayAdapter(requireActivity(), android.R.layout.simple_dropdown_item_1line, modeTitleList)
+        binding.spinnerMode.setAdapter(arrayAdapter)
     }
 }

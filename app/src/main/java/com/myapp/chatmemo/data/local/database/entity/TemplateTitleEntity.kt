@@ -23,4 +23,3 @@ data class TemplateTitleEntity(
         updateAt = getDateTimeNow()
     }
 }
-

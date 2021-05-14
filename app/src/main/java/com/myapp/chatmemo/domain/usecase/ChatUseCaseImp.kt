@@ -4,12 +4,12 @@ import com.myapp.chatmemo.data.repository.LocalChatRepository
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.value.*
 import com.myapp.chatmemo.ui.utils.expansion.getDateTimeNow
+import java.time.LocalDateTime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 class ChatUseCaseImp(
     private val localChatRepository: LocalChatRepository,
@@ -55,7 +55,8 @@ class ChatUseCaseImp(
     }
 
     override fun addTemplateComment(
-        templateConfiguration: TemplateConfiguration, roomId: RoomId
+        templateConfiguration: TemplateConfiguration,
+        roomId: RoomId
     ): Pair<TemplateConfiguration, Comment> {
         when (val templateMode = templateConfiguration.templateMode) {
             is TemplateMode.Order -> {

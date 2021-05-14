@@ -19,7 +19,7 @@ class AnimUtils {
         override fun addListener(listener: AnimatorListener) {
             val wrapper: AnimatorListener = AnimatorListenerWrapper(this, listener)
             if (!mListeners.containsKey(listener)) {
-                mListeners.put(listener, wrapper)
+                mListeners[listener] = wrapper
                 mAnimator.addListener(wrapper)
             }
         }
@@ -111,8 +111,9 @@ class AnimUtils {
         }
     }
 
-    private class AnimatorListenerWrapper internal constructor(
-        private val mAnimator: Animator, private val mListener: Animator.AnimatorListener
+    private class AnimatorListenerWrapper constructor(
+        private val mAnimator: Animator,
+        private val mListener: Animator.AnimatorListener
     ) : Animator.AnimatorListener {
         override fun onAnimationStart(animator: Animator) {
             mListener.onAnimationStart(mAnimator)

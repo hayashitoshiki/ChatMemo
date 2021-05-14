@@ -10,7 +10,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 
 class TemplateUseCaseImp(
-    private val localChatRepository: LocalChatRepository, private val localTemplateRepository: LocalTemplateRepository
+    private val localChatRepository: LocalChatRepository,
+    private val localTemplateRepository: LocalTemplateRepository
 ) : TemplateUseCase {
 
     override suspend fun createTemplate(template: Template): Boolean {
