@@ -1,5 +1,8 @@
 package com.myapp.chatmemo
 
+import androidx.lifecycle.Observer
+import com.myapp.chatmemo.domain.model.entity.ChatRoom
+import com.nhaarman.mockito_kotlin.mock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -12,6 +15,8 @@ abstract class BaseUnitTest {
 
     @ExperimentalCoroutinesApi
     protected val testScope = TestCoroutineScope(testDispatcher)
+
+    protected val observerRoomList = mock<Observer<List<ChatRoom>>>()
 
     // endregoin
 }
