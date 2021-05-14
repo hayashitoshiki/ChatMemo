@@ -10,9 +10,12 @@ import com.myapp.chatmemo.domain.model.value.RoomId
 import com.myapp.chatmemo.domain.model.value.User
 import com.myapp.chatmemo.domain.usecase.ChatUseCase
 import com.nhaarman.mockito_kotlin.mock
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -41,6 +44,7 @@ class ChatRoomTitleEditViewModelTest : BaseUnitTest() {
     private lateinit var viewModel: RoomTitleEditViewModel
     private lateinit var chatUseCase: ChatUseCase
 
+    // data
     private val roomId1 = RoomId(1)
     private val title = "testRoom"
     private val comment1 = Comment("testComment1", User.BLACK, CommentDateTime(LocalDateTime.now()))
@@ -53,7 +57,9 @@ class ChatRoomTitleEditViewModelTest : BaseUnitTest() {
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
-        chatUseCase = mockk()
+        chatUseCase = mockk<ChatUseCase>().also {
+            coEvery { it.updateRoom((any())) } returns Unit
+        }
         viewModel = RoomTitleEditViewModel(chatroom1, chatUseCase)
         viewModel.newRoomTitle.observeForever(observerString)
         viewModel.isEnableSubmitButton.observeForever(observerBoolean)
@@ -65,6 +71,28 @@ class ChatRoomTitleEditViewModelTest : BaseUnitTest() {
     fun tearDown() {
         Dispatchers.resetMain()
     }
+
+    // region ルーム名変更
+
+    /**
+     * ルーム名変更
+     *
+     * 条件：なし
+     * 結果：渡した引数のルーム名でチャットルームを変更するロジックが呼ばれること
+     */
+    @Test
+    fun changeRoomName() {
+        runBlocking {
+            val changeTitle = "changeTitle"
+            val resultMock = chatroom1
+            resultMock.title = changeTitle
+            viewModel.changeRoomName(changeTitle)
+            coVerify { (chatUseCase).updateRoom(resultMock) }
+        }
+
+    }
+
+    // endregion
 
     // region 更新ボタンのバリデート
     /**
