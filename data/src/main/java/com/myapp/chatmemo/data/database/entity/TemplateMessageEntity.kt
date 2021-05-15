@@ -3,7 +3,7 @@ package com.myapp.chatmemo.data.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.myapp.chatmemo.domain.getDateTimeNow
+import com.myapp.chatmemo.common.getDateTimeNow
 import java.time.LocalDateTime
 
 /**

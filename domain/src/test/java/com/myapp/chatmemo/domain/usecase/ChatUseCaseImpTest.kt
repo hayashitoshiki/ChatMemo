@@ -1,6 +1,5 @@
 package com.myapp.chatmemo.domain.usecase
 
-import com.myapp.chatmemo.domain.BaseUnitTest
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.*
@@ -12,6 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -20,7 +21,17 @@ import org.junit.Before
 import org.junit.Test
 import java.time.LocalDateTime
 
-class ChatUseCaseImpTest : BaseUnitTest() {
+class ChatUseCaseImpTest {
+
+    // region Coroutine関連
+
+    @ExperimentalCoroutinesApi
+    private val testDispatcher = TestCoroutineDispatcher()
+
+    @ExperimentalCoroutinesApi
+    private val testScope = TestCoroutineScope(testDispatcher)
+
+    // endregoin
 
     private lateinit var localChatRepository: LocalChatRepository
     private lateinit var useCase: ChatUseCaseImp

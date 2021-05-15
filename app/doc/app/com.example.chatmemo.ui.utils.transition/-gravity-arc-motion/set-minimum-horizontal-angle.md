@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.myapp.chatmemo.ui.utils.transition](../index.md) / [GravityArcMotion](index.md) / [setMinimumHorizontalAngle](./set-minimum-horizontal-angle.md)
+[app](../../index.md) / [om.myapp.chatmemo.presentation.utils.transition](../index.md) / [GravityArcMotion](index.md) / [setMinimumHorizontalAngle](./set-minimum-horizontal-angle.md)
 
 # setMinimumHorizontalAngle
 

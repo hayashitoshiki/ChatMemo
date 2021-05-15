@@ -27,11 +27,10 @@ class LocalTemplateRepositoryImp(
     // テンプレート登録
     override suspend fun createTemplate(template: Template): Boolean {
         return withContext(ioDispatcher) {
-            val templateEntity = com.myapp.chatmemo.data.repository.Converter.templateEntityFromTemplate(template)
+            val templateEntity = Converter.templateEntityFromTemplate(template)
             templateDao.insert(templateEntity)
             template.templateMessageList.forEach {
-                val templateMessageEntity =
-                    com.myapp.chatmemo.data.repository.Converter.templateMessageEntityFromTemplateAndMessage(template, it)
+                val templateMessageEntity = Converter.templateMessageEntityFromTemplateAndMessage(template, it)
                 phraseDao.insert(templateMessageEntity)
             }
             return@withContext true
@@ -43,13 +42,12 @@ class LocalTemplateRepositoryImp(
         return withContext(ioDispatcher) {
             val templateId = template.templateId.value.toLong()
             val oldTemplateEntity = templateDao.getTemplateById(templateId)
-            val newTemplateEntity = com.myapp.chatmemo.data.repository.Converter.templateEntityFromTemplate(template)
+            val newTemplateEntity = Converter.templateEntityFromTemplate(template)
             oldTemplateEntity.update(newTemplateEntity)
             templateDao.update(oldTemplateEntity)
             phraseDao.deleteByTemplateId(templateId)
             template.templateMessageList.forEach {
-                val templateMessageEntity =
-                    com.myapp.chatmemo.data.repository.Converter.templateMessageEntityFromTemplateAndMessage(template, it)
+                val templateMessageEntity = Converter.templateMessageEntityFromTemplateAndMessage(template, it)
                 phraseDao.insert(templateMessageEntity)
             }
             return@withContext true

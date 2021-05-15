@@ -29,7 +29,7 @@ class LocalChatRepositoryImp(
     // チャットルーム作成
     override suspend fun createRoom(chatRoom: ChatRoom) {
         withContext(ioDispatcher) {
-            val chatRoomEntity = com.myapp.chatmemo.data.repository.Converter.chatEntityFromChat(chatRoom)
+            val chatRoomEntity = Converter.chatEntityFromChat(chatRoom)
             roomDao.insert(chatRoomEntity)
         }
     }
@@ -46,7 +46,7 @@ class LocalChatRepositoryImp(
     // チャットルーム更新
     override suspend fun updateRoom(chatRoom: ChatRoom) {
         return withContext(ioDispatcher) {
-            val newChatRoomEntity = com.myapp.chatmemo.data.repository.Converter.chatEntityFromChat(chatRoom)
+            val newChatRoomEntity = Converter.chatEntityFromChat(chatRoom)
             val oldChatRoomEntity = withContext(Dispatchers.Default) {
                 roomDao.getRoomById(chatRoom.roomId.value.toLong())
                     .first()
@@ -91,7 +91,7 @@ class LocalChatRepositoryImp(
         roomId: RoomId
     ) {
         return withContext(ioDispatcher) {
-            val commentEntity = com.myapp.chatmemo.data.repository.Converter.commentEntityFromComment(comment, roomId)
+            val commentEntity = Converter.commentEntityFromComment(comment, roomId)
             return@withContext commentDao.insert(commentEntity)
         }
     }
@@ -101,8 +101,7 @@ class LocalChatRepositoryImp(
         withContext(ioDispatcher) {
             commentList.forEach {
                 val oldComment = commentDao.getCommentByDate(it.time.date)
-                val newCommentEntity =
-                    com.myapp.chatmemo.data.repository.Converter.commentEntityFromComment(it, RoomId(oldComment.roomId.toInt()))
+                val newCommentEntity = Converter.commentEntityFromComment(it, RoomId(oldComment.roomId.toInt()))
                 oldComment.update(newCommentEntity)
                 commentDao.update(oldComment)
             }
@@ -122,7 +121,7 @@ class LocalChatRepositoryImp(
         } else {
             null
         }
-        return com.myapp.chatmemo.data.repository.Converter.chatFromBy(
+        return Converter.chatFromBy(
             chatRoomEntity, commentList, templateTitle, templatePhrase
         )
     }

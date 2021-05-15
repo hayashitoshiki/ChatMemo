@@ -1,6 +1,5 @@
 package com.myapp.chatmemo.data.repository
 
-import com.myapp.chatmemo.data.BaseUnitTest
 import com.myapp.chatmemo.data.database.entity.TemplateMessageEntity
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.TemplateId
@@ -13,6 +12,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -20,7 +20,14 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class LocalTemplateRepositoryImpTest : BaseUnitTest() {
+class LocalTemplateRepositoryImpTest {
+
+    // region Coroutine関連
+
+    @ExperimentalCoroutinesApi
+    private val testDispatcher = TestCoroutineDispatcher()
+
+    // endregoin
 
     // mock
     private lateinit var repository: LocalTemplateRepositoryImp

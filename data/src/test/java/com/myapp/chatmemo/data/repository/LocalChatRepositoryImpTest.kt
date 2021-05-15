@@ -1,6 +1,5 @@
 package com.myapp.chatmemo.data.repository
 
-import com.myapp.chatmemo.data.BaseUnitTest
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.*
@@ -16,7 +15,7 @@ import org.junit.Before
 import org.junit.Test
 import java.time.LocalDateTime
 
-class LocalChatRepositoryImpTest : BaseUnitTest() {
+class LocalChatRepositoryImpTest {
 
     // mock
     private lateinit var repository: LocalChatRepositoryImp

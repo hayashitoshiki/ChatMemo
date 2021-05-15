@@ -1,6 +1,5 @@
 package com.myapp.chatmemo.domain.usecase
 
-import com.myapp.chatmemo.domain.BaseUnitTest
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.*
@@ -19,7 +18,7 @@ import org.junit.Before
 import org.junit.Test
 import java.time.LocalDateTime
 
-class TemplateUseCaseImpTest : BaseUnitTest() {
+class TemplateUseCaseImpTest {
 
     // mock
     private lateinit var localChatRepository: LocalChatRepository

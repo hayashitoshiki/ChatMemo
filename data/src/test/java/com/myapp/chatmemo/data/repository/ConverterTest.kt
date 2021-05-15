@@ -1,6 +1,5 @@
 package com.myapp.chatmemo.data.repository
 
-import com.myapp.chatmemo.data.BaseUnitTest
 import com.myapp.chatmemo.data.database.entity.ChatRoomEntity
 import com.myapp.chatmemo.data.database.entity.CommentEntity
 import com.myapp.chatmemo.data.database.entity.TemplateMessageEntity
@@ -17,10 +16,7 @@ import java.time.LocalDateTime
 /**
  * ドメインモデルのコンバーターのロジック仕様
  */
-class ConverterTest : BaseUnitTest() {
-
-    // mock
-    private val converter = Converter
+class ConverterTest {
 
     // data
     private val phraseEntity1 = TemplateMessageEntity(1, "phraseEntity1", 1)

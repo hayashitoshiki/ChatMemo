@@ -48,7 +48,7 @@ UIベース画面管理
 # Package com.myapp.chatmemo.ui.adapter
 アダプター管理
 
-# Package com.myapp.chatmemo.ui.utils
+# Package om.myapp.chatmemo.presentation.utils
 UI共通処理管理
 
 # Package com.myapp.chatmemo.ui.transition

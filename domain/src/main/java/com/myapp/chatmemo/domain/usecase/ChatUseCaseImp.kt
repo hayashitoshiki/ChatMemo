@@ -1,6 +1,6 @@
 package com.myapp.chatmemo.domain.usecase
 
-import com.myapp.chatmemo.domain.getDateTimeNow
+import com.myapp.chatmemo.common.getDateTimeNow
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.value.*
 import com.myapp.chatmemo.domain.repository.LocalChatRepository
