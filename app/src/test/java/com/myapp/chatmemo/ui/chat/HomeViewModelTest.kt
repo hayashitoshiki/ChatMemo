@@ -37,7 +37,7 @@ class HomeViewModelTest : BaseUnitTest() {
 
     // mock
     private lateinit var viewModel: HomeViewModel
-    private lateinit var chatUseCase: ChatUseCase
+    private lateinit var chatUseCase: com.myapp.chatmemo.domain.usecase.ChatUseCase
 
     // data
     private val roomId1 = RoomId(1)
@@ -54,7 +54,7 @@ class HomeViewModelTest : BaseUnitTest() {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        chatUseCase = mockk<ChatUseCase>().also {
+        chatUseCase = mockk<com.myapp.chatmemo.domain.usecase.ChatUseCase>().also {
             every { it.getRoomAll() } returns cahtRoomListFlow
             coEvery { it.deleteRoom(RoomId(any())) } returns Unit
         }

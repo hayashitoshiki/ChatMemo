@@ -4,16 +4,14 @@ import android.app.Application
 import android.util.Log
 import androidx.room.Room
 import com.myapp.chatmemo.data.local.database.dao.AppDatabase
-import com.myapp.chatmemo.data.repository.LocalChatRepository
 import com.myapp.chatmemo.data.repository.LocalChatRepositoryImp
-import com.myapp.chatmemo.data.repository.LocalTemplateRepository
 import com.myapp.chatmemo.data.repository.LocalTemplateRepositoryImp
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.RoomId
-import com.myapp.chatmemo.domain.usecase.ChatUseCase
+import com.myapp.chatmemo.domain.repository.LocalChatRepository
+import com.myapp.chatmemo.domain.repository.LocalTemplateRepository
 import com.myapp.chatmemo.domain.usecase.ChatUseCaseImp
-import com.myapp.chatmemo.domain.usecase.TemplateUseCase
 import com.myapp.chatmemo.domain.usecase.TemplateUseCaseImp
 import com.myapp.chatmemo.ui.chat.*
 import com.myapp.chatmemo.ui.template.TempalteAddViewModel
@@ -51,7 +49,8 @@ class MyApplication : Application() {
         }
 
         // AppDatabaseをビルドする
-        database = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "app_database").build()
+        database = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "app_database")
+            .build()
     }
 
     // Koinモジュール
@@ -64,12 +63,14 @@ class MyApplication : Application() {
         viewModel { (template: Template?) -> TempalteAddViewModel(template, get()) }
         viewModel { TemplateListViewModel(get()) }
 
-        factory<ChatUseCase> { ChatUseCaseImp(get(), applicationScope) }
-        factory<TemplateUseCase> { TemplateUseCaseImp(get(), get()) }
+        factory<com.myapp.chatmemo.domain.usecase.ChatUseCase> { ChatUseCaseImp(get(), applicationScope) }
+        factory<com.myapp.chatmemo.domain.usecase.TemplateUseCase> { TemplateUseCaseImp(get(), get()) }
 
         factory<LocalTemplateRepository> { LocalTemplateRepositoryImp(database.templateDao(), database.phraseDao()) }
         factory<LocalChatRepository> {
-            LocalChatRepositoryImp(database.roomDao(), database.commentDao(), database.templateDao(), database.phraseDao())
+            LocalChatRepositoryImp(
+                database.roomDao(), database.commentDao(), database.templateDao(), database.phraseDao()
+            )
         }
     }
 }

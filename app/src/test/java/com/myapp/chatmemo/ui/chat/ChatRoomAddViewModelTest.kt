@@ -53,10 +53,10 @@ class ChatRoomAddViewModelTest : BaseUnitTest() {
         val observerBoolean = mock<Observer<Boolean>>()
         val observerTemplateList = mock<Observer<List<Template>>>()
 
-        val templateUseCase = mockk<TemplateUseCase>().also {
+        val templateUseCase = mockk<com.myapp.chatmemo.domain.usecase.TemplateUseCase>().also {
             coEvery { it.getSpinnerTemplateAll() } returns flow { emit(templateList) }
         }
-        val chatUseCase = mockk<ChatUseCase>().also {
+        val chatUseCase = mockk<com.myapp.chatmemo.domain.usecase.ChatUseCase>().also {
             coEvery { it.getNextRoomId() } returns RoomId(1)
             coEvery { it.createRoom(any()) } returns Unit
         }

@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
  */
 class TempalteAddViewModel(
     private val template: Template?,
-    private val templateUseCase: TemplateUseCase
+    private val templateUseCase: com.myapp.chatmemo.domain.usecase.TemplateUseCase
 ) : BaseViewModel() {
 
     val titleText = MutableLiveData("")
@@ -45,7 +45,8 @@ class TempalteAddViewModel(
             viewModelScope.launch {
                 titleText.postValue(template.title)
                 val templateId: TemplateId = template.templateId
-                val list = templateUseCase.getTemplateMessageById(templateId).toMutableList()
+                val list = templateUseCase.getTemplateMessageById(templateId)
+                    .toMutableList()
                 phraseList.postValue(list)
                 submitText.postValue("更新")
             }

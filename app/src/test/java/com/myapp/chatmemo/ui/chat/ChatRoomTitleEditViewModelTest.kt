@@ -13,7 +13,6 @@ import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import java.time.LocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -25,6 +24,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import java.time.LocalDateTime
 
 /**
  * ルーム名変更ダイアログ　ロジック仕様
@@ -42,7 +42,7 @@ class ChatRoomTitleEditViewModelTest : BaseUnitTest() {
 
     // mock
     private lateinit var viewModel: RoomTitleEditViewModel
-    private lateinit var chatUseCase: ChatUseCase
+    private lateinit var chatUseCase: com.myapp.chatmemo.domain.usecase.ChatUseCase
 
     // data
     private val roomId1 = RoomId(1)
@@ -57,7 +57,7 @@ class ChatRoomTitleEditViewModelTest : BaseUnitTest() {
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
-        chatUseCase = mockk<ChatUseCase>().also {
+        chatUseCase = mockk<com.myapp.chatmemo.domain.usecase.ChatUseCase>().also {
             coEvery { it.updateRoom((any())) } returns Unit
         }
         viewModel = RoomTitleEditViewModel(chatroom1, chatUseCase)

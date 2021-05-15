@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
  */
 class ChatViewModel(
     id: RoomId,
-    private val chatUseCase: ChatUseCase
+    private val chatUseCase: com.myapp.chatmemo.domain.usecase.ChatUseCase
 ) : BaseViewModel() {
 
     val chatRoom = chatUseCase.getChatRoomByRoomById(id)

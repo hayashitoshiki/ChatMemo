@@ -3,10 +3,10 @@ package com.myapp.chatmemo.data.local.database.dao
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.myapp.chatmemo.data.local.database.entity.ChatRoomEntity
-import com.myapp.chatmemo.data.local.database.entity.CommentEntity
-import com.myapp.chatmemo.data.local.database.entity.TemplateMessageEntity
-import com.myapp.chatmemo.data.local.database.entity.TemplateTitleEntity
+import com.myapp.chatmemo.data.database.entity.ChatRoomEntity
+import com.myapp.chatmemo.data.database.entity.CommentEntity
+import com.myapp.chatmemo.data.database.entity.TemplateMessageEntity
+import com.myapp.chatmemo.data.database.entity.TemplateTitleEntity
 
 /**
  * DB定義
@@ -17,8 +17,8 @@ import com.myapp.chatmemo.data.local.database.entity.TemplateTitleEntity
 )
 @TypeConverters(DataBaseConverter::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun commentDao(): CommentDao
-    abstract fun phraseDao(): PhraseDao
-    abstract fun roomDao(): RoomDao
-    abstract fun templateDao(): TemplateDao
+    abstract fun commentDao(): com.myapp.chatmemo.data.database.dao.CommentDao
+    abstract fun phraseDao(): com.myapp.chatmemo.data.database.dao.PhraseDao
+    abstract fun roomDao(): com.myapp.chatmemo.data.database.dao.RoomDao
+    abstract fun templateDao(): com.myapp.chatmemo.data.database.dao.TemplateDao
 }

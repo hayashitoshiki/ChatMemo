@@ -21,7 +21,7 @@ MVVM + Clean Architecture + DDD
 # Package com.myapp.chatmemo.data.local.database.dao
 DBクエリ管理
 
-# Package com.myapp.chatmemo.data.local.database.entity
+# Package com.myapp.chatmemo.data.database.entity
 DBのテーブル構成管理
 
 # Package com.myapp.chatmemo.data.repository

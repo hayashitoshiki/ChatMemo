@@ -14,7 +14,7 @@ import com.myapp.chatmemo.ui.utils.expansion.BaseViewModel
  */
 class RoomTitleEditViewModel(
     private var chatRoomEntity: ChatRoom,
-    private val chatRoomUseCase: ChatUseCase
+    private val chatRoomUseCase: com.myapp.chatmemo.domain.usecase.ChatUseCase
 ) : BaseViewModel() {
 
     val newRoomTitle = MutableLiveData("")

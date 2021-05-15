@@ -12,7 +12,6 @@ import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import java.time.LocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
@@ -25,6 +24,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import java.time.LocalDateTime
 
 /**
  * ルーム定型文設定画面　ロジック仕様
@@ -43,8 +43,8 @@ class ChatRoomPhraseEditViewModelTest : BaseUnitTest() {
 
     // mock
     private lateinit var viewModel: RoomPhraseEditViewModel
-    private lateinit var chatUseCase: ChatUseCase
-    private lateinit var templateUseCase: TemplateUseCase
+    private lateinit var chatUseCase: com.myapp.chatmemo.domain.usecase.ChatUseCase
+    private lateinit var templateUseCase: com.myapp.chatmemo.domain.usecase.TemplateUseCase
     private val templateNon = Template(TemplateId(0), "選択なし", listOf())
     private val template1 = Template(TemplateId(1), "testTemplate1", listOf())
     private val template2 = Template(TemplateId(2), "testTemplate2", listOf())
@@ -69,11 +69,11 @@ class ChatRoomPhraseEditViewModelTest : BaseUnitTest() {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        templateUseCase = mockk<TemplateUseCase>().also {
+        templateUseCase = mockk<com.myapp.chatmemo.domain.usecase.TemplateUseCase>().also {
             coEvery { it.getSpinnerTemplateAll() } returns flow { emit(templateList) }
             coEvery { it.getTemplateAll() } returns flow { emit(templateList) }
         }
-        chatUseCase = mockk<ChatUseCase>().also {
+        chatUseCase = mockk<com.myapp.chatmemo.domain.usecase.ChatUseCase>().also {
             coEvery { it.updateRoom(any()) } returns Unit
         }
         Dispatchers.setMain(Dispatchers.Unconfined)
@@ -210,7 +210,7 @@ class ChatRoomPhraseEditViewModelTest : BaseUnitTest() {
      */
     @Test
     fun validateInitByTemplateListEmpty() {
-        templateUseCase = mockk<TemplateUseCase>().also {
+        templateUseCase = mockk<com.myapp.chatmemo.domain.usecase.TemplateUseCase>().also {
             coEvery { it.getSpinnerTemplateAll() } returns flow { emit(templateListEmpty) }
         }
         setChatRoom1()
@@ -374,7 +374,7 @@ class ChatRoomPhraseEditViewModelTest : BaseUnitTest() {
      */
     @Test
     fun changedTemplateTitleValueByInitAndTemplateListEmpty() {
-        templateUseCase = mockk<TemplateUseCase>().also {
+        templateUseCase = mockk<com.myapp.chatmemo.domain.usecase.TemplateUseCase>().also {
             coEvery { it.getSpinnerTemplateAll() } returns flow { emit(templateListEmpty) }
         }
         setChatRoom1()

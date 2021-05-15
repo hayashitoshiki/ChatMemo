@@ -11,7 +11,6 @@ import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import java.time.LocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -27,6 +26,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import java.time.LocalDateTime
 
 /**
  * チャット画面　ロジック仕様
@@ -46,7 +46,7 @@ class ChatViewModelTest : BaseUnitTest() {
 
     // mock
     private lateinit var viewModel: ChatViewModel
-    private lateinit var chatUseCase: ChatUseCase
+    private lateinit var chatUseCase: com.myapp.chatmemo.domain.usecase.ChatUseCase
 
     private val roomId1 = RoomId(1)
     private val roomId2 = RoomId(2)
@@ -83,7 +83,7 @@ class ChatViewModelTest : BaseUnitTest() {
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
-        chatUseCase = mockk<ChatUseCase>().also {
+        chatUseCase = mockk<com.myapp.chatmemo.domain.usecase.ChatUseCase>().also {
             coEvery { it.getChatRoomByRoomById(RoomId(4)) } returns flowOf(chatroom1, chatroom2)
             coEvery { it.getChatRoomByRoomById(RoomId(1)) } returns flow { emit(chatroom1) }
             coEvery { it.getChatRoomByRoomById(RoomId(2)) } returns flow { emit(chatroom2) }

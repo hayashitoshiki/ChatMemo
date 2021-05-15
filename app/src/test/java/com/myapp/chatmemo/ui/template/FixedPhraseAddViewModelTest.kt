@@ -39,7 +39,7 @@ class FixedPhraseAddViewModelTest : BaseUnitTest() {
 
     // mock
     private lateinit var viewModel: TempalteAddViewModel
-    private lateinit var templateUseCase: TemplateUseCase
+    private lateinit var templateUseCase: com.myapp.chatmemo.domain.usecase.TemplateUseCase
 
     private val templateMesage = TemplateMessage("testTemplateMessage1")
     private val templateMessageList = listOf(templateMesage)
@@ -50,7 +50,7 @@ class FixedPhraseAddViewModelTest : BaseUnitTest() {
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
-        templateUseCase = mockk<TemplateUseCase>().also {
+        templateUseCase = mockk<com.myapp.chatmemo.domain.usecase.TemplateUseCase>().also {
             coEvery { it.getTemplateMessageById(TemplateId(any())) } returns templateMessageList
             coEvery { it.getNextTemplateId() } returns templateId
             coEvery { it.createTemplate(any()) } returns true

@@ -18,7 +18,8 @@ class TemplateListViewModel(
     private val templateUseCase: TemplateUseCase
 ) : BaseViewModel() {
 
-    val templateList: LiveData<List<Template>> = templateUseCase.getTemplateAll().asLiveData()
+    val templateList: LiveData<List<Template>> = templateUseCase.getTemplateAll()
+        .asLiveData()
     val status = MutableLiveData<Boolean>()
 
     // 定型文リスト削除

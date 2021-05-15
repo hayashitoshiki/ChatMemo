@@ -17,7 +17,8 @@ class HomeViewModel(
     private val chatUseCase: ChatUseCase
 ) : ViewModel() {
 
-    val chatRoomEntityList: LiveData<List<ChatRoom>> = chatUseCase.getRoomAll().asLiveData()
+    val chatRoomEntityList: LiveData<List<ChatRoom>> = chatUseCase.getRoomAll()
+        .asLiveData()
 
     // ルーム削除
     fun deleteRoom(roomId: RoomId) {
