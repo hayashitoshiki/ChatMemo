@@ -127,10 +127,10 @@ class RoomAddFragment : Fragment() {
     // テンプレートモードスピナー設定
     private fun setTemplateModeSpiner(templateModeList: List<TemplateMode>) {
         val modeTitleList = templateModeList.mapIndexed { index, template ->
-                val message = requireContext().getString(template.text)
-                viewModel.templateModeList.value!![index].massage = message
-                return@mapIndexed message
-            }
+            val message = requireContext().getString(template.text)
+            viewModel.templateModeList.value!![index].massage = message
+            return@mapIndexed message
+        }
         val arrayAdapter: ArrayAdapter<String> =
             ArrayAdapter(requireActivity(), android.R.layout.simple_dropdown_item_1line, modeTitleList)
         binding.spinnerMode.setAdapter(arrayAdapter)

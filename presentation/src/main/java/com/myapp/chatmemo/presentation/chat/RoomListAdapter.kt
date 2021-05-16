@@ -42,7 +42,6 @@ class RoomListAdapter : ListAdapter<ChatRoom, RoomListAdapter.ViewHolder>(ChatRo
         return ViewHolder(inflater)
     }
 
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(
         holder: ViewHolder,
@@ -120,4 +119,3 @@ private object ChatRoomDiffCallback : DiffUtil.ItemCallback<ChatRoom>() {
         return oldItem == newItem
     }
 }
-

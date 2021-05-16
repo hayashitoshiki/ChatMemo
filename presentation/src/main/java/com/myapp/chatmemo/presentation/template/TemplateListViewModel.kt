@@ -17,7 +17,7 @@ class TemplateListViewModel(
 
     val templateList: LiveData<List<Template>> = templateUseCase.getTemplateAll()
         .asLiveData()
-    val status = MutableLiveData<Boolean>()
+    val status = MutableLiveData<Boolean?>()
     private val _isNoDataText: MediatorLiveData<Boolean> = MediatorLiveData()
     val isNoDataText: LiveData<Boolean> = _isNoDataText
 

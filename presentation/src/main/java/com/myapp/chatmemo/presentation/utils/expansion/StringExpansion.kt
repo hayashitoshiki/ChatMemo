@@ -19,5 +19,3 @@ val TemplateMode.text: Int
 @get: StringRes
 val Template.firsText: Int
     get() = R.string.spinner_message_first
-
-
