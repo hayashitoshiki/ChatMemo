@@ -133,7 +133,7 @@ class ConverterTest {
     fun templateFromTemplateEntityAndPhraseEntity() {
         val result = Converter.templateFromTemplateEntityAndPhraseEntity(templateTitleEntity, phraseEntityList)
         val templateMessageList = phraseEntityList.map { Converter.templateMessageFromPharaseEntity(it) }
-        assertEquals(templateTitleEntity.id!!.toInt(), result.templateId.value)
+        assertEquals(templateTitleEntity.id, result.templateId.value)
         assertEquals(templateTitleEntity.title, result.title)
         assertEquals(templateMessageList, result.templateMessageList)
     }

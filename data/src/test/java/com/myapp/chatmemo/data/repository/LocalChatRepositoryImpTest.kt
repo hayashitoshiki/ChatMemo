@@ -94,7 +94,7 @@ class LocalChatRepositoryImpTest {
     fun getNextTemplateId() {
         runBlocking {
             val result = repository.getNextRoomId().value
-            assertEquals(templateTableSize + 1, result)
+            assertEquals((templateTableSize + 1).toLong(), result)
         }
     }
 

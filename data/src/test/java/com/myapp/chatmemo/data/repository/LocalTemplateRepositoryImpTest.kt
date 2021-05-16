@@ -27,7 +27,7 @@ class LocalTemplateRepositoryImpTest {
     @ExperimentalCoroutinesApi
     private val testDispatcher = TestCoroutineDispatcher()
 
-    // endregoin
+    // endregion
 
     // mock
     private lateinit var repository: LocalTemplateRepositoryImp
@@ -86,7 +86,7 @@ class LocalTemplateRepositoryImpTest {
     fun getNextTemplateId() {
         runBlocking {
             val result = repository.getNextTemplateId().value
-            assertEquals(templateTableSize + 1, result)
+            assertEquals((templateTableSize + 1).toLong(), result)
         }
     }
 
