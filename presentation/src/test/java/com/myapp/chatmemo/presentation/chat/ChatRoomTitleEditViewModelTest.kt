@@ -1,4 +1,4 @@
-package om.myapp.chatmemo.presentation.chat
+package com.myapp.chatmemo.presentation.chat
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
@@ -8,7 +8,6 @@ import com.myapp.chatmemo.domain.model.value.CommentDateTime
 import com.myapp.chatmemo.domain.model.value.RoomId
 import com.myapp.chatmemo.domain.model.value.User
 import com.myapp.chatmemo.domain.usecase.ChatUseCase
-import com.myapp.chatmemo.presentation.chat.RoomTitleEditViewModel
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.coVerify

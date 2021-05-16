@@ -27,7 +27,7 @@ import com.myapp.chatmemo.presentation.databinding.ItemCommentWhiteBinding
 class ChatRecyclerAdapter(
     private val context: Context,
     private val lifecycleOwner: LifecycleOwner
-) : ListAdapter<Comment, ChatRecyclerAdapter.ViewHolder>(DiffCallback) {
+) : ListAdapter<Comment, ChatRecyclerAdapter.ViewHolder>(ChtatDiffCallback) {
 
     // Viewのタイプ定数
     companion object {
@@ -106,7 +106,7 @@ class ChatRecyclerAdapter(
     }
 }
 
-private object DiffCallback : DiffUtil.ItemCallback<Comment>() {
+private object ChtatDiffCallback : DiffUtil.ItemCallback<Comment>() {
     override fun areItemsTheSame(
         oldItem: Comment,
         newItem: Comment

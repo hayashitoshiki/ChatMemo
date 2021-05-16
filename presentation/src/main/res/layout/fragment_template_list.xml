@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.myapp.chatmemo.presentation.template.TemplateListViewModel" />
@@ -34,17 +36,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/no_data_text"
             android:layout_width="wrap_content"
@@ -52,7 +43,7 @@
             android:text="@string/error_nothing_phrase"
             android:textSize="@dimen/body"
             android:textStyle="bold"
-            android:visibility="invisible"
+            android:visibility="@{viewModel.isNoDataText ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

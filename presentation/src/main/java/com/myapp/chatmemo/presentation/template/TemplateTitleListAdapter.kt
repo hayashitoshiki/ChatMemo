@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
@@ -15,9 +17,8 @@ import com.myapp.chatmemo.presentation.databinding.ItemPhraseTitleBinding
 
 /**
  * 定型文リスト画面用のリサイクルビューアダプター
- * @property items 定型文のタイトルリスト
  */
-class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.Adapter<PhraseTitleListAdapter.ViewHolder>() {
+class PhraseTitleListAdapter : ListAdapter<Template, PhraseTitleListAdapter.ViewHolder>(TemplateDiffCallback) {
 
     private lateinit var listener: OnItemClickListener
     private var viewBinderHelper: ViewBinderHelper = ViewBinderHelper()
@@ -37,18 +38,14 @@ class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.A
         return ViewHolder(inflater)
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(
         holder: ViewHolder,
         position: Int
     ) {
         var x = 0f
-        val template = items[position]
-        viewBinderHelper.bind(holder.swipeRevealLayout, items[position].toString())
+        val template = getItem(position)
+        viewBinderHelper.bind(holder.swipeRevealLayout, template.toString())
 
         // 値代入
         holder.textView.text = template.title
@@ -75,10 +72,6 @@ class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.A
         }
     }
 
-    fun setData(items: List<Template>) {
-        this.items = items
-    }
-
     // インターフェースの作成
     interface OnItemClickListener {
         fun onItemClickListener(
@@ -90,5 +83,21 @@ class PhraseTitleListAdapter(private var items: List<Template>) : RecyclerView.A
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
+    }
+}
+
+private object TemplateDiffCallback : DiffUtil.ItemCallback<Template>() {
+    override fun areItemsTheSame(
+        oldItem: Template,
+        newItem: Template
+    ): Boolean {
+        return oldItem.templateId == newItem.templateId
+    }
+
+    override fun areContentsTheSame(
+        oldItem: Template,
+        newItem: Template
+    ): Boolean {
+        return oldItem == newItem
     }
 }

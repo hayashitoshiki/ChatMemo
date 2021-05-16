@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
@@ -17,7 +19,7 @@ import com.myapp.chatmemo.presentation.databinding.ItemRoomListBinding
 /**
  * ルームリスト用アダプター
  */
-class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<RoomListAdapter.ViewHolder>() {
+class RoomListAdapter : ListAdapter<ChatRoom, RoomListAdapter.ViewHolder>(ChatRoomDiffCallback) {
 
     private lateinit var listener: OnItemClickListener
     private var viewBinderHelper: ViewBinderHelper = ViewBinderHelper()
@@ -40,18 +42,15 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
         return ViewHolder(inflater)
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(
         holder: ViewHolder,
         position: Int
     ) {
-        val room = items[position]
+        val room = getItem(position)
         var x = 0f
-        viewBinderHelper.bind(holder.swipeRevealLayout, items[position].toString())
+        viewBinderHelper.bind(holder.swipeRevealLayout, room.toString())
 
         // ルーム名
         holder.roomNameTextView.text = room.title
@@ -76,7 +75,7 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
                 }
                 MotionEvent.ACTION_UP -> {
                     if (-5 < x - event.x && x - event.x < 5) {
-                        listener.onItemClickListener(v, position, items[position])
+                        listener.onItemClickListener(v, position, room)
                     }
                     x = 0f
                 }
@@ -86,14 +85,9 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
         // 削除ボタン
         holder.deleteButton.setOnClickListener {
             if (holder.swipeRevealLayout.isOpened) {
-                listener.onItemClickListener(it, position, items[position])
+                listener.onItemClickListener(it, position, room)
             }
         }
-    }
-
-    // データ更新
-    fun setData(items: List<ChatRoom>) {
-        this.items = items
     }
 
     // インターフェースの作成
@@ -110,3 +104,20 @@ class RoomListAdapter(private var items: List<ChatRoom>) : RecyclerView.Adapter<
         this.listener = listener
     }
 }
+
+private object ChatRoomDiffCallback : DiffUtil.ItemCallback<ChatRoom>() {
+    override fun areItemsTheSame(
+        oldItem: ChatRoom,
+        newItem: ChatRoom
+    ): Boolean {
+        return oldItem.roomId == newItem.roomId
+    }
+
+    override fun areContentsTheSame(
+        oldItem: ChatRoom,
+        newItem: ChatRoom
+    ): Boolean {
+        return oldItem == newItem
+    }
+}
+

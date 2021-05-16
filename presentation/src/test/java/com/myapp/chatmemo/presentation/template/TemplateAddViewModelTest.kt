@@ -1,4 +1,4 @@
-package om.myapp.chatmemo.presentation.template
+package com.myapp.chatmemo.presentation.template
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
@@ -6,7 +6,6 @@ import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.TemplateId
 import com.myapp.chatmemo.domain.model.value.TemplateMessage
 import com.myapp.chatmemo.domain.usecase.TemplateUseCase
-import com.myapp.chatmemo.presentation.template.TempalteAddViewModel
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -25,7 +24,7 @@ import org.junit.rules.TestRule
 /**
  * 定型文追加・編集画面　ロジック仕様
  */
-class FixedPhraseAddViewModelTest {
+class TemplateAddViewModelTest {
 
     // LiveData用
     @Rule

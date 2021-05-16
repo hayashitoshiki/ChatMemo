@@ -57,15 +57,13 @@ class ChatFragment : Fragment() {
 
         viewModel.commentList.observe(viewLifecycleOwner, { viewUpDate(it) })
         viewModel.chatRoom.observe(viewLifecycleOwner, { setNavigationTitle(it.title) })
+        viewModel.commentText.observe(viewLifecycleOwner, { setAutoHeigth() })
 
         val adapter = ChatRecyclerAdapter(requireContext(), viewLifecycleOwner)
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = layoutManager
-
-        // 文字入力
-        viewModel.commentText.observe(viewLifecycleOwner, { setAutoHeigth() })
 
         // キーボード表示時のスクロール
         binding.container.viewTreeObserver.addOnGlobalLayoutListener {
@@ -179,8 +177,5 @@ class ChatFragment : Fragment() {
     private fun viewUpDate(data: List<Comment>) {
         val adapter = binding.recyclerView.adapter as ChatRecyclerAdapter
         adapter.submitList(data)
-        //        adapter.setData(data)
-        //        adapter.notifyDataSetChanged()
-        //        binding.recyclerView.scrollToPosition(adapter.itemCount - 1)
     }
 }

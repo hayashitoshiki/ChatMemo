@@ -4,6 +4,12 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.myapp.chatmemo.presentation.chat.HomeViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +24,7 @@
             android:textColor="@color/text_color_dark_secondary"
             android:textSize="@dimen/body"
             android:textStyle="bold"
-            android:visibility="gone"
+            android:visibility="@{viewModel.isNoDataText ? View.VISIBLE : View.GONE }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

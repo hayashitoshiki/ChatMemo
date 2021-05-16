@@ -1,4 +1,4 @@
-package om.myapp.chatmemo.presentation.chat
+package com.myapp.chatmemo.presentation.chat
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
@@ -8,7 +8,6 @@ import com.myapp.chatmemo.domain.model.value.CommentDateTime
 import com.myapp.chatmemo.domain.model.value.RoomId
 import com.myapp.chatmemo.domain.model.value.User
 import com.myapp.chatmemo.domain.usecase.ChatUseCase
-import com.myapp.chatmemo.presentation.chat.HomeViewModel
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -58,9 +57,12 @@ class HomeViewModelTest {
     private val commentList = mutableListOf(comment1, comment2, comment3)
     private val chatroom1 = ChatRoom(roomId1, title, null, commentList)
     private val chatRoomList = listOf(chatroom1)
+    private val chatRoomListEmpty = listOf<ChatRoom>()
     private val cahtRoomListFlow = flow { emit(chatRoomList) }
+    private val chatRoomListEmptyFlow = flow { emit(chatRoomListEmpty) }
 
     private val observerRoomList = mock<Observer<List<ChatRoom>>>()
+    private val observerBoolean = mock<Observer<Boolean>>()
 
     @ExperimentalCoroutinesApi
     @Before
@@ -71,7 +73,12 @@ class HomeViewModelTest {
             coEvery { it.deleteRoom(RoomId(any())) } returns Unit
         }
         viewModel = HomeViewModel(chatUseCase)
+        initObserver()
+    }
+
+    private fun initObserver() {
         viewModel.chatRoomEntityList.observeForever(observerRoomList)
+        viewModel.isNoDataText.observeForever(observerBoolean)
     }
 
     @ExperimentalCoroutinesApi
@@ -79,6 +86,39 @@ class HomeViewModelTest {
     fun tearDown() {
         Dispatchers.resetMain()
     }
+
+    // regoin ルームリストなし文言表示制御
+
+    /**
+     * ルームリストなし文言表示制御
+     *
+     * 条件：取得したルームリストが０件
+     * 結果：ルームリストなし文言が表示される
+     */
+    @Test
+    fun changeNoDataTextByNon() {
+        chatUseCase = mockk<ChatUseCase>().also {
+            every { it.getRoomAll() } returns chatRoomListEmptyFlow
+        }
+        viewModel = HomeViewModel(chatUseCase)
+        initObserver()
+        val result = viewModel.isNoDataText.value
+        assertEquals(true, result)
+    }
+
+    /**
+     * ルームリストなし文言表示制御
+     *
+     * 条件：取得したルームリストが１件以上
+     * 結果：ルームリストなし文言が表示されない
+     */
+    @Test
+    fun changeNoDataTextByNotNon() {
+        val result = viewModel.isNoDataText.value
+        assertEquals(false, result)
+    }
+
+    // endregion
 
     // region  ルームリスト取得
 

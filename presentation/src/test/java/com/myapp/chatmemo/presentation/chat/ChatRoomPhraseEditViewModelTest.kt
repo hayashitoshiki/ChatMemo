@@ -1,11 +1,10 @@
-package om.myapp.chatmemo.presentation.chat
+package com.myapp.chatmemo.presentation.chat
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.*
-import com.myapp.chatmemo.presentation.chat.RoomPhraseEditViewModel
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.coVerify

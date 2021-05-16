@@ -15,8 +15,8 @@ import com.myapp.chatmemo.presentation.databinding.ItemPhraseBinding
  * 定型文作成画面用のリストビューアダプター
  * @property items 定型文リスト
  */
-class PhraseListAdapter(private var items: MutableList<TemplateMessage>) :
-    RecyclerView.Adapter<PhraseListAdapter.ViewHolder>() {
+class TemplateListAdapter(private var items: MutableList<TemplateMessage>) :
+    RecyclerView.Adapter<TemplateListAdapter.ViewHolder>() {
 
     private lateinit var listener: OnItemClickListener
 

@@ -80,7 +80,7 @@ class TemplateAddFragment : Fragment() {
         viewModel.phraseText.observe(viewLifecycleOwner, { setAutoHeigth() })
 
         // 定型文リスト
-        val adapter = PhraseListAdapter(arrayListOf())
+        val adapter = TemplateListAdapter(arrayListOf())
         val layoutManager = LinearLayoutManager(requireContext())
         val itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
         val controller = AnimationUtils.loadLayoutAnimation(context, R.anim.fall_down)
@@ -88,7 +88,7 @@ class TemplateAddFragment : Fragment() {
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.layoutAnimation = controller
         binding.recyclerView.addItemDecoration(itemDecoration)
-        adapter.setOnItemClickListener(object : PhraseListAdapter.OnItemClickListener {
+        adapter.setOnItemClickListener(object : TemplateListAdapter.OnItemClickListener {
             override fun onItemClickListener(
                 view: View,
                 position: Int,
@@ -126,7 +126,7 @@ class TemplateAddFragment : Fragment() {
 
     // データ追加
     private fun viewUpDate(data: MutableList<TemplateMessage>) {
-        val adapter = binding.recyclerView.adapter as PhraseListAdapter
+        val adapter = binding.recyclerView.adapter as TemplateListAdapter
         if (adapter.itemCount < data.size) {
             adapter.setData(data)
             adapter.notifyDataSetChanged()

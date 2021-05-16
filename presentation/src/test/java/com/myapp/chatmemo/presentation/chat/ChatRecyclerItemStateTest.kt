@@ -1,9 +1,8 @@
-package om.myapp.chatmemo.presentation.chat
+package com.myapp.chatmemo.presentation.chat
 
 import com.myapp.chatmemo.domain.model.value.Comment
 import com.myapp.chatmemo.domain.model.value.CommentDateTime
 import com.myapp.chatmemo.domain.model.value.User
-import com.myapp.chatmemo.presentation.chat.ChatRecyclerItemState
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before

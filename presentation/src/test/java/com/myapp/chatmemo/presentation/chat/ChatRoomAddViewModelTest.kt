@@ -1,4 +1,4 @@
-package om.myapp.chatmemo.presentation.chat
+package com.myapp.chatmemo.presentation.chat
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
@@ -6,7 +6,6 @@ import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.RoomId
 import com.myapp.chatmemo.domain.model.value.TemplateId
 import com.myapp.chatmemo.domain.model.value.TemplateMode
-import com.myapp.chatmemo.presentation.chat.RoomAddViewModel
 import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.mockk

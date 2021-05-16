@@ -1,9 +1,6 @@
 package com.myapp.chatmemo.presentation.chat
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.value.RoomId
 import com.myapp.chatmemo.domain.usecase.ChatUseCase
@@ -19,6 +16,17 @@ class HomeViewModel(
 
     val chatRoomEntityList: LiveData<List<ChatRoom>> = chatUseCase.getRoomAll()
         .asLiveData()
+    private val _isNoDataText: MediatorLiveData<Boolean> = MediatorLiveData()
+    val isNoDataText: LiveData<Boolean> = _isNoDataText
+
+    init {
+        _isNoDataText.addSource(chatRoomEntityList) { changeNoDataText(it) }
+    }
+
+    // チャットルームなし文言テキスト表示制御
+    private fun changeNoDataText(chatRoomList: List<ChatRoom>) {
+        _isNoDataText.value = chatRoomList.isEmpty()
+    }
 
     // ルーム削除
     fun deleteRoom(roomId: RoomId) {
