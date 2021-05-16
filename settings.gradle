@@ -1,2 +1,6 @@
+include ':common'
+include ':presentation'
+include ':data'
+include ':domain'
 include ':app'
 rootProject.name = "ChatMemo"

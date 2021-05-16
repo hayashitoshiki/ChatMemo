@@ -3,15 +3,15 @@
     package="com.myapp.chatmemo">
 
     <application
-        android:name="com.myapp.chatmemo.ui.MyApplication"
-        android:allowBackup="true"
+        android:name="com.myapp.chatmemo.MyApplication"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ChatMemo">
         <activity
-            android:name="com.myapp.chatmemo.ui.MainActivity"
+            android:name=".presentation.MainActivity"
             android:screenOrientation="portrait"
             android:fitsSystemWindows="true"
             android:windowSoftInputMode="adjustPan">

@@ -1,0 +1,37 @@
+package com.myapp.chatmemo.presentation.chat
+
+import androidx.lifecycle.*
+import com.myapp.chatmemo.domain.model.entity.ChatRoom
+import com.myapp.chatmemo.domain.model.value.RoomId
+import com.myapp.chatmemo.domain.usecase.ChatUseCase
+import kotlinx.coroutines.launch
+
+/**
+ * ホーム画面_ロジック
+ * @property chatUseCase Chatに関するUseCase
+ */
+class HomeViewModel(
+    private val chatUseCase: ChatUseCase
+) : ViewModel() {
+
+    val chatRoomEntityList: LiveData<List<ChatRoom>> = chatUseCase.getRoomAll()
+        .asLiveData()
+    private val _isNoDataText: MediatorLiveData<Boolean> = MediatorLiveData()
+    val isNoDataText: LiveData<Boolean> = _isNoDataText
+
+    init {
+        _isNoDataText.addSource(chatRoomEntityList) { changeNoDataText(it) }
+    }
+
+    // チャットルームなし文言テキスト表示制御
+    private fun changeNoDataText(chatRoomList: List<ChatRoom>) {
+        _isNoDataText.value = chatRoomList.isEmpty()
+    }
+
+    // ルーム削除
+    fun deleteRoom(roomId: RoomId) {
+        viewModelScope.launch {
+            chatUseCase.deleteRoom(roomId)
+        }
+    }
+}

@@ -1,3 +1,4 @@
 [*.{kt, kts}]
 max_line_length = 128
-disabled_rules = no-wildcard-imports
+insert_final_newline = true
+disabled_rules = no-wildcard-imports, import-ordering

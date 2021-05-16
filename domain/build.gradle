@@ -1,0 +1,6 @@
+apply plugin: 'com.android.library'
+apply from: './jacoco.gradle'
+
+dependencies {
+    implementation project(":common")
+}

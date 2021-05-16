@@ -1,4 +1,4 @@
-[app](../../index.md) / [com.myapp.chatmemo.data.local.database.entity](../index.md) / [TemplateEntity](index.md) / [title](./title.md)
+[app](../../index.md) / [com.myapp.chatmemo.data.database.entity](../index.md) / [TemplateEntity](index.md) / [title](./title.md)
 
 # title
 
