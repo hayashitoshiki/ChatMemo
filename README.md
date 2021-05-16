@@ -12,16 +12,23 @@
 Kotlin
 
 ## アーキテクチャ
-MVVM
+MVVM + Clean Architecture
 
 ## 主な使用技術
 ###  ネイティブ(ライブラリ)
-* Koin
-* Coroutine
-* Room
-* LiveData
-* DataBinding
-* swipereveallayout
+* DI
+  * Koin
+* 非同期
+  * Coroutine
+  * Coroutine Flow
+* Database
+  * Room
+* UI
+  * LiveData
+  * DataBinding
+  * Navigation
+  * ViewModel
+  * swipereveallayout
 
 ### バックエンド
 * なし　
@@ -38,7 +45,20 @@ MVVM
 
 ## 主なソース
 
+### アプリ基盤(app)
 https://github.com/hayashitoshiki/ChatMemo/tree/master/app/src/main
+
+### 画面関連(presentasion)
+https://github.com/hayashitoshiki/ChatMemo/tree/master/presentation/src/main
+
+### 業務ロジック(domain)
+https://github.com/hayashitoshiki/ChatMemo/tree/master/domain/src/main/java/com/myapp/chatmemo/domain
+
+### データアクセス(data)
+https://github.com/hayashitoshiki/ChatMemo/tree/master/data/src/main/java/com/myapp/chatmemo/data
+
+### 共通処理(commone)
+https://github.com/hayashitoshiki/ChatMemo/tree/master/common/src/main/java/com/myapp/chatmemo/common
 
 ## ソースドキュメント
 https://github.com/hayashitoshiki/ChatMemo/blob/master/app/doc/app/index.md
