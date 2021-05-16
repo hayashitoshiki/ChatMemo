@@ -22,6 +22,8 @@ import com.myapp.chatmemo.domain.model.value.TemplateMode
 import com.myapp.chatmemo.presentation.MainActivity
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentRoomAddBinding
+import com.myapp.chatmemo.presentation.utils.expansion.firsText
+import com.myapp.chatmemo.presentation.utils.expansion.text
 import com.myapp.chatmemo.presentation.utils.transition.FabTransform
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -61,7 +63,7 @@ class RoomAddFragment : Fragment() {
         sharedElementEnterTransition = trans
         sharedElementReturnTransition = transition
 
-        (activity as AppCompatActivity).supportActionBar?.title = "ルーム作成"
+        (activity as AppCompatActivity).supportActionBar?.title = requireContext().getString(R.string.title_room_add)
 
         viewModel.templateTitleList.observe(viewLifecycleOwner, { setTemplateTitleSpiner(it) })
         viewModel.templateModeList.observe(viewLifecycleOwner, { setTemplateModeSpiner(it) })
@@ -108,7 +110,15 @@ class RoomAddFragment : Fragment() {
 
     // テンプレートタイトルスピナー設定
     private fun setTemplateTitleSpiner(templateList: List<Template>) {
-        val templateTitleList = templateList.map { it.title }
+        val templateTitleList = templateList.mapIndexed { index, template ->
+            if (index == 0) {
+                val message = requireContext().getString(template.firsText)
+                viewModel.templateTitleList.value!![0].title = message
+                return@mapIndexed message
+            } else {
+                return@mapIndexed template.title
+            }
+        }
         val arrayAdapter: ArrayAdapter<String> =
             ArrayAdapter(requireActivity(), android.R.layout.simple_dropdown_item_1line, templateTitleList)
         binding.spinnerTitle.setAdapter(arrayAdapter)
@@ -116,7 +126,11 @@ class RoomAddFragment : Fragment() {
 
     // テンプレートモードスピナー設定
     private fun setTemplateModeSpiner(templateModeList: List<TemplateMode>) {
-        val modeTitleList = templateModeList.map { it.massage }
+        val modeTitleList = templateModeList.mapIndexed { index, template ->
+                val message = requireContext().getString(template.text)
+                viewModel.templateModeList.value!![index].massage = message
+                return@mapIndexed message
+            }
         val arrayAdapter: ArrayAdapter<String> =
             ArrayAdapter(requireActivity(), android.R.layout.simple_dropdown_item_1line, modeTitleList)
         binding.spinnerMode.setAdapter(arrayAdapter)

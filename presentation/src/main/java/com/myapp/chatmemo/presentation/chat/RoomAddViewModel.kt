@@ -43,7 +43,7 @@ class RoomAddViewModel(
         _isEnableSubmitButton.addSource(templateModeValue) { changeSubmitButton() }
         templateTitleList.observeForever {}
 
-        val modeList = listOf(TemplateMode.Order("順番"), TemplateMode.Randam("ランダム"))
+        val modeList = listOf(TemplateMode.Order(), TemplateMode.Randam())
         templateModeList.setValue(modeList)
     }
 

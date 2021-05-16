@@ -140,13 +140,14 @@ class ChatFragment : Fragment() {
             // 新規作成ボタン
             R.id.menu_delete_room -> {
                 AlertDialog.Builder(requireActivity())
-                    .setTitle("ルームを削除しますか？")
-                    .setPositiveButton("はい") { dialog, _ ->
+                    .setTitle(requireContext().getString(R.string.dialog_title_room_delete))
+                    .setMessage(requireContext().getString(R.string.dialog_question_delete))
+                    .setPositiveButton(requireContext().getString(R.string.dialog_positive)) { dialog, _ ->
                         viewModel.deleteRoom()
                         findNavController().popBackStack()
                         dialog.dismiss()
                     }
-                    .setNegativeButton("いいえ", null)
+                    .setNegativeButton(requireContext().getString(R.string.dialog_negative), null)
                     .show()
             }
         }

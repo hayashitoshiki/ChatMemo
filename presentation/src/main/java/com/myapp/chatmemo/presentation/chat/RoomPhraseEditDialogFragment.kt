@@ -13,6 +13,8 @@ import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.TemplateMode
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.DialogRoomPhraseEditBinding
+import com.myapp.chatmemo.presentation.utils.expansion.firsText
+import com.myapp.chatmemo.presentation.utils.expansion.text
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
@@ -79,7 +81,15 @@ class RoomPhraseEditDialogFragment : DialogFragment() {
 
     // テンプレートタイトルスピナー設定
     private fun setTemplateTitleSpiner(templateList: List<Template>) {
-        val titleList = templateList.map { it.title }
+        val titleList = templateList.mapIndexed { index, template ->
+            if (index == 0) {
+                val message = requireContext().getString(template.firsText)
+                viewModel.templateTitleList.value!![0].title = message
+                return@mapIndexed message
+            } else {
+                return@mapIndexed template.title
+            }
+        }
         val arrayAdapter: ArrayAdapter<String> =
             ArrayAdapter(requireActivity(), android.R.layout.simple_dropdown_item_1line, titleList)
         binding.spinnerTitle.setAdapter(arrayAdapter)
@@ -87,7 +97,11 @@ class RoomPhraseEditDialogFragment : DialogFragment() {
 
     // テンプレートモードスピナー設定
     private fun setTemplateModeSpiner(templateModeList: List<TemplateMode>) {
-        val modeList = templateModeList.map { it.massage }
+        val modeList = templateModeList.mapIndexed { index, template ->
+            val message = requireContext().getString(template.text)
+            viewModel.templateModeList.value!![index].massage = message
+            return@mapIndexed message
+        }
         val arrayAdapter: ArrayAdapter<String> =
             ArrayAdapter(requireActivity(), android.R.layout.simple_dropdown_item_1line, modeList)
         binding.spinnerMode.setAdapter(arrayAdapter)

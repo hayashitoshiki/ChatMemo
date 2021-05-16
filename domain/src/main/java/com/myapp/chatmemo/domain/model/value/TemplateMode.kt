@@ -1,7 +1,11 @@
 package com.myapp.chatmemo.domain.model.value
 
-sealed class TemplateMode(val massage: String) {
-    data class Order(var message: String = "順番", var position: Int = 0) : TemplateMode(message)
+sealed class TemplateMode(var massage: String) {
+    data class Order(
+        var message: String = "順番",
+        var position: Int = 0
+    ) : TemplateMode(message)
+
     data class Randam(
         var message: String = "ランダム",
         var position: MutableList<Int> = mutableListOf()

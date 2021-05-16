@@ -73,7 +73,7 @@ class TemplateAddFragment : Fragment() {
         binding.txtList.startAnimation(anim2)
         binding.recyclerView.startAnimation(anim2)
 
-        (activity as AppCompatActivity).supportActionBar?.title = "定型文作成"
+        (activity as AppCompatActivity).supportActionBar?.title = requireContext().getString(R.string.title_template_add)
 
         viewModel.submitState.observe(viewLifecycleOwner, { back(it) })
         viewModel.phraseList.observe(viewLifecycleOwner, { viewUpDate(it) })

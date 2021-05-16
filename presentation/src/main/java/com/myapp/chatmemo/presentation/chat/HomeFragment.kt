@@ -69,12 +69,12 @@ class HomeFragment : Fragment() {
                         }
                         R.id.btn_delete -> {
                             AlertDialog.Builder(requireActivity())
-                                .setTitle("ルーム削除")
-                                .setMessage("削除しますか？")
-                                .setPositiveButton("はい") { _, _ ->
+                                .setTitle(requireContext().getString(R.string.dialog_title_room_delete))
+                                .setMessage(requireContext().getString(R.string.dialog_question_delete))
+                                .setPositiveButton(requireContext().getString(R.string.dialog_positive)) { _, _ ->
                                     viewModel.deleteRoom(item.roomId)
                                 }
-                                .setNegativeButton("いいえ", null)
+                                .setNegativeButton(requireContext().getString(R.string.dialog_negative), null)
                                 .show()
                         }
                     }

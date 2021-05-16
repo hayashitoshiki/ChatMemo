@@ -43,8 +43,7 @@ class TtemplateListFragment : Fragment() {
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as AppCompatActivity).supportActionBar?.title = "定型文一覧"
-
+        (activity as AppCompatActivity).supportActionBar?.title = requireContext().getString(R.string.title_template_list)
         viewModel.templateList.observe(viewLifecycleOwner, { viewUpDate(it) })
         viewModel.status.observe(viewLifecycleOwner, { if (it != null && !it) showErrorToast() })
 
@@ -69,12 +68,12 @@ class TtemplateListFragment : Fragment() {
                         }
                         R.id.btn_delete -> {
                             AlertDialog.Builder(requireActivity())
-                                .setTitle("定型文削除")
-                                .setMessage("削除しますか？")
-                                .setPositiveButton("はい") { _, _ ->
+                                .setTitle(requireContext().getString(R.string.dialog_title_template_delete))
+                                .setMessage(requireContext().getString(R.string.dialog_question_delete))
+                                .setPositiveButton(requireContext().getString(R.string.dialog_positive)) { _, _ ->
                                     viewModel.deletePhrase(item)
                                 }
-                                .setNegativeButton("いいえ", null)
+                                .setNegativeButton(requireContext().getString(R.string.dialog_negative), null)
                                 .show()
                         }
                     }
@@ -100,7 +99,7 @@ class TtemplateListFragment : Fragment() {
 
     // エラートースト表示
     private fun showErrorToast() {
-        Toast.makeText(requireContext(), "現在使用中のため削除できません", Toast.LENGTH_SHORT)
+        Toast.makeText(requireContext(), requireContext().getString(R.string.error_delete_template), Toast.LENGTH_SHORT)
             .show()
         viewModel.status.value = null
     }

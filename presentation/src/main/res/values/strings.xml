@@ -3,15 +3,16 @@
 
     <!-- Title -->
     <string name="title_home">ルーム一覧</string>
-    <string name="title_room_add">ルーム名</string>
+    <string name="title_room_add">ルーム作成</string>
     <string name="title_room_name_edit">ルーム名変更</string>
     <string name="title_room_phrase_edit">定型文設定</string>
-    <string name="title_phrase_add">定型文追加</string>
-    <string name="title_phrase_list">定型文リスト</string>
+    <string name="title_template_add">定型文追加</string>
+    <string name="title_template_list">定型文一覧</string>
 
     <!-- Label -->
     <string name="label_room_name_old">元のルーム名　</string>
     <string name="label_room_name_new">新しいルーム名</string>
+    <string name="label_room_add">ルーム名</string>
     <string name="label_room_phrase_list">定型文</string>
     <string name="label_room_phrase_mode">表示順</string>
     <string name="label_phrase_mode_normal">順番</string>
@@ -34,6 +35,13 @@
     <string name="hint_room_name">最大２０文字</string>
     <string name="hint_message">メッセージを入力..</string>
 
+    <!-- Dialog message -->
+    <string name="dialog_title_template_delete">定型文削除</string>
+    <string name="dialog_title_room_delete">ルーム削除</string>
+    <string name="dialog_question_delete">削除しますか？</string>
+    <string name="dialog_positive">はい</string>
+    <string name="dialog_negative">いいえ</string>
+
     <!-- Navigation Bottom -->
     <string name="bottom_home">ホーム</string>
     <string name="bottom_phrase">定型文</string>
@@ -43,10 +51,18 @@
     <string name="menu_label_edit_room_name">ルーム名変更</string>
     <string name="menu_label_delete_room">ルーム削除</string>
 
+    <!-- Template Mode Text -->
+    <string name="template_mode_order">順番</string>
+    <string name="template_mode_randam">ランダム</string>
+
+    <!-- Spinner First Text -->
+    <string name="spinner_message_first">選択なし</string>
+
     <!-- Error Message -->
     <string name="error_nothing_room">新しくチャットルームを作成しよう!</string>
     <string name="error_nothing_phrase">定型文リストを作成しよう！</string>
     <string name="error_phrase_title">すでに同じタイトルが保存されています。</string>
+    <string name="error_delete_template">現在使用中のため削除できません</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
