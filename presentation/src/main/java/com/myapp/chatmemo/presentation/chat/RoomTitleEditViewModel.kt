@@ -37,6 +37,6 @@ class RoomTitleEditViewModel(
 
     // 変更ボタン活性・非活性制御
     private fun changeSubmitButton(title: String) {
-        _isEnableSubmitButton.postValue(title.isNotEmpty() && title != _oldRoomTitle.value!!)
+        _isEnableSubmitButton.postValue(title.isNotEmpty() && title != _oldRoomTitle.value)
     }
 }

@@ -120,8 +120,8 @@ class ChatRoomAddViewModelTest {
         runBlocking {
             val result = viewModel.createRoom()
             assertNotEquals(null, result.templateConfiguration)
-            assertEquals(template1.title, result.templateConfiguration!!.template.title)
-            assertEquals(templateMode1, result.templateConfiguration!!.templateMode)
+            assertEquals(template1.title, result.templateConfiguration?.template?.title)
+            assertEquals(templateMode1, result.templateConfiguration?.templateMode)
         }
     }
 
@@ -137,7 +137,7 @@ class ChatRoomAddViewModelTest {
     @Test
     fun validateByInit() {
         viewModel.changeSubmitButton()
-        assertEquals(false, viewModel.isEnableSubmitButton.value!!)
+        assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -151,7 +151,7 @@ class ChatRoomAddViewModelTest {
         viewModel.templateTitleValue.value = template1.title
         viewModel.templateModeValue.value = templateMode1.message
         viewModel.changeSubmitButton()
-        assertEquals(false, viewModel.isEnableSubmitButton.value!!)
+        assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -163,7 +163,7 @@ class ChatRoomAddViewModelTest {
     fun validateByTitleNotNull() {
         viewModel.titleText.value = "test"
         viewModel.changeSubmitButton()
-        assertEquals(true, viewModel.isEnableSubmitButton.value!!)
+        assertEquals(true, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -176,7 +176,7 @@ class ChatRoomAddViewModelTest {
         viewModel.titleText.value = "test"
         viewModel.templateTitleValue.value = templateNon.title
         viewModel.changeSubmitButton()
-        assertEquals(true, viewModel.isEnableSubmitButton.value!!)
+        assertEquals(true, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -189,7 +189,7 @@ class ChatRoomAddViewModelTest {
         viewModel.titleText.value = "test"
         viewModel.templateTitleValue.value = templateMode1.message
         viewModel.changeSubmitButton()
-        assertEquals(false, viewModel.isEnableSubmitButton.value!!)
+        assertEquals(false, viewModel.isEnableSubmitButton.value)
     }
 
     /**
@@ -203,7 +203,7 @@ class ChatRoomAddViewModelTest {
         viewModel.templateTitleValue.value = "testTemplate1"
         viewModel.templateModeValue.value = templateMode1.message
         viewModel.changeSubmitButton()
-        assertEquals(true, viewModel.isEnableSubmitButton.value!!)
+        assertEquals(true, viewModel.isEnableSubmitButton.value)
     }
 
     // endregion
@@ -220,8 +220,8 @@ class ChatRoomAddViewModelTest {
         viewModel.templateTitleValue.value = "testTemplate1"
         viewModel.templateModeValue.value = templateMode1.message
         viewModel.templateTitleValue.value = "testTemplate2"
-        assertEquals(templateMode1.message, viewModel.templateModeValue.value!!)
-        assertEquals(true, viewModel.isEnableTemplateMode.value!!)
+        assertEquals(templateMode1.message, viewModel.templateModeValue.value)
+        assertEquals(true, viewModel.isEnableTemplateMode.value)
     }
 
     /**
@@ -234,8 +234,8 @@ class ChatRoomAddViewModelTest {
         viewModel.templateTitleValue.value = "testTemplate1"
         viewModel.templateModeValue.value = templateMode1.message
         viewModel.templateTitleValue.value = templateNon.title
-        assertEquals("", viewModel.templateModeValue.value!!)
-        assertEquals(false, viewModel.isEnableTemplateMode.value!!)
+        assertEquals("", viewModel.templateModeValue.value)
+        assertEquals(false, viewModel.isEnableTemplateMode.value)
     }
 
     // endregion

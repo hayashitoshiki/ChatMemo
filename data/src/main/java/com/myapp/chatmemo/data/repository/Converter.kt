@@ -24,14 +24,14 @@ object Converter {
         template: Template,
         message: TemplateMessage
     ): TemplateMessageEntity {
-        val templateId = template.templateId.value.toLong()
+        val templateId = template.templateId.value
         val phraseTitle = message.massage
         return TemplateMessageEntity(null, phraseTitle, templateId)
     }
 
     // テンプレートオブジェクトからテンプレートEntityへ変換
     fun templateEntityFromTemplate(template: Template): TemplateTitleEntity {
-        val templateId = template.templateId.value.toLong()
+        val templateId = template.templateId.value
         val templateTitle = template.title
         return TemplateTitleEntity(templateId, templateTitle)
     }
@@ -41,7 +41,10 @@ object Converter {
         templateTitleEntity: TemplateTitleEntity,
         templateMessageEntityList: List<TemplateMessageEntity>
     ): Template {
-        val templateId = TemplateId(templateTitleEntity.id!!.toInt())
+        if (templateTitleEntity.id == null) {
+            throw NullPointerException("登録していないEntityをコンバートしようとしています")
+        }
+        val templateId = TemplateId(templateTitleEntity.id)
         val tempalteTitle = templateTitleEntity.title
         val templateMessageList = templateMessageEntityList.map { templateMessageFromPharaseEntity(it) }
         return Template(templateId, tempalteTitle, templateMessageList)
@@ -59,7 +62,7 @@ object Converter {
         val message = comment.message
         val user = comment.user.chageInt()
         val date = comment.time.date
-        val roomIdLong = roomId.value.toLong()
+        val roomIdLong = roomId.value
         return CommentEntity(null, message, user, date, roomIdLong)
     }
 
@@ -73,14 +76,14 @@ object Converter {
 
     // ChatRoomモデルからChatRoomEntityへ変換
     fun chatEntityFromChat(chatRoom: ChatRoom): ChatRoomEntity {
-        val id = chatRoom.roomId.value.toLong()
+        val id = chatRoom.roomId.value
         val title = chatRoom.title
         val templateId: Long?
         val point: String?
         val mode: Int?
         val templateConfiguration = chatRoom.templateConfiguration
         if (templateConfiguration != null) {
-            templateId = templateConfiguration.template.templateId.value.toLong()
+            templateId = templateConfiguration.template.templateId.value
             point = when (val templateMode = templateConfiguration.templateMode) {
                 is TemplateMode.Order -> templateMode.position.toString()
                 is TemplateMode.Randam -> templateMode.position.joinToString(",")
@@ -110,7 +113,8 @@ object Converter {
         templateTitleEntity: TemplateTitleEntity?,
         templateMessageList: List<TemplateMessageEntity>?
     ): ChatRoom {
-        val roomId = RoomId(chatRoomEntity.id!!.toInt())
+        if (chatRoomEntity.id == null) throw NullPointerException("登録していないEntityをコンバートしようとしています")
+        val roomId = RoomId(chatRoomEntity.id)
         val roomTitle = chatRoomEntity.title
         val commentList: MutableList<Comment> =
             commentEntityList.map { commentEntity -> commentFromCommentEntity(commentEntity) }
@@ -121,7 +125,7 @@ object Converter {
                 val template = templateFromTemplateEntityAndPhraseEntity(templateTitleEntity, templateMessageList)
                 val templateMode = when (TemplateMode.toStatus(chatRoomEntity.templateMode!!)) {
                     is TemplateMode.Order -> {
-                        TemplateMode.Order("順番", chatRoomEntity.phrasePoint!!.toInt())
+                        TemplateMode.Order("順番", chatRoomEntity.phrasePoint?.toInt() ?: 0)
                     }
                     is TemplateMode.Randam -> {
                         if (!chatRoomEntity.phrasePoint.isNullOrEmpty()) {

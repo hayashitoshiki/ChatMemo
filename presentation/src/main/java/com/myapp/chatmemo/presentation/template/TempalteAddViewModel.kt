@@ -60,8 +60,8 @@ class TempalteAddViewModel(
     fun submit() {
         viewModelScope.launch {
             var result = false
-            val templateTitle = titleText.value!!
-            val phraseList = phraseList.value!!
+            val templateTitle = titleText.value ?: return@launch
+            val phraseList = phraseList.value ?: return@launch
             when (submitText.value) {
                 "追加" -> {
                     val templateId: TemplateId = templateUseCase.getNextTemplateId()
@@ -69,7 +69,7 @@ class TempalteAddViewModel(
                     result = templateUseCase.createTemplate(template)
                 }
                 "更新" -> {
-                    val templateId = template!!.templateId
+                    val templateId = template?.templateId ?: return@launch
                     val template = Template(templateId, templateTitle, phraseList)
                     result = templateUseCase.updateTemplate(template)
                 }
@@ -80,8 +80,8 @@ class TempalteAddViewModel(
 
     // 追加
     fun addPhrase() {
-        val phrase = TemplateMessage(phraseText.value!!)
-        val list = phraseList.value!!
+        val phrase = TemplateMessage(phraseText.value ?: return)
+        val list = phraseList.value ?: return
         list.add(phrase)
         phraseList.postValue(list)
         phraseText.value = ""

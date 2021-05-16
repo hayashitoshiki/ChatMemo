@@ -44,9 +44,9 @@ class ChatViewModel(
         viewModelScope.launch {
             chatRoom.value?.also { room ->
                 val roomId = room.roomId
-                val message = commentText.value!!
+                val message = commentText.value ?: return@also
                 val comment = chatUseCase.addComment(message, roomId)
-                val commentList: MutableList<Comment> = _commentList.value!!.toMutableList()
+                val commentList: MutableList<Comment> = _commentList.value?.toMutableList() ?: mutableListOf()
                 commentList.add(comment)
                 room.commentList = commentList
                 room.templateConfiguration?.let { templateConfiguration ->
@@ -67,14 +67,14 @@ class ChatViewModel(
     // ルーム削除
     fun deleteRoom() {
         viewModelScope.launch {
-            chatUseCase.deleteRoom(chatRoom.value!!.roomId)
+            chatUseCase.deleteRoom(chatRoom.value?.roomId ?: return@launch)
         }
     }
 
     // 立場変更
     fun changeUser() {
-        if (!commentList.value.isNullOrEmpty()) {
-            val newCommentList = chatUseCase.reverseAllCommentUser(commentList.value!!)
+        commentList.value?.let {
+            val newCommentList = chatUseCase.reverseAllCommentUser(it)
             _commentList.value = newCommentList
         }
     }

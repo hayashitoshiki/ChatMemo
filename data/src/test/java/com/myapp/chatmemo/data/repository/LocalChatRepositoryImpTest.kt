@@ -135,7 +135,7 @@ class LocalChatRepositoryImpTest {
     fun deleteRoom() {
         runBlocking {
             val roomId = chatRoom.roomId
-            val roomIdLong = roomId.value.toLong()
+            val roomIdLong = roomId.value
             repository.deleteRoom(roomId)
             coVerify(exactly = 1) { (roomDao).deleteById(roomIdLong) }
             coVerify(exactly = 1) { (commentDao).deleteById(roomIdLong) }

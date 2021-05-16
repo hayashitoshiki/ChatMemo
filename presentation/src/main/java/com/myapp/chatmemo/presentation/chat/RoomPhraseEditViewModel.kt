@@ -50,9 +50,12 @@ class RoomPhraseEditViewModel(
 
     // 送信
     suspend fun submit() {
-        if (templateTitleValue.value!! != templateTitleList.value!![0].title) {
-            val template = templateTitleList.value!!.first { it.title == templateTitleValue.value!! }
-            val templateMode = templateModeList.value!!.first { it.massage == templateModeValue.value!! }
+        val templateTitleList = templateTitleList.value ?: return
+        val templateModeList = templateModeList.value ?: return
+        val templateModeValue = templateModeValue.value ?: return
+        if (templateTitleValue.value != templateTitleList[0].title) {
+            val template = templateTitleList.first { it.title == templateTitleValue.value }
+            val templateMode = templateModeList.first { it.massage == templateModeValue }
             val templateConfiguration = TemplateConfiguration(template, templateMode)
             chatRoom.templateConfiguration = templateConfiguration
         } else {
@@ -66,19 +69,20 @@ class RoomPhraseEditViewModel(
         val title = templateTitleValue.value
         val mode = templateModeValue.value
         val templateList = templateTitleList.value
+        val templateConfiguration = chatRoom.templateConfiguration
 
         _isEnableSubmitButton.value = when {
             // テンプレートが存在しないされていない場合
             templateList == null || templateList.size == 1 -> false
             // 現在、テンプレートが設定されていない場合
-            chatRoom.templateConfiguration == null -> {
+            templateConfiguration == null -> {
                 val emptyTitle = templateList[0].title
-                title!!.isNotEmpty() && title != emptyTitle && !mode.isNullOrEmpty()
+                !title.isNullOrEmpty() && title != emptyTitle && !mode.isNullOrEmpty()
             }
             // 現在、テンプレートが設定されている場合
             else -> {
-                val oldTitle = chatRoom.templateConfiguration!!.template.title
-                val oldMode = chatRoom.templateConfiguration!!.templateMode.massage
+                val oldTitle = templateConfiguration.template.title
+                val oldMode = templateConfiguration.templateMode.massage
                 title == null || (mode != null && !(title == oldTitle && mode == oldMode))
             }
         }

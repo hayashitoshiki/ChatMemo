@@ -95,7 +95,7 @@ class ConverterTest {
         val result = Converter.templateMessageEntityFromTemplateAndMessage(template1, templateMessage1)
         assertEquals(null, result.id)
         assertEquals(templateMessage1.massage, result.text)
-        assertEquals(template1.templateId.value.toLong(), result.templateId)
+        assertEquals(template1.templateId.value, result.templateId)
     }
 
     // endregion
@@ -113,7 +113,7 @@ class ConverterTest {
     @Test
     fun templateEntityFromTemplate() {
         val result = Converter.templateEntityFromTemplate(template1)
-        assertEquals(template1.templateId.value.toLong(), result.id)
+        assertEquals(template1.templateId.value, result.id)
         assertEquals(template1.title, result.title)
     }
 
@@ -160,7 +160,7 @@ class ConverterTest {
         assertEquals(comment1.message, result.text)
         assertEquals(comment1.user.chageInt(), result.user)
         assertEquals(comment1.time.date, result.commentTime)
-        assertEquals(chatRoomId1.value.toLong(), result.roomId)
+        assertEquals(chatRoomId1.value, result.roomId)
     }
 
     // endregion
@@ -203,7 +203,7 @@ class ConverterTest {
     @Test
     fun chatEntityFromChatByTemplateNull() {
         val result = Converter.chatEntityFromChat(chatRoomByTemplateNull)
-        val id = chatRoomByTemplateNull.roomId.value.toLong()
+        val id = chatRoomByTemplateNull.roomId.value
         val title = chatRoomByTemplateNull.title
         val templateId = null
         val templateMode = null
@@ -235,11 +235,11 @@ class ConverterTest {
     @Test
     fun chatEntityFromChatByOrder() {
         val result = Converter.chatEntityFromChat(chatRoomByOrder)
-        val id = chatRoomByOrder.roomId.value.toLong()
+        val id = chatRoomByOrder.roomId.value
         val title = chatRoomByOrder.title
-        val templateId = chatRoomByOrder.templateConfiguration!!.template.templateId.value.toLong()
-        val templateMode = chatRoomByOrder.templateConfiguration!!.templateMode.getInt()
-        val templatePosition = (chatRoomByOrder.templateConfiguration!!.templateMode as TemplateMode.Order).position.toString()
+        val templateId = chatRoomByOrder.templateConfiguration?.template?.templateId?.value
+        val templateMode = chatRoomByOrder.templateConfiguration?.templateMode?.getInt()
+        val templatePosition = (chatRoomByOrder.templateConfiguration?.templateMode as TemplateMode.Order).position.toString()
         val lastCommentMessage = chatRoomByOrder.commentList.last().message
         val lastCommentTime = chatRoomByOrder.commentList.last().time.date
         assertEquals(id, result.id)
@@ -267,10 +267,10 @@ class ConverterTest {
     @Test
     fun chatEntityFromChatByRandam() {
         val result = Converter.chatEntityFromChat(chatRoomByRandam)
-        val id = chatRoomByRandam.roomId.value.toLong()
+        val id = chatRoomByRandam.roomId.value
         val title = chatRoomByRandam.title
-        val templateId = chatRoomByRandam.templateConfiguration!!.template.templateId.value.toLong()
-        val templateMode = chatRoomByRandam.templateConfiguration!!.templateMode.getInt()
+        val templateId = chatRoomByRandam.templateConfiguration?.template?.templateId?.value
+        val templateMode = chatRoomByRandam.templateConfiguration?.templateMode?.getInt()
         val templatePosition =
             (chatRoomByRandam.templateConfiguration!!.templateMode as TemplateMode.Randam).position.joinToString(",")
         val lastCommentMessage = chatRoomByRandam.commentList.last().message
@@ -300,9 +300,9 @@ class ConverterTest {
     @Test
     fun chatEntityFromChatByCommentNotNull() {
         val result = Converter.chatEntityFromChat(chatRoomByCommentNotNull)
-        val id = chatRoomByCommentNotNull.roomId.value.toLong()
+        val id = chatRoomByCommentNotNull.roomId.value
         val title = chatRoomByCommentNotNull.title
-        val templateId = chatRoomByCommentNotNull.templateConfiguration!!.template.templateId.value.toLong()
+        val templateId = chatRoomByCommentNotNull.templateConfiguration!!.template.templateId.value
         val templateMode = chatRoomByCommentNotNull.templateConfiguration!!.templateMode.getInt()
         val templatePosition =
             (chatRoomByCommentNotNull.templateConfiguration!!.templateMode as TemplateMode.Order).position.toString()
@@ -333,9 +333,9 @@ class ConverterTest {
     @Test
     fun chatEntityFromChatByCommentNull() {
         val result = Converter.chatEntityFromChat(chatRoomByCommentNull)
-        val id = chatRoomByCommentNull.roomId.value.toLong()
+        val id = chatRoomByCommentNull.roomId.value
         val title = chatRoomByCommentNull.title
-        val templateId = chatRoomByCommentNull.templateConfiguration!!.template.templateId.value.toLong()
+        val templateId = chatRoomByCommentNull.templateConfiguration!!.template.templateId.value
         val templateMode = chatRoomByCommentNull.templateConfiguration!!.templateMode.getInt()
         val templatePosition =
             (chatRoomByCommentNull.templateConfiguration!!.templateMode as TemplateMode.Order).position.toString()
@@ -367,7 +367,7 @@ class ConverterTest {
     @Test
     fun chatFromByTemplateNull() {
         val result = Converter.chatFromBy(chatRoomEntityByTemplateNull, commentEntityList, null, null)
-        val id = RoomId(chatRoomEntityByTemplateNull.id!!.toInt())
+        val id = RoomId(chatRoomEntityByTemplateNull.id!!)
         val title = chatRoomEntityByTemplateNull.title
         val commentList = commentEntityList.map { Converter.commentFromCommentEntity(it) }
         assertEquals(id, result.roomId)
@@ -392,7 +392,7 @@ class ConverterTest {
     @Test
     fun chatFromByTemplateOrder() {
         val result = Converter.chatFromBy(chatRoomEntityByOrder, commentEntityList, templateTitleEntity, phraseEntityList)
-        val id = RoomId(chatRoomEntityByOrder.id!!.toInt())
+        val id = RoomId(chatRoomEntityByOrder.id!!)
         val title = chatRoomEntityByOrder.title
         val commentList = commentEntityList.map { Converter.commentFromCommentEntity(it) }
         val template = Converter.templateFromTemplateEntityAndPhraseEntity(templateTitleEntity, phraseEntityList)
@@ -421,7 +421,7 @@ class ConverterTest {
     @Test
     fun chatFromByTemplateRandam() {
         val result = Converter.chatFromBy(chatRoomEntityByRandam, commentEntityList, templateTitleEntity, phraseEntityList)
-        val id = RoomId(chatRoomEntityByRandam.id!!.toInt())
+        val id = RoomId(chatRoomEntityByRandam.id!!)
         val title = chatRoomEntityByRandam.title
         val commentList = commentEntityList.map { Converter.commentFromCommentEntity(it) }
         val template = Converter.templateFromTemplateEntityAndPhraseEntity(templateTitleEntity, phraseEntityList)
@@ -453,7 +453,7 @@ class ConverterTest {
     @Test
     fun chatFromByTemplateRandamInit() {
         val result = Converter.chatFromBy(chatRoomEntityByRandamInit, commentEntityList, templateTitleEntity, phraseEntityList)
-        val id = RoomId(chatRoomEntityByRandamInit.id!!.toInt())
+        val id = RoomId(chatRoomEntityByRandamInit.id!!)
         val title = chatRoomEntityByRandamInit.title
         val commentList = commentEntityList.map { Converter.commentFromCommentEntity(it) }
         val template = Converter.templateFromTemplateEntityAndPhraseEntity(templateTitleEntity, phraseEntityList)

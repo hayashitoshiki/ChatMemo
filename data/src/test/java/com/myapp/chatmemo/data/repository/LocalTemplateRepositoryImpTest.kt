@@ -125,7 +125,7 @@ class LocalTemplateRepositoryImpTest {
             repository.updateTemplate(template)
             coVerify(exactly = 1) { (templateDao).update(any()) }
             coVerify(exactly = template.templateMessageList.size) { (phraseDao).insert(any()) }
-            coVerify(exactly = 1) { (phraseDao).deleteByTemplateId(template.templateId.value.toLong()) }
+            coVerify(exactly = 1) { (phraseDao).deleteByTemplateId(template.templateId.value) }
         }
     }
 
@@ -145,7 +145,7 @@ class LocalTemplateRepositoryImpTest {
     fun deleteTemplate() {
         runBlocking {
             repository.deleteTemplate(template.templateId)
-            val id = template.templateId.value.toLong()
+            val id = template.templateId.value
             coVerify(exactly = 1) { (templateDao).deleteByTemplateId(id) }
             coVerify(exactly = 1) { (phraseDao).deleteByTemplateId(id) }
         }

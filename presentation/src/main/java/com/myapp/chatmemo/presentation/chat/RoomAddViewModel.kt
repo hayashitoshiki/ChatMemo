@@ -50,13 +50,13 @@ class RoomAddViewModel(
     // 新規ルーム作成
     suspend fun createRoom(): ChatRoom {
         val roomId = chatUseCase.getNextRoomId()
-        val title = titleText.value!!
+        val title = titleText.value ?: throw NullPointerException("タイトルが設定されていないのに呼ばれています")
         val templateConfiguration: TemplateConfiguration?
         val comment = mutableListOf<Comment>()
         val templateTitle = templateTitleValue.value
         val templateList = templateTitleList.value
         val templateMode = templateModeValue.value
-        val templateModeList = templateModeList.value!!
+        val templateModeList = templateModeList.value ?: throw NullPointerException("テンプレート形式リストがないのに呼ばれています")
 
         templateConfiguration =
             if (!templateTitle.isNullOrEmpty() && !templateList.isNullOrEmpty() && templateTitle != templateList[0].title) {
@@ -92,14 +92,16 @@ class RoomAddViewModel(
 
     // テンプレート選択制御
     private fun changedTemplateTitleValue(text: String) {
-        if (text.isEmpty() || text == templateTitleList.value!![0].title) {
+        val templateTitleList = templateTitleList.value
+        if (text.isEmpty() || (templateTitleList != null && text == templateTitleList[0].title)) {
             templateModeValue.value = ""
         }
     }
 
     // テンプレート表示形式選択欄のバリデート
     private fun changeModeEnable(text: String) {
-        val result = text.isNotEmpty() && text != templateTitleList.value!![0].title
+        val templateTitleList = templateTitleList.value
+        val result = text.isNotEmpty() && templateTitleList != null && text != templateTitleList[0].title
         _isEnableTemplateMode.value = result
     }
 }

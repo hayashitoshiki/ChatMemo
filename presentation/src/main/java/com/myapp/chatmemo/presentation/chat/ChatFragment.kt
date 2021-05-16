@@ -121,19 +121,23 @@ class ChatFragment : Fragment() {
         when (item.itemId) {
             // 定型文変更ボタン
             R.id.menu_edit_room_phrase -> {
-                val dialogFragment = RoomPhraseEditDialogFragment()
-                val bundle = Bundle()
-                bundle.putSerializable("room", viewModel.chatRoom.value!!)
-                dialogFragment.arguments = bundle
-                dialogFragment.show(requireActivity().supportFragmentManager, null)
+                viewModel.chatRoom.value?.let {
+                    val dialogFragment = RoomPhraseEditDialogFragment()
+                    val bundle = Bundle()
+                    bundle.putSerializable("room", it)
+                    dialogFragment.arguments = bundle
+                    dialogFragment.show(requireActivity().supportFragmentManager, null)
+                }
             }
             // ルーム名変更ボタン
             R.id.menu_edit_room -> {
-                val dialogFragment = RoomTitleEditDialogFragment()
-                val bundle = Bundle()
-                bundle.putSerializable("room", viewModel.chatRoom.value!!)
-                dialogFragment.arguments = bundle
-                dialogFragment.show(requireActivity().supportFragmentManager, null)
+                viewModel.chatRoom.value?.let {
+                    val dialogFragment = RoomTitleEditDialogFragment()
+                    val bundle = Bundle()
+                    bundle.putSerializable("room", it)
+                    dialogFragment.arguments = bundle
+                    dialogFragment.show(requireActivity().supportFragmentManager, null)
+                }
             }
             // 新規作成ボタン
             R.id.menu_delete_room -> {

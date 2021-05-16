@@ -20,7 +20,7 @@ class LocalTemplateRepositoryImp(
     override suspend fun getNextTemplateId(): TemplateId {
         return withContext(ioDispatcher) {
             val id = templateDao.getNextId() ?: 0
-            return@withContext TemplateId(id.toInt() + 1)
+            return@withContext TemplateId(id + 1)
         }
     }
 
@@ -40,7 +40,7 @@ class LocalTemplateRepositoryImp(
     // テンプレート更新
     override suspend fun updateTemplate(template: Template): Boolean {
         return withContext(ioDispatcher) {
-            val templateId = template.templateId.value.toLong()
+            val templateId = template.templateId.value
             val oldTemplateEntity = templateDao.getTemplateById(templateId)
             val newTemplateEntity = Converter.templateEntityFromTemplate(template)
             oldTemplateEntity.update(newTemplateEntity)
@@ -57,7 +57,7 @@ class LocalTemplateRepositoryImp(
     // テンプレート削除
     override suspend fun deleteTemplate(templateId: TemplateId): Boolean {
         return withContext(ioDispatcher) {
-            val temId = templateId.value.toLong()
+            val temId = templateId.value
             templateDao.deleteByTemplateId(temId)
             phraseDao.deleteByTemplateId(temId)
 
@@ -70,8 +70,9 @@ class LocalTemplateRepositoryImp(
         return templateDao.getAll()
             .map { templateEntityList ->
                 templateEntityList.sortedByDescending { it.updateAt }
+                    .filter { it.id != null }
                     .map { templateEntity ->
-                        Template(TemplateId(templateEntity.id!!.toInt()), templateEntity.title, listOf())
+                        Template(TemplateId(templateEntity.id!!), templateEntity.title, listOf())
                     }
             }
     }
@@ -79,7 +80,7 @@ class LocalTemplateRepositoryImp(
     // テンプレートIDに紐づくテンプレートメッセージ取得
     override suspend fun getTemplateMessageById(templateId: TemplateId): List<TemplateMessage> {
         return withContext(ioDispatcher) {
-            val id = templateId.value.toLong()
+            val id = templateId.value
             return@withContext phraseDao.getAllByTitle(id)
                 .map {
                     Converter.templateMessageFromPharaseEntity(it)

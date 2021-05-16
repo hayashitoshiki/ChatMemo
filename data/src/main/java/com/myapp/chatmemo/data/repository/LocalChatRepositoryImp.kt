@@ -22,7 +22,7 @@ class LocalChatRepositoryImp(
     override suspend fun getNextRoomId(): RoomId {
         return withContext(ioDispatcher) {
             val id = roomDao.getNextId() ?: 0
-            return@withContext RoomId(id.toInt() + 1)
+            return@withContext RoomId(id + 1)
         }
     }
 
@@ -37,7 +37,7 @@ class LocalChatRepositoryImp(
     // チャットルーム削除
     override suspend fun deleteRoom(roomId: RoomId) {
         withContext(ioDispatcher) {
-            val id = roomId.value.toLong()
+            val id = roomId.value
             roomDao.deleteById(id)
             commentDao.deleteById(id)
         }
@@ -48,7 +48,7 @@ class LocalChatRepositoryImp(
         return withContext(ioDispatcher) {
             val newChatRoomEntity = Converter.chatEntityFromChat(chatRoom)
             val oldChatRoomEntity = withContext(Dispatchers.Default) {
-                roomDao.getRoomById(chatRoom.roomId.value.toLong())
+                roomDao.getRoomById(chatRoom.roomId.value)
                     .first()
             }
             oldChatRoomEntity.update(newChatRoomEntity)
@@ -68,7 +68,7 @@ class LocalChatRepositoryImp(
 
     // ルームIDに紐づくチャットルーム取得
     override fun getRoomById(roomId: RoomId): Flow<ChatRoom> {
-        return roomDao.getRoomById(roomId.value.toLong())
+        return roomDao.getRoomById(roomId.value)
             .filterNotNull()
             .map { chatRoomEntity ->
                 chatRoomFromChatRoomEntity(chatRoomEntity)
@@ -78,7 +78,7 @@ class LocalChatRepositoryImp(
     // テンプレートIDに紐づくチャットルーム取得
     override suspend fun getRoomByTemplateId(templateId: TemplateId): List<ChatRoom> {
         return withContext(ioDispatcher) {
-            return@withContext roomDao.getRoomByTemplateId(templateId.value.toLong())
+            return@withContext roomDao.getRoomByTemplateId(templateId.value)
                 .map { chatRoomEntity ->
                     chatRoomFromChatRoomEntity(chatRoomEntity)
                 }
@@ -101,7 +101,7 @@ class LocalChatRepositoryImp(
         withContext(ioDispatcher) {
             commentList.forEach {
                 val oldComment = commentDao.getCommentByDate(it.time.date)
-                val newCommentEntity = Converter.commentEntityFromComment(it, RoomId(oldComment.roomId.toInt()))
+                val newCommentEntity = Converter.commentEntityFromComment(it, RoomId(oldComment.roomId))
                 oldComment.update(newCommentEntity)
                 commentDao.update(oldComment)
             }
@@ -110,19 +110,20 @@ class LocalChatRepositoryImp(
 
     // チャットルームEntitiyからチャットルームオブジェクトへ変換
     private suspend fun chatRoomFromChatRoomEntity(chatRoomEntity: ChatRoomEntity): ChatRoom {
-        val commentList: List<CommentEntity> = commentDao.getAllCommentByRoom(chatRoomEntity.id!!)
-        val templateTitle = if (chatRoomEntity.templateId != null) {
-            templateDao.getTemplateById(chatRoomEntity.templateId!!)
-        } else {
+        if (chatRoomEntity.id == null) {
+            throw NullPointerException("登録していないEntityをコンバートしようとしています")
+        }
+        val commentList: List<CommentEntity> = commentDao.getAllCommentByRoom(chatRoomEntity.id)
+        val templateTitle = chatRoomEntity.templateId?.let {
+            templateDao.getTemplateById(it)
+        } ?: run {
             null
         }
-        val templatePhrase = if (templateTitle != null) {
-            phraseDao.getAllByTitle(templateTitle.id!!)
-        } else {
+        val templatePhrase = templateTitle?.id?.let {
+            phraseDao.getAllByTitle(it)
+        } ?: run {
             null
         }
-        return Converter.chatFromBy(
-            chatRoomEntity, commentList, templateTitle, templatePhrase
-        )
+        return Converter.chatFromBy(chatRoomEntity, commentList, templateTitle, templatePhrase)
     }
 }

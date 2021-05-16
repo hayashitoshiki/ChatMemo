@@ -43,13 +43,15 @@ class RoomTitleEditDialogFragment : DialogFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        dialog!!.window!!.setBackgroundDrawableResource(R.color.transparent)
+        dialog?.window?.setBackgroundDrawableResource(R.color.transparent)
 
-        // 検索ボタン
+        // 決定ボタン
         binding.btnSubmit.setOnClickListener {
             lifecycleScope.launch {
-                viewModel.changeRoomName(viewModel.newRoomTitle.value!!)
-                dismiss()
+                viewModel.newRoomTitle.value?.let {
+                    viewModel.changeRoomName(it)
+                    dismiss()
+                }
             }
         }
         // editTextフォーカス制御
