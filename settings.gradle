@@ -1,3 +1,4 @@
+include ':document'
 include ':common'
 include ':presentation'
 include ':data'

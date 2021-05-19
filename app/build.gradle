@@ -1,12 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.jetbrains.dokka-android'
 apply from: './jacoco.gradle'
+apply plugin: 'org.jetbrains.dokka-android'
 
-dokka {
-    outputFormat = 'gfm'
-    includes = ['doc/module_package.md']
-    outputDirectory = "$projectDir/doc"
-}
 android {
     defaultConfig {
         applicationId "com.myapp.chatmemo"
