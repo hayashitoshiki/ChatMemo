@@ -61,4 +61,4 @@ https://github.com/hayashitoshiki/ChatMemo/tree/master/data/src/main/java/com/my
 https://github.com/hayashitoshiki/ChatMemo/tree/master/common/src/main/java/com/myapp/chatmemo/common
 
 ## ソースドキュメント
-https://github.com/hayashitoshiki/ChatMemo/blob/master/app/doc/app/index.md
+https://github.com/hayashitoshiki/ChatMemo/blob/master/document/document/index.md
