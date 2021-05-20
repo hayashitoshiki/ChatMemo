@@ -18,7 +18,7 @@ import com.myapp.chatmemo.presentation.template.TempalteAddViewModel
 import com.myapp.chatmemo.presentation.template.TemplateListViewModel
 import kotlinx.coroutines.MainScope
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.dsl.module
