@@ -4,14 +4,16 @@ import com.myapp.chatmemo.common.getDateTimeNow
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.value.*
 import com.myapp.chatmemo.domain.repository.LocalChatRepository
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class ChatUseCaseImp(
+class ChatUseCaseImp @Inject constructor(
     private val localChatRepository: LocalChatRepository,
     private val externalScope: CoroutineScope,
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default

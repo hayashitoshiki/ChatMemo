@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -24,17 +25,28 @@ import com.myapp.chatmemo.domain.model.value.TemplateMessage
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentTemplateAddBinding
 import com.myapp.chatmemo.presentation.utils.transition.FabTransform
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * 定型文作成画面
  */
+@AndroidEntryPoint
 class TemplateAddFragment : Fragment() {
 
     private lateinit var binding: FragmentTemplateAddBinding
     private val args: TemplateAddFragmentArgs by navArgs()
-    private val viewModel: TempalteAddViewModel by inject { parametersOf(args.data) }
+    @Inject
+    lateinit var assistedFactory: TempalteAddViewModel.TempalteAddViewModelAssistedFactory
+
+    private val viewModel: TempalteAddViewModel by viewModels {
+        TempalteAddViewModel.provideFactory(
+            this,
+            assistedFactory,
+            args.data
+        )
+    }
+//    private val viewModel: TempalteAddViewModel by viewModels { args.data }
 
     override fun onCreateView(
         inflater: LayoutInflater,

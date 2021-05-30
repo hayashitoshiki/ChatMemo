@@ -2,6 +2,7 @@
 buildscript {
     ext.kotlin_version = "1.5.0"
     ext.dokka_version = '0.9.17'
+    ext.hilt_version = '2.35'
     repositories {
         google()
         mavenCentral()
@@ -10,6 +11,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         // safe-args
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.2"
         classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokka_version}"
@@ -36,6 +38,7 @@ subprojects { // 配下のモジュール全てに適用される
 
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-kapt'
+    apply plugin: 'dagger.hilt.android.plugin'
 
     android {
         compileSdkVersion 30
@@ -97,9 +100,14 @@ subprojects { // 配下のモジュール全てに適用される
         // ktlint
         ktlint "com.pinterest:ktlint:0.41.0"
 
+        // hilt
+        implementation "com.google.dagger:hilt-android:$rootProject.hilt_version"
+        kapt "com.google.dagger:hilt-android-compiler:$rootProject.hilt_version"
+//        compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:0.6.0"
+//        kapt "com.squareup.inject:assisted-inject-processor-dagger2:0.6.0"
         // koin
-        def koin_version = "3.0.2"
-        implementation "io.insert-koin:koin-android:$koin_version"
+//        def koin_version = "3.0.2"
+//        implementation "io.insert-koin:koin-android:$koin_version"
 //        implementation "org.koin:koin-android-scope:$koin_version"
 //        implementation "org.koin:koin-android-viewmodel:$koin_version"
         // coroutines

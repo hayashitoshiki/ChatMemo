@@ -1,16 +1,19 @@
 package com.myapp.chatmemo.presentation.template
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import androidx.savedstate.SavedStateRegistryOwner
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.TemplateId
 import com.myapp.chatmemo.domain.model.value.TemplateMessage
 import com.myapp.chatmemo.domain.usecase.TemplateUseCase
 import com.myapp.chatmemo.presentation.utils.expansion.BaseViewModel
 import com.myapp.chatmemo.presentation.utils.expansion.ViewModelLiveData
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * 定型文作成画面_UIロジック
@@ -18,10 +21,31 @@ import kotlinx.coroutines.launch
  * @property template DBアクセス用repository
  * @property templateUseCase テンプレート用UseCase
  */
-class TempalteAddViewModel(
-    private val template: Template?,
+class TempalteAddViewModel @AssistedInject constructor(
+    @Assisted private val template: Template?,
     private val templateUseCase: TemplateUseCase
 ) : BaseViewModel() {
+
+    @AssistedFactory
+    interface TempalteAddViewModelAssistedFactory {
+        fun create(template: Template?): TempalteAddViewModel
+    }
+
+    companion object {
+        fun provideFactory(
+            owner: SavedStateRegistryOwner,
+            assistedFactory: TempalteAddViewModelAssistedFactory,
+            template: Template?
+        ): ViewModelProvider.Factory = object : AbstractSavedStateViewModelFactory(owner, null) {
+            override fun <T : ViewModel?> create(
+                key: String,
+                modelClass: Class<T>,
+                handle: SavedStateHandle
+            ): T {
+                return assistedFactory.create(template) as T
+            }
+        }
+    }
 
     val titleText = MutableLiveData("")
     val phraseText = MutableLiveData("")

@@ -11,21 +11,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentTemplateListBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * 定型文一覧画面
  */
+@AndroidEntryPoint
 class TtemplateListFragment : Fragment() {
 
     private lateinit var binding: FragmentTemplateListBinding
-    private val viewModel: TemplateListViewModel by viewModel()
+    private val viewModel: TemplateListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

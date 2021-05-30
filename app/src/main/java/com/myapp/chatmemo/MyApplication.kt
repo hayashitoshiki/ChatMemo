@@ -16,13 +16,10 @@ import com.myapp.chatmemo.domain.usecase.TemplateUseCaseImp
 import com.myapp.chatmemo.presentation.chat.*
 import com.myapp.chatmemo.presentation.template.TempalteAddViewModel
 import com.myapp.chatmemo.presentation.template.TemplateListViewModel
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.MainScope
-import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.context.startKoin
-import org.koin.core.module.Module
-import org.koin.dsl.module
 
+@HiltAndroidApp
 class MyApplication : Application() {
 
     companion object {
@@ -33,7 +30,7 @@ class MyApplication : Application() {
     }
 
     // Grovalp Scope
-    private val applicationScope = MainScope()
+    val applicationScope = MainScope()
 
     init {
         shared = this
@@ -43,34 +40,34 @@ class MyApplication : Application() {
         super.onCreate()
         Log.d(TAG, "onCreate")
 
-        startKoin {
-            androidContext(applicationContext)
-            modules(module)
-        }
+//        startKoin {
+//            androidContext(applicationContext)
+//            modules(module)
+//        }
 
         // AppDatabaseをビルドする
-        database = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "app_database")
-            .build()
+//        database = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "app_database")
+//            .build()
     }
 
     // Koinモジュール
-    private val module: Module = module {
-        viewModel { HomeViewModel(get()) }
-        viewModel { (id: RoomId) -> ChatViewModel(id, get()) }
-        viewModel { RoomAddViewModel(get(), get()) }
-        viewModel { (chatroom: ChatRoom) -> RoomPhraseEditViewModel(chatroom, get(), get()) }
-        viewModel { (chatroom: ChatRoom) -> RoomTitleEditViewModel(chatroom, get()) }
-        viewModel { (template: Template?) -> TempalteAddViewModel(template, get()) }
-        viewModel { TemplateListViewModel(get()) }
-
-        factory<com.myapp.chatmemo.domain.usecase.ChatUseCase> { ChatUseCaseImp(get(), applicationScope) }
-        factory<com.myapp.chatmemo.domain.usecase.TemplateUseCase> { TemplateUseCaseImp(get(), get()) }
-
-        factory<LocalTemplateRepository> { LocalTemplateRepositoryImp(database.templateDao(), database.phraseDao()) }
-        factory<LocalChatRepository> {
-            LocalChatRepositoryImp(
-                database.roomDao(), database.commentDao(), database.templateDao(), database.phraseDao()
-            )
-        }
-    }
+//    private val module: Module = module {
+//        viewModel { HomeViewModel(get()) }
+//        viewModel { (id: RoomId) -> ChatViewModel(id, get()) }
+//        viewModel { RoomAddViewModel(get(), get()) }
+//        viewModel { (chatroom: ChatRoom) -> RoomPhraseEditViewModel(chatroom, get(), get()) }
+//        viewModel { (chatroom: ChatRoom) -> RoomTitleEditViewModel(chatroom, get()) }
+//        viewModel { (template: Template?) -> TempalteAddViewModel(template, get()) }
+//        viewModel { TemplateListViewModel(get()) }
+//
+//        factory<com.myapp.chatmemo.domain.usecase.ChatUseCase> { ChatUseCaseImp(get(), applicationScope) }
+//        factory<com.myapp.chatmemo.domain.usecase.TemplateUseCase> { TemplateUseCaseImp(get(), get()) }
+//
+//        factory<LocalTemplateRepository> { LocalTemplateRepositoryImp(database.templateDao(), database.phraseDao()) }
+//        factory<LocalChatRepository> {
+//            LocalChatRepositoryImp(
+//                database.roomDao(), database.commentDao(), database.templateDao(), database.phraseDao()
+//            )
+//        }
+//    }
 }

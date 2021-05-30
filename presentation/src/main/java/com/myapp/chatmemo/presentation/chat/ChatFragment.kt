@@ -9,25 +9,45 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.myapp.chatmemo.domain.model.value.Comment
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentChatBinding
+import com.myapp.chatmemo.presentation.template.TempalteAddViewModel
 import com.myapp.chatmemo.presentation.utils.transition.PlayTransition
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * チャット画面
  */
+@AndroidEntryPoint
 class ChatFragment : Fragment() {
 
     private var isKeyboardShowing = false
     private val args: ChatFragmentArgs by navArgs()
     private lateinit var binding: FragmentChatBinding
-    private val viewModel: ChatViewModel by inject { parametersOf(args.data.roomId) }
+
+    @Inject
+    lateinit var assistedFactory: ChatViewModel.ViewModelAssistedFactory
+    private val viewModel: ChatViewModel by viewModels {
+        ChatViewModel.provideFactory(
+            assistedFactory, args.data.roomId
+        )
+    }
+//    private val viewModel: ChatViewModel = assistedFactory.create(args.data.roomId)
+//    by assistedViewModels {
+//        assistedFactory.create(id = args.data.roomId)
+//        ChatViewModel.provideFactory(
+//            this,
+//            assistedFactory,
+//            args.data.roomId
+//        )
+//    }
+//    private val viewModel: ChatViewModel by inject { parametersOf(args.data.roomId) }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -5,12 +5,14 @@ import com.myapp.chatmemo.data.database.entity.CommentEntity
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.value.*
 import com.myapp.chatmemo.domain.repository.LocalChatRepository
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class LocalChatRepositoryImp(
+class LocalChatRepositoryImp @Inject constructor(
     private val roomDao: com.myapp.chatmemo.data.database.dao.RoomDao,
     private val commentDao: com.myapp.chatmemo.data.database.dao.CommentDao,
     private val templateDao: com.myapp.chatmemo.data.database.dao.TemplateDao,

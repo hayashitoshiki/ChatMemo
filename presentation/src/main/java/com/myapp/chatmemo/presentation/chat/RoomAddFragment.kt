@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.transition.ChangeTransform
@@ -25,18 +26,18 @@ import com.myapp.chatmemo.presentation.databinding.FragmentRoomAddBinding
 import com.myapp.chatmemo.presentation.utils.expansion.firsText
 import com.myapp.chatmemo.presentation.utils.expansion.text
 import com.myapp.chatmemo.presentation.utils.transition.FabTransform
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
 
 /**
  * 新規ルーム作成画面
  */
+@AndroidEntryPoint
 class RoomAddFragment : Fragment() {
 
     private lateinit var binding: FragmentRoomAddBinding
-    private val viewModel: RoomAddViewModel by inject { parametersOf() }
+    private val viewModel: RoomAddViewModel by viewModels()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(

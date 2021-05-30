@@ -5,11 +5,13 @@ import com.myapp.chatmemo.domain.model.value.TemplateId
 import com.myapp.chatmemo.domain.model.value.TemplateMessage
 import com.myapp.chatmemo.domain.repository.LocalChatRepository
 import com.myapp.chatmemo.domain.repository.LocalTemplateRepository
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class TemplateUseCaseImp(
+class TemplateUseCaseImp @Inject constructor(
     private val localChatRepository: LocalChatRepository,
     private val localTemplateRepository: LocalTemplateRepository
 ) : TemplateUseCase {

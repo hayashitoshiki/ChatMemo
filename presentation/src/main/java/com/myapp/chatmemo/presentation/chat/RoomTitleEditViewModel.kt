@@ -1,21 +1,43 @@
 package com.myapp.chatmemo.presentation.chat
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
+import androidx.savedstate.SavedStateRegistryOwner
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
+import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.usecase.ChatUseCase
+import com.myapp.chatmemo.presentation.template.TempalteAddViewModel
 import com.myapp.chatmemo.presentation.utils.expansion.BaseViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /**
  * ルーム名変更ダイアログ_ロジック
  * @property chatRoomEntity chatRoom
  * @property chatRoomUseCase Chatに関するUseCase
  */
-class RoomTitleEditViewModel(
-    private var chatRoomEntity: ChatRoom,
-    private val chatRoomUseCase: ChatUseCase
+class RoomTitleEditViewModel @AssistedInject constructor(
+    private val chatRoomUseCase: ChatUseCase,
+    @Assisted private var chatRoomEntity: ChatRoom
 ) : BaseViewModel() {
+
+    @AssistedFactory
+    interface RoomTitleEditViewModelAssistedFactory {
+        fun create(chatRoomEntity: ChatRoom): RoomTitleEditViewModel
+    }
+
+    companion object {
+        fun provideFactory(
+            assistedFactory: RoomTitleEditViewModelAssistedFactory,
+            chatRoomEntity: ChatRoom
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return assistedFactory.create(chatRoomEntity) as T
+            }
+        }
+    }
 
     val newRoomTitle = MutableLiveData("")
     private val _oldRoomTitle = MutableLiveData("")
