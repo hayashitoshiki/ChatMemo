@@ -60,5 +60,12 @@ https://github.com/hayashitoshiki/ChatMemo/tree/master/data/src/main/java/com/my
 ### 共通処理(commone)
 https://github.com/hayashitoshiki/ChatMemo/tree/master/common/src/main/java/com/myapp/chatmemo/common
 
+## 詳細仕様
+* 画面仕様  
+https://github.com/hayashitoshiki/ChatMemo/tree/master/presentation/src/test/java/com/myapp/chatmemo/presentation
+
+* 機能仕様  
+https://github.com/hayashitoshiki/ChatMemo/tree/master/domain/src/test/java/com/myapp/chatmemo/domain/usecase
+
 ## ソースドキュメント
 https://github.com/hayashitoshiki/ChatMemo/blob/master/document/document/index.md
