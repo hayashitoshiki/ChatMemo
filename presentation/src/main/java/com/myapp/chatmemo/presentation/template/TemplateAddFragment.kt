@@ -46,7 +46,6 @@ class TemplateAddFragment : Fragment() {
             args.data
         )
     }
-//    private val viewModel: TempalteAddViewModel by viewModels { args.data }
 
     override fun onCreateView(
         inflater: LayoutInflater,

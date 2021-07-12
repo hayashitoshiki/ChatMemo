@@ -32,9 +32,6 @@ class RoomTitleEditDialogFragment : DialogFragment() {
             requireArguments().getSerializable("room") as ChatRoom
         )
     }
-//    private val viewModel: RoomTitleEditViewModel by inject {
-//        parametersOf(requireArguments().getSerializable("room") as ChatRoom)
-//    }
     private lateinit var binding: DialogRoomTitleEditBinding
 
     override fun onCreateView(

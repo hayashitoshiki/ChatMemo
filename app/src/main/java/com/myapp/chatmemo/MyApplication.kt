@@ -39,35 +39,5 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Log.d(TAG, "onCreate")
-
-//        startKoin {
-//            androidContext(applicationContext)
-//            modules(module)
-//        }
-
-        // AppDatabaseをビルドする
-//        database = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "app_database")
-//            .build()
     }
-
-    // Koinモジュール
-//    private val module: Module = module {
-//        viewModel { HomeViewModel(get()) }
-//        viewModel { (id: RoomId) -> ChatViewModel(id, get()) }
-//        viewModel { RoomAddViewModel(get(), get()) }
-//        viewModel { (chatroom: ChatRoom) -> RoomPhraseEditViewModel(chatroom, get(), get()) }
-//        viewModel { (chatroom: ChatRoom) -> RoomTitleEditViewModel(chatroom, get()) }
-//        viewModel { (template: Template?) -> TempalteAddViewModel(template, get()) }
-//        viewModel { TemplateListViewModel(get()) }
-//
-//        factory<com.myapp.chatmemo.domain.usecase.ChatUseCase> { ChatUseCaseImp(get(), applicationScope) }
-//        factory<com.myapp.chatmemo.domain.usecase.TemplateUseCase> { TemplateUseCaseImp(get(), get()) }
-//
-//        factory<LocalTemplateRepository> { LocalTemplateRepositoryImp(database.templateDao(), database.phraseDao()) }
-//        factory<LocalChatRepository> {
-//            LocalChatRepositoryImp(
-//                database.roomDao(), database.commentDao(), database.templateDao(), database.phraseDao()
-//            )
-//        }
-//    }
 }

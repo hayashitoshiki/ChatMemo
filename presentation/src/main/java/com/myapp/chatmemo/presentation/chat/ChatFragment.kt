@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.myapp.chatmemo.domain.model.value.Comment
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentChatBinding
-import com.myapp.chatmemo.presentation.template.TempalteAddViewModel
-import com.myapp.chatmemo.presentation.utils.transition.PlayTransition
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -38,16 +36,6 @@ class ChatFragment : Fragment() {
             assistedFactory, args.data.roomId
         )
     }
-//    private val viewModel: ChatViewModel = assistedFactory.create(args.data.roomId)
-//    by assistedViewModels {
-//        assistedFactory.create(id = args.data.roomId)
-//        ChatViewModel.provideFactory(
-//            this,
-//            assistedFactory,
-//            args.data.roomId
-//        )
-//    }
-//    private val viewModel: ChatViewModel by inject { parametersOf(args.data.roomId) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,10 +53,6 @@ class ChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-
-//        val trans = PlayTransition(requireContext(), resources.getColor(R.color.white, null))
-//        sharedElementEnterTransition = trans
-//        sharedElementReturnTransition = trans
         val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
         binding.layoutInput.startAnimation(anim1)
 
