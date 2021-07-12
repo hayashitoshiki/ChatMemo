@@ -14,8 +14,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.myapp.chatmemo.domain.model.value.Comment
+import com.myapp.chatmemo.domain.model.value.User
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentChatBinding
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
+import com.xwray.groupie.databinding.BindableItem
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -63,7 +67,7 @@ class ChatFragment : Fragment() {
         viewModel.chatRoom.observe(viewLifecycleOwner, { setNavigationTitle(it.title) })
         viewModel.commentText.observe(viewLifecycleOwner, { setAutoHeigth() })
 
-        val adapter = ChatRecyclerAdapter(requireContext(), viewLifecycleOwner)
+        val adapter = GroupAdapter<ViewHolder>()
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
         binding.recyclerView.adapter = adapter
@@ -180,7 +184,20 @@ class ChatFragment : Fragment() {
 
     // データ反映
     private fun viewUpDate(data: List<Comment>) {
-        val adapter = binding.recyclerView.adapter as ChatRecyclerAdapter
-        adapter.submitList(data)
+        val adapter = GroupAdapter<ViewHolder>()
+        val items = mutableListOf<BindableItem<*>>()
+        data.forEachIndexed { index, comment ->
+            val beforComment = if (index != 0) data[index - 1] else null
+            val state = ChatRecyclerItemState(beforComment, comment)
+            if (index == 0 || state.isHeader) {
+                items.add(CommentHeaderItem(comment))
+            }
+            when (comment.user) {
+                User.BLACK -> items.add(CommentBlackItem(comment, requireContext()))
+                User.WHITE -> items.add(CommentWhiteItem(comment, requireContext()))
+            }
+        }
+        binding.recyclerView.adapter = adapter
+        adapter.update(items)
     }
 }

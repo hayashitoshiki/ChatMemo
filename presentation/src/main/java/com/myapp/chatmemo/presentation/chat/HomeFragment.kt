@@ -16,6 +16,9 @@ import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.presentation.MainActivity
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentHomeBinding
+import com.myapp.chatmemo.presentation.utils.expansion.OnRoomListItemClickListener
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -26,6 +29,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
+    private lateinit var clickListener : OnRoomListItemClickListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,10 +53,13 @@ class HomeFragment : Fragment() {
 
         // チャットルームリスト
         binding.recyclerView.let {
-            val adapter = RoomListAdapter()
+            val adapter = GroupAdapter<ViewHolder>()
             val layoutManager = LinearLayoutManager(requireContext())
             val controller = AnimationUtils.loadLayoutAnimation(context, R.anim.fall_down)
-            adapter.setOnItemClickListener(object : RoomListAdapter.OnItemClickListener {
+            it.adapter = adapter
+            it.layoutManager = layoutManager
+            it.layoutAnimation = controller
+            clickListener = object : OnRoomListItemClickListener {
                 override fun onItemClickListener(
                     view: View,
                     position: Int,
@@ -65,9 +72,9 @@ class HomeFragment : Fragment() {
                             binding.recyclerView.startAnimation(anim1)
                             binding.fab.startAnimation(anim1)
                             binding.fab.visibility = View.GONE
-                            val data = bundleOf("data" to item)
+                            val sendData = bundleOf("data" to item)
                             val extras = FragmentNavigatorExtras(view to "end_fab_transition")
-                            findNavController().navigate(R.id.action_homeFragment_to_chatFragment, data, null, extras)
+                            findNavController().navigate(R.id.action_homeFragment_to_chatFragment, sendData, null, extras)
                         }
                         R.id.btn_delete -> {
                             AlertDialog.Builder(requireActivity())
@@ -81,10 +88,7 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
-            })
-            it.adapter = adapter
-            it.layoutManager = layoutManager
-            it.layoutAnimation = controller
+            }
         }
         // Fabボタン
         binding.fab.setOnClickListener {
@@ -104,7 +108,8 @@ class HomeFragment : Fragment() {
 
     // データ反映
     private fun viewUpDate(data: List<ChatRoom>) {
-        val adapter = binding.recyclerView.adapter as RoomListAdapter
-        adapter.submitList(data)
+        val items = data.map { RoomListItem(it, clickListener) }
+        val adapter = binding.recyclerView.adapter as GroupAdapter<*>
+        adapter.update(items)
     }
 }

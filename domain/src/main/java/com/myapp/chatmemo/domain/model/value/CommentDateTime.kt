@@ -12,7 +12,7 @@ import java.util.*
 /**
  * コメントした日時
  */
-inline class CommentDateTime(val date: LocalDateTime) {
+class CommentDateTime(val date: LocalDateTime) {
     /**
      * セクション用の日時文字列を返す
      * yyyy/MM/dd

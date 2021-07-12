@@ -112,8 +112,12 @@ class TempalteAddViewModel @AssistedInject constructor(
     }
 
     // リスト更新
-    fun updatePhraseList(items: MutableList<TemplateMessage>) {
-        phraseList.setValue(items)
+    fun updatePhraseList(item: TemplateMessage) {
+        val phraseListTmp = phraseList.value
+        phraseListTmp?.let {
+            it.remove(item)
+            phraseList.setValue(it)
+        }
     }
 
     // 定型文文章追加ボタン
