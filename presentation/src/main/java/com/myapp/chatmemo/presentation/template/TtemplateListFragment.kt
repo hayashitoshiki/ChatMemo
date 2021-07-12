@@ -31,7 +31,7 @@ class TtemplateListFragment : Fragment() {
 
     private lateinit var binding: FragmentTemplateListBinding
     private val viewModel: TemplateListViewModel by viewModels()
-    private lateinit var clickListener : OnTemplateTitleListItemClickListener
+    private lateinit var clickListener: OnTemplateTitleListItemClickListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,8 +88,7 @@ class TtemplateListFragment : Fragment() {
                     }
                 }
             }
-        }
-        // 追加ボタン
+        } // 追加ボタン
         binding.fab.setOnClickListener {
             val extras = FragmentNavigatorExtras(it to "end_fab_transition")
             val data = bundleOf("data" to null)

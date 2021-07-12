@@ -1,19 +1,15 @@
 package com.myapp.chatmemo.presentation.chat
 
 import androidx.lifecycle.*
-import androidx.savedstate.SavedStateRegistryOwner
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.value.Comment
 import com.myapp.chatmemo.domain.model.value.RoomId
 import com.myapp.chatmemo.domain.usecase.ChatUseCase
-import com.myapp.chatmemo.presentation.utils.expansion.BaseViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * チャット画面_UIロジック
@@ -27,7 +23,7 @@ class ChatViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface ViewModelAssistedFactory {
-        fun create(@Assisted("id")id: RoomId): ChatViewModel
+        fun create(@Assisted("id") id: RoomId): ChatViewModel
     }
 
     companion object {

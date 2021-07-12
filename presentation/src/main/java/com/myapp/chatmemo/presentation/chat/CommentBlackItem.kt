@@ -7,7 +7,6 @@ import com.myapp.chatmemo.domain.model.value.Comment
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.ItemCommentBlackBinding
 import com.xwray.groupie.databinding.BindableItem
-import java.time.ZoneOffset
 
 /**
  * チャットリスト_自分のコメント
@@ -19,7 +18,10 @@ class CommentBlackItem(
 
     override fun getLayout(): Int = R.layout.item_comment_black
 
-    override fun bind(binding: ItemCommentBlackBinding, position: Int) {
+    override fun bind(
+        binding: ItemCommentBlackBinding,
+        position: Int
+    ) {
         binding.comment = item
         binding.layoutCommentBlack.setOnLongClickListener {
             val clipboard: ClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

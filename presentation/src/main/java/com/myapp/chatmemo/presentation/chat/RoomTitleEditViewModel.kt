@@ -1,17 +1,12 @@
 package com.myapp.chatmemo.presentation.chat
 
 import androidx.lifecycle.*
-import androidx.savedstate.SavedStateRegistryOwner
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
-import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.usecase.ChatUseCase
-import com.myapp.chatmemo.presentation.template.TempalteAddViewModel
 import com.myapp.chatmemo.presentation.utils.expansion.BaseViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
 /**
  * ルーム名変更ダイアログ_ロジック

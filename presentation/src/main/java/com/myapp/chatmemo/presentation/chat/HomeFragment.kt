@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
-    private lateinit var clickListener : OnRoomListItemClickListener
+    private lateinit var clickListener: OnRoomListItemClickListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,8 +89,7 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-        }
-        // Fabボタン
+        } // Fabボタン
         binding.fab.setOnClickListener {
             val extras = FragmentNavigatorExtras(it to "end_fab_transition")
             findNavController().navigate(R.id.action_homeFragment_to_roomAddFragment, null, null, extras)

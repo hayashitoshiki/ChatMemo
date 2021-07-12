@@ -12,8 +12,6 @@ import com.myapp.chatmemo.presentation.utils.expansion.ViewModelLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
 /**
  * ルームの定型文設定変更ダイアログ_ロジック

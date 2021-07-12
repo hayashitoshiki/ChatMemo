@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +26,6 @@ import com.myapp.chatmemo.presentation.utils.expansion.firsText
 import com.myapp.chatmemo.presentation.utils.expansion.text
 import com.myapp.chatmemo.presentation.utils.transition.FabTransform
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**

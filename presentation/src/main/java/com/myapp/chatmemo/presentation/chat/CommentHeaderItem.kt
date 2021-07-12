@@ -4,7 +4,6 @@ import com.myapp.chatmemo.domain.model.value.Comment
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.ItemCommentHeaderBinding
 import com.xwray.groupie.databinding.BindableItem
-import java.time.ZoneOffset
 
 /**
  * チャットリスト_日付ヘッダー

@@ -6,7 +6,7 @@ import com.myapp.chatmemo.domain.model.entity.Template
 /**
  * テンプレートタイトルリスト用アイテムクリックリスナー
  */
-interface OnTemplateTitleListItemClickListener  {
+interface OnTemplateTitleListItemClickListener {
     fun onItemClickListener(
         view: View,
         position: Int,

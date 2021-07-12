@@ -38,17 +38,13 @@ abstract class AppModule {
     @Binds
     abstract fun bindTemplateUseCase(templateUseCaseImp: TemplateUseCaseImp): TemplateUseCase
 
-
     // Repository
     @Binds
     abstract fun bindLocalTemplateRepository(localTemplateRepositoryImp: LocalTemplateRepositoryImp): LocalTemplateRepository
 
     @Binds
     abstract fun bindLocalChatRepository(localChatRepositoryImp: LocalChatRepositoryImp): LocalChatRepository
-
 }
-
-
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -59,10 +55,9 @@ object DataModule {
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(
-            context.applicationContext,
-            AppDatabase::class.java,
-            "app_database"
-        ).build()
+            context.applicationContext, AppDatabase::class.java, "app_database"
+        )
+            .build()
     }
 
     // Dao
@@ -90,7 +85,6 @@ object DataModule {
         return db.templateDao()
     }
 
-
     // coroutine
     @Provides
     fun provideCoroutineScope(): CoroutineScope {
@@ -101,5 +95,4 @@ object DataModule {
     fun provideCoroutineDispatcher(): CoroutineDispatcher {
         return Dispatchers.Default
     }
-
 }

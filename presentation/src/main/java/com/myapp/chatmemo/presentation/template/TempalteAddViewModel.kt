@@ -11,9 +11,7 @@ import com.myapp.chatmemo.presentation.utils.expansion.ViewModelLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * 定型文作成画面_UIロジック
