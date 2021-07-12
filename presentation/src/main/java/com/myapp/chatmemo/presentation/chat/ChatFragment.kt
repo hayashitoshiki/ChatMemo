@@ -66,9 +66,9 @@ class ChatFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        val trans = PlayTransition(requireContext(), resources.getColor(R.color.white, null))
-        sharedElementEnterTransition = trans
-        sharedElementReturnTransition = trans
+//        val trans = PlayTransition(requireContext(), resources.getColor(R.color.white, null))
+//        sharedElementEnterTransition = trans
+//        sharedElementReturnTransition = trans
         val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
         binding.layoutInput.startAnimation(anim1)
 

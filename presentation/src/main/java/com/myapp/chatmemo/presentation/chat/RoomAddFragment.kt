@@ -84,13 +84,6 @@ class RoomAddFragment : Fragment() {
         binding.btnAddRoom.setOnClickListener {
             lifecycleScope.launch {
                 (requireActivity() as MainActivity).hideNavigationBottom()
-                val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
-                binding.container.startAnimation(anim1)
-                binding.container.visibility = View.GONE
-                delay(
-                    resources.getInteger(R.integer.fade_out_time)
-                        .toLong()
-                )
                 val chatRoom: ChatRoom = viewModel.createRoom()
                 val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(chatRoom)
                 findNavController().navigate(action)
