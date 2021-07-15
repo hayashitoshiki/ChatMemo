@@ -10,7 +10,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,6 +21,7 @@ import com.myapp.chatmemo.domain.model.value.TemplateMode
 import com.myapp.chatmemo.presentation.MainActivity
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentRoomAddBinding
+import com.myapp.chatmemo.presentation.utils.expansion.BaseFragment
 import com.myapp.chatmemo.presentation.utils.expansion.firsText
 import com.myapp.chatmemo.presentation.utils.expansion.text
 import com.myapp.chatmemo.presentation.utils.transition.FabTransform
@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
  * 新規ルーム作成画面
  */
 @AndroidEntryPoint
-class RoomAddFragment : Fragment() {
+class RoomAddFragment : BaseFragment() {
 
     private lateinit var binding: FragmentRoomAddBinding
     private val viewModel: RoomAddViewModel by viewModels()
@@ -77,8 +77,7 @@ class RoomAddFragment : Fragment() {
             val arrayAdapter = ArrayAdapter(requireActivity(), android.R.layout.simple_dropdown_item_1line, listOf(""))
             spinner.setAdapter(arrayAdapter)
             spinner.keyListener = null
-        }
-        // 新規作成ボタン
+        } // 新規作成ボタン
         binding.btnAddRoom.setOnClickListener {
             lifecycleScope.launch {
                 (requireActivity() as MainActivity).hideNavigationBottom()
@@ -86,8 +85,7 @@ class RoomAddFragment : Fragment() {
                 val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(chatRoom)
                 findNavController().navigate(action)
             }
-        }
-        // editTextフォーカス制御
+        } // editTextフォーカス制御
         binding.editTitle.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

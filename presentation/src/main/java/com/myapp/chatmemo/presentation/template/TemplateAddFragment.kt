@@ -11,7 +11,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -24,6 +23,7 @@ import androidx.transition.TransitionSet
 import com.myapp.chatmemo.domain.model.value.TemplateMessage
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentTemplateAddBinding
+import com.myapp.chatmemo.presentation.utils.expansion.BaseFragment
 import com.myapp.chatmemo.presentation.utils.expansion.OnTemplateMessageListItemClickListener
 import com.myapp.chatmemo.presentation.utils.transition.FabTransform
 import com.xwray.groupie.GroupAdapter
@@ -35,18 +35,17 @@ import javax.inject.Inject
  * 定型文作成画面
  */
 @AndroidEntryPoint
-class TemplateAddFragment : Fragment() {
+class TemplateAddFragment : BaseFragment() {
 
     private lateinit var binding: FragmentTemplateAddBinding
     private val args: TemplateAddFragmentArgs by navArgs()
+
     @Inject
     lateinit var assistedFactory: TempalteAddViewModel.TempalteAddViewModelAssistedFactory
 
     private val viewModel: TempalteAddViewModel by viewModels {
         TempalteAddViewModel.provideFactory(
-            this,
-            assistedFactory,
-            args.data
+            this, assistedFactory, args.data
         )
     }
 
@@ -104,10 +103,8 @@ class TemplateAddFragment : Fragment() {
         binding.recyclerView.addItemDecoration(itemDecoration)
 
         // 追加ボタン
-        binding.btnSubmit.setOnClickListener { viewModel.addPhrase() }
-        // 登録ボタン
-        binding.btnAdd.setOnClickListener { viewModel.submit() }
-        // editTextフォーカス制御
+        binding.btnSubmit.setOnClickListener { viewModel.addPhrase() } // 登録ボタン
+        binding.btnAdd.setOnClickListener { viewModel.submit() } // editTextフォーカス制御
         binding.editTitle.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

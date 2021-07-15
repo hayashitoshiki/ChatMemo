@@ -103,16 +103,12 @@ subprojects { // 配下のモジュール全てに適用される
         // hilt
         implementation "com.google.dagger:hilt-android:$rootProject.hilt_version"
         kapt "com.google.dagger:hilt-android-compiler:$rootProject.hilt_version"
-//        compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:0.6.0"
-//        kapt "com.squareup.inject:assisted-inject-processor-dagger2:0.6.0"
-        // koin
-//        def koin_version = "3.0.2"
-//        implementation "io.insert-koin:koin-android:$koin_version"
-//        implementation "org.koin:koin-android-scope:$koin_version"
-//        implementation "org.koin:koin-android-viewmodel:$koin_version"
         // coroutines
         implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
         implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+        // timber
+        def timber_version = "4.7.1"
+        implementation "com.jakewharton.timber:timber:$timber_version"
 
         // test
         testImplementation 'junit:junit:4.13.1'

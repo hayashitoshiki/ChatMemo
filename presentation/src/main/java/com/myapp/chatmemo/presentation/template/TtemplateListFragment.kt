@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -18,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentTemplateListBinding
+import com.myapp.chatmemo.presentation.utils.expansion.BaseFragment
 import com.myapp.chatmemo.presentation.utils.expansion.OnTemplateTitleListItemClickListener
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -27,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
  * 定型文一覧画面
  */
 @AndroidEntryPoint
-class TtemplateListFragment : Fragment() {
+class TtemplateListFragment : BaseFragment() {
 
     private lateinit var binding: FragmentTemplateListBinding
     private val viewModel: TemplateListViewModel by viewModels()

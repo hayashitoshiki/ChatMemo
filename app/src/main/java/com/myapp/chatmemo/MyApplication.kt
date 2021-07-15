@@ -5,6 +5,7 @@ import android.util.Log
 import com.myapp.chatmemo.database.AppDatabase
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.MainScope
+import timber.log.Timber
 
 @HiltAndroidApp
 class MyApplication : Application() {
@@ -26,5 +27,12 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Log.d(TAG, "onCreate")
+        configureTimber()
+    }
+
+    private fun configureTimber() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 }

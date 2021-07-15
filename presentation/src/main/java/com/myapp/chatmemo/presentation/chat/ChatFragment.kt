@@ -8,7 +8,6 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -17,6 +16,7 @@ import com.myapp.chatmemo.domain.model.value.Comment
 import com.myapp.chatmemo.domain.model.value.User
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentChatBinding
+import com.myapp.chatmemo.presentation.utils.expansion.BaseFragment
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import com.xwray.groupie.databinding.BindableItem
@@ -27,7 +27,7 @@ import javax.inject.Inject
  * チャット画面
  */
 @AndroidEntryPoint
-class ChatFragment : Fragment() {
+class ChatFragment : BaseFragment() {
 
     private var isKeyboardShowing = false
     private val args: ChatFragmentArgs by navArgs()
@@ -91,8 +91,7 @@ class ChatFragment : Fragment() {
         }
 
         // 送信ボタン
-        binding.btnSubmit.setOnClickListener { viewModel.submit() }
-        // 変更ボタン
+        binding.btnSubmit.setOnClickListener { viewModel.submit() } // 変更ボタン
         binding.btnChangeUser.setOnClickListener { viewModel.changeUser() }
     }
 
@@ -124,8 +123,7 @@ class ChatFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            // 定型文変更ボタン
+        when (item.itemId) { // 定型文変更ボタン
             R.id.menu_edit_room_phrase -> {
                 viewModel.chatRoom.value?.let {
                     val dialogFragment = RoomPhraseEditDialogFragment()
@@ -134,8 +132,7 @@ class ChatFragment : Fragment() {
                     dialogFragment.arguments = bundle
                     dialogFragment.show(requireActivity().supportFragmentManager, null)
                 }
-            }
-            // ルーム名変更ボタン
+            } // ルーム名変更ボタン
             R.id.menu_edit_room -> {
                 viewModel.chatRoom.value?.let {
                     val dialogFragment = RoomTitleEditDialogFragment()
@@ -144,8 +141,7 @@ class ChatFragment : Fragment() {
                     dialogFragment.arguments = bundle
                     dialogFragment.show(requireActivity().supportFragmentManager, null)
                 }
-            }
-            // 新規作成ボタン
+            } // 新規作成ボタン
             R.id.menu_delete_room -> {
                 AlertDialog.Builder(requireActivity())
                     .setTitle(requireContext().getString(R.string.dialog_title_room_delete))
