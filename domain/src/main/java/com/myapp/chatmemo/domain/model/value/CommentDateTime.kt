@@ -12,10 +12,10 @@ import java.util.*
 /**
  * コメントした日時
  */
-class CommentDateTime(val date: LocalDateTime) {
+inline class CommentDateTime(val date: LocalDateTime) {
     /**
      * セクション用の日時文字列を返す
-     * yyyy/MM/dd
+     * @return yyyy/MM/dd
      */
     fun toSectionDate(): String {
         val systemDateTime = LocalDateTime.ofInstant(date.toInstant(ZoneOffset.UTC), ZoneId.systemDefault())
@@ -27,7 +27,7 @@ class CommentDateTime(val date: LocalDateTime) {
 
     /**
      * メッセージリスト用の日時文字列を返す
-     * hh:mm
+     * @return hh:mm
      */
     fun toMessageDate(): String {
         val systemDateTime = LocalDateTime.ofInstant(date.toInstant(ZoneOffset.UTC), ZoneId.systemDefault())

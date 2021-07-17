@@ -4,11 +4,20 @@ import com.myapp.chatmemo.domain.model.value.TemplateId
 import com.myapp.chatmemo.domain.model.value.TemplateMessage
 import java.io.Serializable
 
+/**
+ * テンプレート定義
+ */
 data class Template(
-    // テンプレートID
+    /**
+     * テンプレートID
+     */
     val templateId: TemplateId,
-    // タイトル
+    /**
+     * テンプレートタイトル
+     */
     var title: String,
-    // テンプレートメッセージリスト
+    /**
+     * テンプレートメッセージリスト
+     */
     var templateMessageList: List<TemplateMessage>
 ) : Serializable
