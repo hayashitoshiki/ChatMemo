@@ -9,4 +9,7 @@
 ### Parameters
 
 `template` - 追加する定型文リスト
-return 正常登録できたか
+
+**Return**
+正常登録できたか
+

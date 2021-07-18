@@ -2,4 +2,4 @@
 
 # newRoomTitle
 
-`val newRoomTitle: <ERROR CLASS>`
+`val newRoomTitle: MutableLiveData<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>`

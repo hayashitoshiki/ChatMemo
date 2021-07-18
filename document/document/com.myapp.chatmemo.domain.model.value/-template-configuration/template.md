@@ -3,3 +3,6 @@
 # template
 
 `var template: `[`Template`](../../com.myapp.chatmemo.domain.model.entity/-template/index.md)
+
+使用するテンプレート
+

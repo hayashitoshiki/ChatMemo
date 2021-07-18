@@ -6,6 +6,12 @@
 
 ルームの定型文設定変更ダイアログ_ロジック
 
+### Types
+
+| Name | Summary |
+|---|---|
+| [RoomPhraseEditViewModelAssistedFactory](-room-phrase-edit-view-model-assisted-factory/index.md) | `interface RoomPhraseEditViewModelAssistedFactory` |
+
 ### Constructors
 
 | Name | Summary |
@@ -21,7 +27,7 @@
 | [templateModeList](template-mode-list.md) | `val templateModeList: `[`ViewModelLiveData`](../../com.myapp.chatmemo.presentation.utils.expansion/-view-model-live-data/index.md)`<`[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`TemplateMode`](../../com.myapp.chatmemo.domain.model.value/-template-mode/index.md)`>>` |
 | [templateModeValue](template-mode-value.md) | `val templateModeValue: MediatorLiveData<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>` |
 | [templateTitleList](template-title-list.md) | `val templateTitleList: <ERROR CLASS>` |
-| [templateTitleValue](template-title-value.md) | `val templateTitleValue: <ERROR CLASS>` |
+| [templateTitleValue](template-title-value.md) | `val templateTitleValue: MutableLiveData<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>` |
 
 ### Functions
 
@@ -35,3 +41,9 @@
 |---|---|
 | [postValue](../../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/post-value.md) | `fun <T> `[`ViewModelLiveData`](../../com.myapp.chatmemo.presentation.utils.expansion/-view-model-live-data/index.md)`<`[`T`](../../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/post-value.md#T)`>.postValue(value: `[`T`](../../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/post-value.md#T)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
 | [setValue](../../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/set-value.md) | `fun <T> `[`ViewModelLiveData`](../../com.myapp.chatmemo.presentation.utils.expansion/-view-model-live-data/index.md)`<`[`T`](../../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/set-value.md#T)`>.setValue(value: `[`T`](../../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/set-value.md#T)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
+
+### Companion Object Functions
+
+| Name | Summary |
+|---|---|
+| [provideFactory](provide-factory.md) | `fun provideFactory(owner: SavedStateRegistryOwner, assistedFactory: `[`RoomPhraseEditViewModelAssistedFactory`](-room-phrase-edit-view-model-assisted-factory/index.md)`, chatRoomEntity: `[`ChatRoom`](../../com.myapp.chatmemo.domain.model.entity/-chat-room/index.md)`): Factory` |

@@ -12,6 +12,12 @@
 |---|---|
 | [&lt;init&gt;](-init-.md) | `RoomPhraseEditDialogFragment()`<br>ルームの定型文設定変更ダイアログ |
 
+### Properties
+
+| Name | Summary |
+|---|---|
+| [assistedFactory](assisted-factory.md) | `lateinit var assistedFactory: `[`RoomPhraseEditViewModelAssistedFactory`](../-room-phrase-edit-view-model/-room-phrase-edit-view-model-assisted-factory/index.md) |
+
 ### Functions
 
 | Name | Summary |

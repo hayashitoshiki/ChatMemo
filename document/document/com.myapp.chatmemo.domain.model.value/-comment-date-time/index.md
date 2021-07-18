@@ -2,7 +2,7 @@
 
 # CommentDateTime
 
-`inline class CommentDateTime`
+`data class CommentDateTime`
 
 コメントした日時
 
@@ -22,5 +22,5 @@
 
 | Name | Summary |
 |---|---|
-| [toMessageDate](to-message-date.md) | `fun toMessageDate(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>メッセージリスト用の日時文字列を返す hh:mm |
-| [toSectionDate](to-section-date.md) | `fun toSectionDate(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>セクション用の日時文字列を返す yyyy/MM/dd |
+| [toMessageDate](to-message-date.md) | `fun toMessageDate(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>メッセージリスト用の日時文字列を返す |
+| [toSectionDate](to-section-date.md) | `fun toSectionDate(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>セクション用の日時文字列を返す |

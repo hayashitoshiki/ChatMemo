@@ -8,3 +8,6 @@ Overrides [TemplateUseCase.getNextTemplateId](../-template-use-case/get-next-tem
 
 次の連番のテンプレートID取得
 
+**Return**
+次の登録する際のテンプレートID
+

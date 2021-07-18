@@ -3,3 +3,6 @@
 # user
 
 `val user: `[`User`](../-user/index.md)
+
+コメントしたユーザ
+

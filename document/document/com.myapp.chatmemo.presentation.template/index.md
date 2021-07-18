@@ -8,9 +8,9 @@
 
 | Name | Summary |
 |---|---|
-| [PhraseTitleListAdapter](-phrase-title-list-adapter/index.md) | `class PhraseTitleListAdapter`<br>定型文リスト画面用のリサイクルビューアダプター |
 | [TempalteAddViewModel](-tempalte-add-view-model/index.md) | `class TempalteAddViewModel : `[`BaseViewModel`](../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/index.md)<br>定型文作成画面_UIロジック |
-| [TemplateAddFragment](-template-add-fragment/index.md) | `class TemplateAddFragment : Fragment`<br>定型文作成画面 |
-| [TemplateListAdapter](-template-list-adapter/index.md) | `class TemplateListAdapter`<br>定型文作成画面用のリストビューアダプター |
+| [TemplateAddFragment](-template-add-fragment/index.md) | `class TemplateAddFragment : `[`BaseFragment`](../com.myapp.chatmemo.presentation.utils.expansion/-base-fragment/index.md)<br>定型文作成画面 |
 | [TemplateListViewModel](-template-list-view-model/index.md) | `class TemplateListViewModel : `[`BaseViewModel`](../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/index.md)<br>定型文一覧画面_UIロジック |
-| [TtemplateListFragment](-ttemplate-list-fragment/index.md) | `class TtemplateListFragment : Fragment`<br>定型文一覧画面 |
+| [TemplateMessageItem](-template-message-item/index.md) | `class TemplateMessageItem`<br>テンプレート文言リスト用アイテム |
+| [TemplateTitleItem](-template-title-item/index.md) | `class TemplateTitleItem`<br>テンプレートタイトルリスト用アイテム |
+| [TtemplateListFragment](-ttemplate-list-fragment/index.md) | `class TtemplateListFragment : `[`BaseFragment`](../com.myapp.chatmemo.presentation.utils.expansion/-base-fragment/index.md)<br>定型文一覧画面 |

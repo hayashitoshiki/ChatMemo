@@ -8,3 +8,6 @@ Overrides [TemplateUseCase.getTemplateAll](../-template-use-case/get-template-al
 
 全てのテンプレート取得
 
+**Return**
+全てのテンプレート
+

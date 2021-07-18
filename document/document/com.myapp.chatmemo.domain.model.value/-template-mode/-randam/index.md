@@ -4,11 +4,13 @@
 
 `data class Randam : `[`TemplateMode`](../index.md)
 
+ランダム
+
 ### Constructors
 
 | Name | Summary |
 |---|---|
-| [&lt;init&gt;](-init-.md) | `Randam(message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)` = "ランダム", position: `[`MutableList`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html)`<`[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`> = mutableListOf())` |
+| [&lt;init&gt;](-init-.md) | `Randam(message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)` = "ランダム", position: `[`MutableList`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html)`<`[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`> = mutableListOf())`<br>ランダム |
 
 ### Properties
 
@@ -27,4 +29,4 @@
 
 | Name | Summary |
 |---|---|
-| [getInt](../get-int.md) | `fun getInt(): `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
+| [getInt](../get-int.md) | `fun getInt(): `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)<br>テンプレート表示モードの数値取得 |

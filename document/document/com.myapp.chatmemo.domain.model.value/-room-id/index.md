@@ -2,13 +2,15 @@
 
 # RoomId
 
-`inline class RoomId`
+`data class RoomId`
+
+ルームID定義
 
 ### Constructors
 
 | Name | Summary |
 |---|---|
-| [&lt;init&gt;](-init-.md) | `RoomId(value: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)`)` |
+| [&lt;init&gt;](-init-.md) | `RoomId(value: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)`)`<br>ルームID定義 |
 
 ### Properties
 

@@ -22,7 +22,7 @@
 | [templateModeValue](template-mode-value.md) | `val templateModeValue: MediatorLiveData<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>` |
 | [templateTitleList](template-title-list.md) | `val templateTitleList: LiveData<`[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Template`](../../com.myapp.chatmemo.domain.model.entity/-template/index.md)`>>` |
 | [templateTitleValue](template-title-value.md) | `val templateTitleValue: MutableLiveData<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>` |
-| [titleText](title-text.md) | `val titleText: <ERROR CLASS>` |
+| [titleText](title-text.md) | `val titleText: MutableLiveData<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>` |
 
 ### Functions
 

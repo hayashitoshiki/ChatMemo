@@ -3,3 +3,6 @@
 # onDestroy
 
 `fun onDestroy(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+
+Overrides [BaseFragment.onDestroy](../../com.myapp.chatmemo.presentation.utils.expansion/-base-fragment/on-destroy.md)
+

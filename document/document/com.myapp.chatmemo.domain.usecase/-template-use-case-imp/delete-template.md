@@ -8,3 +8,6 @@ Overrides [TemplateUseCase.deleteTemplate](../-template-use-case/delete-template
 
 テンプレート削除
 
+### Parameters
+
+`templateId` - 削除するテンプレートID

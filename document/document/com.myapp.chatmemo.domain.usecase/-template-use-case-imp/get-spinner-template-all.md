@@ -8,3 +8,6 @@ Overrides [TemplateUseCase.getSpinnerTemplateAll](../-template-use-case/get-spin
 
 全てのテンプレート取得（選択肢スピナーに表示させる用）
 
+**Return**
+全てのテンプレート
+

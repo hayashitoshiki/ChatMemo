@@ -6,3 +6,8 @@
 
 メッセージ追加
 
+### Parameters
+
+`comment` - コメント
+
+`roomId` - チャットルームID

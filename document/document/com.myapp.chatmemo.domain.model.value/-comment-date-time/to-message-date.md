@@ -5,5 +5,7 @@
 `fun toMessageDate(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
 
 メッセージリスト用の日時文字列を返す
+
+**Return**
 hh:mm
 

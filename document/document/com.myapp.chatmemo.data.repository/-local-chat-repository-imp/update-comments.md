@@ -8,3 +8,6 @@ Overrides [LocalChatRepository.updateComments](../../com.myapp.chatmemo.domain.r
 
 メッセージアップデート
 
+### Parameters
+
+`commentList` - コメントリスト

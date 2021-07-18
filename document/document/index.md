@@ -32,6 +32,7 @@ MVVM + Clean Architecture + DDD
 | [com.myapp.chatmemo.data.database.entity](com.myapp.chatmemo.data.database.entity/index.md) | DBのテーブル構成管理 |
 | [com.myapp.chatmemo.data.repository](com.myapp.chatmemo.data.repository/index.md) | DB・APIへのCRUD管理 |
 | [com.myapp.chatmemo.database](com.myapp.chatmemo.database/index.md) | データベース設定管理 |
+| [com.myapp.chatmemo.di](com.myapp.chatmemo.di/index.md) |  |
 | [com.myapp.chatmemo.domain.model.entity](com.myapp.chatmemo.domain.model.entity/index.md) | エンティティ管理 |
 | [com.myapp.chatmemo.domain.model.value](com.myapp.chatmemo.domain.model.value/index.md) | 値オブジェクト管理 |
 | [com.myapp.chatmemo.domain.repository](com.myapp.chatmemo.domain.repository/index.md) | リポジトリ定義管理 |

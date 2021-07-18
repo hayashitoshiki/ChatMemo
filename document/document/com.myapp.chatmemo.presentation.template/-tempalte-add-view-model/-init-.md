@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`TempalteAddViewModel(template: `[`Template`](../../com.myapp.chatmemo.domain.model.entity/-template/index.md)`?, templateUseCase: `[`TemplateUseCase`](../../com.myapp.chatmemo.domain.usecase/-template-use-case/index.md)`)`
+`TempalteAddViewModel(@Assisted template: `[`Template`](../../com.myapp.chatmemo.domain.model.entity/-template/index.md)`?, templateUseCase: `[`TemplateUseCase`](../../com.myapp.chatmemo.domain.usecase/-template-use-case/index.md)`)`
 
 定型文作成画面_UIロジック
 

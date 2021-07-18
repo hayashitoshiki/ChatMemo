@@ -8,4 +8,4 @@
 
 | Name | Summary |
 |---|---|
-| [chageInt](chage-int.md) | `fun chageInt(): `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
+| [chageInt](chage-int.md) | `fun chageInt(): `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)<br>ユーザの数値分類取得 |

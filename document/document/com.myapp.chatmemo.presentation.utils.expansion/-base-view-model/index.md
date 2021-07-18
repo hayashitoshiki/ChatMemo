@@ -23,7 +23,6 @@ BaseViewModel
 
 | Name | Summary |
 |---|---|
-| [ChatViewModel](../../com.myapp.chatmemo.presentation.chat/-chat-view-model/index.md) | `class ChatViewModel : `[`BaseViewModel`](./index.md)<br>チャット画面_UIロジック |
 | [RoomAddViewModel](../../com.myapp.chatmemo.presentation.chat/-room-add-view-model/index.md) | `class RoomAddViewModel : `[`BaseViewModel`](./index.md)<br>新規ルーム作成画面_ロジック |
 | [RoomPhraseEditViewModel](../../com.myapp.chatmemo.presentation.chat/-room-phrase-edit-view-model/index.md) | `class RoomPhraseEditViewModel : `[`BaseViewModel`](./index.md)<br>ルームの定型文設定変更ダイアログ_ロジック |
 | [RoomTitleEditViewModel](../../com.myapp.chatmemo.presentation.chat/-room-title-edit-view-model/index.md) | `class RoomTitleEditViewModel : `[`BaseViewModel`](./index.md)<br>ルーム名変更ダイアログ_ロジック |

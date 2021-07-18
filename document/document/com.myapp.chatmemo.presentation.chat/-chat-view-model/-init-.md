@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`ChatViewModel(id: `[`RoomId`](../../com.myapp.chatmemo.domain.model.value/-room-id/index.md)`, chatUseCase: `[`ChatUseCase`](../../com.myapp.chatmemo.domain.usecase/-chat-use-case/index.md)`)`
+`ChatViewModel(chatUseCase: `[`ChatUseCase`](../../com.myapp.chatmemo.domain.usecase/-chat-use-case/index.md)`, @Assisted("id") id: `[`RoomId`](../../com.myapp.chatmemo.domain.model.value/-room-id/index.md)`)`
 
 チャット画面_UIロジック
 

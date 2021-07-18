@@ -3,3 +3,6 @@
 # &lt;init&gt;
 
 `Comment(message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, user: `[`User`](../-user/index.md)`, time: `[`CommentDateTime`](../-comment-date-time/index.md)`)`
+
+チャットのコメント定義
+

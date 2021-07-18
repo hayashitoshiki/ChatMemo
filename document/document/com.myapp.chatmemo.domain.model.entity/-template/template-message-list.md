@@ -3,3 +3,6 @@
 # templateMessageList
 
 `var templateMessageList: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`TemplateMessage`](../../com.myapp.chatmemo.domain.model.value/-template-message/index.md)`>`
+
+テンプレートメッセージリスト
+

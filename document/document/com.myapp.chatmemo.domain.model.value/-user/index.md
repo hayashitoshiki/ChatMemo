@@ -4,6 +4,8 @@
 
 `enum class User`
 
+チャットのユーザ定義
+
 ### Enum Values
 
 | Name | Summary |
@@ -15,10 +17,10 @@
 
 | Name | Summary |
 |---|---|
-| [chageInt](chage-int.md) | `fun chageInt(): `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
+| [chageInt](chage-int.md) | `fun chageInt(): `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)<br>ユーザの数値分類取得 |
 
 ### Companion Object Functions
 
 | Name | Summary |
 |---|---|
-| [getUser](get-user.md) | `fun getUser(index: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`): `[`User`](./index.md) |
+| [getUser](get-user.md) | `fun getUser(index: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`): `[`User`](./index.md)<br>数値からユーザ取得 |

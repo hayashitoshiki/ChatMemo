@@ -7,5 +7,7 @@
 Overrides [LocalTemplateRepository.getTemplateAll](../../com.myapp.chatmemo.domain.repository/-local-template-repository/get-template-all.md)
 
 定型文のタイトル一覧取得
-return 定型文のタイトル一覧
+
+**Return**
+定型文のタイトル一覧
 

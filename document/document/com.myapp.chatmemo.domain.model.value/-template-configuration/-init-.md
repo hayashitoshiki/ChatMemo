@@ -3,3 +3,6 @@
 # &lt;init&gt;
 
 `TemplateConfiguration(template: `[`Template`](../../com.myapp.chatmemo.domain.model.entity/-template/index.md)`, templateMode: `[`TemplateMode`](../-template-mode/index.md)`)`
+
+テンプレート設定定義
+

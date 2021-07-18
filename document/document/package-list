@@ -7,6 +7,7 @@ com.myapp.chatmemo.data.database.dao
 com.myapp.chatmemo.data.database.entity
 com.myapp.chatmemo.data.repository
 com.myapp.chatmemo.database
+com.myapp.chatmemo.di
 com.myapp.chatmemo.domain.model.entity
 com.myapp.chatmemo.domain.model.value
 com.myapp.chatmemo.domain.repository

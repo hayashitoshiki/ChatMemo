@@ -3,3 +3,6 @@
 # time
 
 `val time: `[`CommentDateTime`](../-comment-date-time/index.md)
+
+コメントした時間
+

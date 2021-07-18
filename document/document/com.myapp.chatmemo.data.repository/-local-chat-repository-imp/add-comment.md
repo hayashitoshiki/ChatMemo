@@ -8,3 +8,8 @@ Overrides [LocalChatRepository.addComment](../../com.myapp.chatmemo.domain.repos
 
 メッセージ追加
 
+### Parameters
+
+`comment` - コメント
+
+`roomId` - チャットルームID

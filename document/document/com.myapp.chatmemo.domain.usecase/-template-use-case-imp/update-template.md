@@ -8,3 +8,6 @@ Overrides [TemplateUseCase.updateTemplate](../-template-use-case/update-template
 
 テンプレートアプデート
 
+### Parameters
+
+`template` - 更新するテンプレート

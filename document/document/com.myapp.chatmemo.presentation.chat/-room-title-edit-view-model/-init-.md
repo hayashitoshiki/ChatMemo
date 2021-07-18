@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`RoomTitleEditViewModel(chatRoomEntity: `[`ChatRoom`](../../com.myapp.chatmemo.domain.model.entity/-chat-room/index.md)`, chatRoomUseCase: `[`ChatUseCase`](../../com.myapp.chatmemo.domain.usecase/-chat-use-case/index.md)`)`
+`RoomTitleEditViewModel(chatRoomUseCase: `[`ChatUseCase`](../../com.myapp.chatmemo.domain.usecase/-chat-use-case/index.md)`, @Assisted chatRoomEntity: `[`ChatRoom`](../../com.myapp.chatmemo.domain.model.entity/-chat-room/index.md)`)`
 
 ルーム名変更ダイアログ_ロジック
 

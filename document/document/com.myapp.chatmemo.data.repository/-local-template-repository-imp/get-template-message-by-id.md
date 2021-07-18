@@ -8,3 +8,6 @@ Overrides [LocalTemplateRepository.getTemplateMessageById](../../com.myapp.chatm
 
 タイトルに紐づいた定型文リスト取得
 
+### Parameters
+
+`templateId` - テンプレートID

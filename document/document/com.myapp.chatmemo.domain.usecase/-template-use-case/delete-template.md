@@ -6,3 +6,6 @@
 
 テンプレート削除
 
+### Parameters
+
+`templateId` - 削除するテンプレートID

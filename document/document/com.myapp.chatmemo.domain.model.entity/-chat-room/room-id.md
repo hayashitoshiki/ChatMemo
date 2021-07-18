@@ -3,3 +3,6 @@
 # roomId
 
 `val roomId: `[`RoomId`](../../com.myapp.chatmemo.domain.model.value/-room-id/index.md)
+
+チャットルームのID
+

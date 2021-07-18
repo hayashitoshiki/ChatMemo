@@ -6,3 +6,6 @@
 
 テンプレートIDに紐づくテンプレートコメント取得
 
+### Parameters
+
+`templateId` - 取得するテンプレートのID

@@ -8,3 +8,6 @@ Overrides [TemplateUseCase.getTemplateMessageById](../-template-use-case/get-tem
 
 テンプレートIDに紐づくテンプレートコメント取得
 
+### Parameters
+
+`templateId` - 取得するテンプレートのID

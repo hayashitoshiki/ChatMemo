@@ -3,3 +3,6 @@
 # &lt;init&gt;
 
 `TemplateId(value: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)`)`
+
+テンプレートID定義
+

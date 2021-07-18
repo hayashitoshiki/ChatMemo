@@ -4,11 +4,13 @@
 
 `inline class TemplateId`
 
+テンプレートID定義
+
 ### Constructors
 
 | Name | Summary |
 |---|---|
-| [&lt;init&gt;](-init-.md) | `TemplateId(value: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)`)` |
+| [&lt;init&gt;](-init-.md) | `TemplateId(value: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)`)`<br>テンプレートID定義 |
 
 ### Properties
 

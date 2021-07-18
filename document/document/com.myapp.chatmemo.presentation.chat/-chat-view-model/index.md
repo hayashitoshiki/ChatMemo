@@ -2,15 +2,21 @@
 
 # ChatViewModel
 
-`class ChatViewModel : `[`BaseViewModel`](../../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/index.md)
+`class ChatViewModel : ViewModel`
 
 チャット画面_UIロジック
+
+### Types
+
+| Name | Summary |
+|---|---|
+| [ViewModelAssistedFactory](-view-model-assisted-factory/index.md) | `interface ViewModelAssistedFactory` |
 
 ### Constructors
 
 | Name | Summary |
 |---|---|
-| [&lt;init&gt;](-init-.md) | `ChatViewModel(id: `[`RoomId`](../../com.myapp.chatmemo.domain.model.value/-room-id/index.md)`, chatUseCase: `[`ChatUseCase`](../../com.myapp.chatmemo.domain.usecase/-chat-use-case/index.md)`)`<br>チャット画面_UIロジック |
+| [&lt;init&gt;](-init-.md) | `ChatViewModel(chatUseCase: `[`ChatUseCase`](../../com.myapp.chatmemo.domain.usecase/-chat-use-case/index.md)`, id: `[`RoomId`](../../com.myapp.chatmemo.domain.model.value/-room-id/index.md)`)`<br>チャット画面_UIロジック |
 
 ### Properties
 
@@ -18,7 +24,7 @@
 |---|---|
 | [chatRoom](chat-room.md) | `val chatRoom: <ERROR CLASS>` |
 | [commentList](comment-list.md) | `val commentList: LiveData<`[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Comment`](../../com.myapp.chatmemo.domain.model.value/-comment/index.md)`>>` |
-| [commentText](comment-text.md) | `val commentText: <ERROR CLASS>` |
+| [commentText](comment-text.md) | `val commentText: MutableLiveData<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>` |
 | [isEnableSubmitButton](is-enable-submit-button.md) | `val isEnableSubmitButton: LiveData<`[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)`>` |
 
 ### Functions
@@ -29,9 +35,8 @@
 | [deleteRoom](delete-room.md) | `fun deleteRoom(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
 | [submit](submit.md) | `fun submit(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
 
-### Inherited Functions
+### Companion Object Functions
 
 | Name | Summary |
 |---|---|
-| [postValue](../../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/post-value.md) | `fun <T> `[`ViewModelLiveData`](../../com.myapp.chatmemo.presentation.utils.expansion/-view-model-live-data/index.md)`<`[`T`](../../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/post-value.md#T)`>.postValue(value: `[`T`](../../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/post-value.md#T)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
-| [setValue](../../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/set-value.md) | `fun <T> `[`ViewModelLiveData`](../../com.myapp.chatmemo.presentation.utils.expansion/-view-model-live-data/index.md)`<`[`T`](../../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/set-value.md#T)`>.setValue(value: `[`T`](../../com.myapp.chatmemo.presentation.utils.expansion/-base-view-model/set-value.md#T)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
+| [provideFactory](provide-factory.md) | `fun provideFactory(assistedFactory: `[`ViewModelAssistedFactory`](-view-model-assisted-factory/index.md)`, id: `[`RoomId`](../../com.myapp.chatmemo.domain.model.value/-room-id/index.md)`): Factory` |

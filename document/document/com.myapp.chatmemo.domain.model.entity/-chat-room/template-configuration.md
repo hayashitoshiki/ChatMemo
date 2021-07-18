@@ -3,3 +3,6 @@
 # templateConfiguration
 
 `var templateConfiguration: `[`TemplateConfiguration`](../../com.myapp.chatmemo.domain.model.value/-template-configuration/index.md)`?`
+
+テンプレート使用設定
+

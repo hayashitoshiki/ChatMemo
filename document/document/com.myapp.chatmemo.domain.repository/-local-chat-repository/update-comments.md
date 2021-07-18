@@ -6,3 +6,6 @@
 
 メッセージアップデート
 
+### Parameters
+
+`commentList` - コメントリスト

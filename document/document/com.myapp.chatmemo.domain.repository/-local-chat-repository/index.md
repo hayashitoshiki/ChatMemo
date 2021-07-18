@@ -4,7 +4,7 @@
 
 `interface LocalChatRepository`
 
-チャットに関するDataBaseCRUD用Repository
+チャットに関するローカルデータCRUD用Repository
 
 ### Functions
 

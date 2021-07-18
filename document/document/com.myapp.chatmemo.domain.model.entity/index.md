@@ -8,5 +8,5 @@
 
 | Name | Summary |
 |---|---|
-| [ChatRoom](-chat-room/index.md) | `data class ChatRoom : `[`Serializable`](https://developer.android.com/reference/java/io/Serializable.html) |
-| [Template](-template/index.md) | `data class Template : `[`Serializable`](https://developer.android.com/reference/java/io/Serializable.html) |
+| [ChatRoom](-chat-room/index.md) | `data class ChatRoom : `[`Serializable`](https://developer.android.com/reference/java/io/Serializable.html)<br>チャットルーム定義 |
+| [Template](-template/index.md) | `data class Template : `[`Serializable`](https://developer.android.com/reference/java/io/Serializable.html)<br>テンプレート定義 |

@@ -2,4 +2,4 @@
 
 # phraseText
 
-`val phraseText: <ERROR CLASS>`
+`val phraseText: MutableLiveData<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>`

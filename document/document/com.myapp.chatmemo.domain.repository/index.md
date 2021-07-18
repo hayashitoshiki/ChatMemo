@@ -8,5 +8,5 @@
 
 | Name | Summary |
 |---|---|
-| [LocalChatRepository](-local-chat-repository/index.md) | `interface LocalChatRepository`<br>チャットに関するDataBaseCRUD用Repository |
-| [LocalTemplateRepository](-local-template-repository/index.md) | `interface LocalTemplateRepository` |
+| [LocalChatRepository](-local-chat-repository/index.md) | `interface LocalChatRepository`<br>チャットに関するローカルデータCRUD用Repository |
+| [LocalTemplateRepository](-local-template-repository/index.md) | `interface LocalTemplateRepository`<br>テンプレートに関するローカルデータソースCRUD用Repository |

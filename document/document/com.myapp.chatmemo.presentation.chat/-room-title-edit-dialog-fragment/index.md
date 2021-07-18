@@ -12,6 +12,12 @@
 |---|---|
 | [&lt;init&gt;](-init-.md) | `RoomTitleEditDialogFragment()`<br>ルーム名変更ダイアログ |
 
+### Properties
+
+| Name | Summary |
+|---|---|
+| [assistedFactory](assisted-factory.md) | `lateinit var assistedFactory: `[`RoomTitleEditViewModelAssistedFactory`](../-room-title-edit-view-model/-room-title-edit-view-model-assisted-factory/index.md) |
+
 ### Functions
 
 | Name | Summary |

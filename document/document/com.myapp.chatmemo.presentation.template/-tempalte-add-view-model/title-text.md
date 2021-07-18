@@ -2,4 +2,4 @@
 
 # titleText
 
-`val titleText: <ERROR CLASS>`
+`val titleText: MutableLiveData<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>`

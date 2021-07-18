@@ -4,11 +4,13 @@
 
 `data class Order : `[`TemplateMode`](../index.md)
 
+登録順
+
 ### Constructors
 
 | Name | Summary |
 |---|---|
-| [&lt;init&gt;](-init-.md) | `Order(message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)` = "順番", position: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0)` |
+| [&lt;init&gt;](-init-.md) | `Order(message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)` = "順番", position: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0)`<br>登録順 |
 
 ### Properties
 
@@ -27,4 +29,4 @@
 
 | Name | Summary |
 |---|---|
-| [getInt](../get-int.md) | `fun getInt(): `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
+| [getInt](../get-int.md) | `fun getInt(): `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)<br>テンプレート表示モードの数値取得 |

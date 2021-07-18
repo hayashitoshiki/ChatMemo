@@ -3,3 +3,13 @@
 # toStatus
 
 `fun toStatus(index: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`): `[`TemplateMode`](index.md)
+
+数値からテンプレートモード取得
+
+### Parameters
+
+`index` - 数値
+
+**Return**
+1→登録順、2→ランダム
+

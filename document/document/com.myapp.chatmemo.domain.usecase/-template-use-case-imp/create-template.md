@@ -8,3 +8,6 @@ Overrides [TemplateUseCase.createTemplate](../-template-use-case/create-template
 
 テンプレート作成
 
+### Parameters
+
+`template` - 作成するテンプレート

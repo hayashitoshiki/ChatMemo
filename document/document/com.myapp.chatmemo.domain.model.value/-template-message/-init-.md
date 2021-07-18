@@ -3,3 +3,6 @@
 # &lt;init&gt;
 
 `TemplateMessage(massage: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`)`
+
+テンプレート文定義
+

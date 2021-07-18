@@ -10,6 +10,12 @@
 |---|---|
 | [&lt;init&gt;](-init-.md) | `MyApplication()` |
 
+### Properties
+
+| Name | Summary |
+|---|---|
+| [applicationScope](application-scope.md) | `val applicationScope: <ERROR CLASS>` |
+
 ### Functions
 
 | Name | Summary |

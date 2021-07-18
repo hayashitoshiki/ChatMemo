@@ -2,4 +2,4 @@
 
 # commentText
 
-`val commentText: <ERROR CLASS>`
+`val commentText: MutableLiveData<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>`

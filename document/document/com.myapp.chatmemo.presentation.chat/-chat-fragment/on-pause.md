@@ -3,3 +3,6 @@
 # onPause
 
 `fun onPause(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+
+Overrides [BaseFragment.onPause](../../com.myapp.chatmemo.presentation.utils.expansion/-base-fragment/on-pause.md)
+

@@ -6,3 +6,6 @@
 
 タイトルに紐づいた定型文リスト取得
 
+### Parameters
+
+`templateId` - テンプレートID

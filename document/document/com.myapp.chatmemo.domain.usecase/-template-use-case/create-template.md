@@ -6,3 +6,6 @@
 
 テンプレート作成
 
+### Parameters
+
+`template` - 作成するテンプレート

@@ -3,3 +3,6 @@
 # templateMode
 
 `var templateMode: `[`TemplateMode`](../-template-mode/index.md)
+
+テンプレートの表示形式
+

@@ -3,3 +3,6 @@
 # templateId
 
 `val templateId: `[`TemplateId`](../../com.myapp.chatmemo.domain.model.value/-template-id/index.md)
+
+テンプレートID
+
