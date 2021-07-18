@@ -1,9 +1,7 @@
 package com.myapp.chatmemo.presentation.chat
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
+import androidx.savedstate.SavedStateRegistryOwner
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.value.TemplateConfiguration
 import com.myapp.chatmemo.domain.model.value.TemplateMode
@@ -11,6 +9,9 @@ import com.myapp.chatmemo.domain.usecase.ChatUseCase
 import com.myapp.chatmemo.domain.usecase.TemplateUseCase
 import com.myapp.chatmemo.presentation.utils.expansion.BaseViewModel
 import com.myapp.chatmemo.presentation.utils.expansion.ViewModelLiveData
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
 /**
  * ルームの定型文設定変更ダイアログ_ロジック
@@ -18,11 +19,32 @@ import com.myapp.chatmemo.presentation.utils.expansion.ViewModelLiveData
  * @property templateUseCase templateに関するUseCase
  * @property chatUseCase Chatに関するUseCase
  */
-class RoomPhraseEditViewModel(
-    private var chatRoom: ChatRoom,
+class RoomPhraseEditViewModel @AssistedInject constructor(
+    @Assisted private var chatRoom: ChatRoom,
     private val templateUseCase: TemplateUseCase,
     private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {
+
+    @AssistedFactory
+    interface RoomPhraseEditViewModelAssistedFactory {
+        fun create(chatRoomEntity: ChatRoom): RoomPhraseEditViewModel
+    }
+
+    companion object {
+        fun provideFactory(
+            owner: SavedStateRegistryOwner,
+            assistedFactory: RoomPhraseEditViewModelAssistedFactory,
+            chatRoomEntity: ChatRoom
+        ): ViewModelProvider.Factory = object : AbstractSavedStateViewModelFactory(owner, null) {
+            override fun <T : ViewModel?> create(
+                key: String,
+                modelClass: Class<T>,
+                handle: SavedStateHandle
+            ): T {
+                return assistedFactory.create(chatRoomEntity) as T
+            }
+        }
+    }
 
     val templateTitleList = templateUseCase.getSpinnerTemplateAll()
         .asLiveData()

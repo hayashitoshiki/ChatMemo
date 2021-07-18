@@ -6,12 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.transition.ChangeTransform
@@ -22,21 +21,21 @@ import com.myapp.chatmemo.domain.model.value.TemplateMode
 import com.myapp.chatmemo.presentation.MainActivity
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentRoomAddBinding
+import com.myapp.chatmemo.presentation.utils.expansion.BaseFragment
 import com.myapp.chatmemo.presentation.utils.expansion.firsText
 import com.myapp.chatmemo.presentation.utils.expansion.text
 import com.myapp.chatmemo.presentation.utils.transition.FabTransform
-import kotlinx.coroutines.delay
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
 
 /**
  * 新規ルーム作成画面
  */
-class RoomAddFragment : Fragment() {
+@AndroidEntryPoint
+class RoomAddFragment : BaseFragment() {
 
     private lateinit var binding: FragmentRoomAddBinding
-    private val viewModel: RoomAddViewModel by inject { parametersOf() }
+    private val viewModel: RoomAddViewModel by viewModels()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -78,24 +77,15 @@ class RoomAddFragment : Fragment() {
             val arrayAdapter = ArrayAdapter(requireActivity(), android.R.layout.simple_dropdown_item_1line, listOf(""))
             spinner.setAdapter(arrayAdapter)
             spinner.keyListener = null
-        }
-        // 新規作成ボタン
+        } // 新規作成ボタン
         binding.btnAddRoom.setOnClickListener {
             lifecycleScope.launch {
                 (requireActivity() as MainActivity).hideNavigationBottom()
-                val anim1 = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
-                binding.container.startAnimation(anim1)
-                binding.container.visibility = View.GONE
-                delay(
-                    resources.getInteger(R.integer.fade_out_time)
-                        .toLong()
-                )
                 val chatRoom: ChatRoom = viewModel.createRoom()
                 val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(chatRoom)
                 findNavController().navigate(action)
             }
-        }
-        // editTextフォーカス制御
+        } // editTextフォーカス制御
         binding.editTitle.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

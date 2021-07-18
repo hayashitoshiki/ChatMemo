@@ -1,7 +1,7 @@
 apply plugin: 'jacoco'
 
 jacoco {
-    toolVersion = "0.8.4" //ツールバージョンを指定可能。省略可。
+    toolVersion = "0.8.7"
 }
 
 android.libraryVariants.all { variant ->
@@ -17,7 +17,7 @@ android.libraryVariants.all { variant ->
         dependsOn "create${variantName}CoverageReport"
         dependsOn "test${variantName}UnitTest"
 
-        group = "testing"
+        group = "verification"
         description = "Generate Jacoco coverage reports for ${realVariantName}"
 
         reports {

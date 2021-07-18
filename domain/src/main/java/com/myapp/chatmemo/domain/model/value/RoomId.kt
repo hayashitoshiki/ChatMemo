@@ -1,3 +1,6 @@
 package com.myapp.chatmemo.domain.model.value
 
-inline class RoomId(val value: Long)
+/**
+ * ルームID定義
+ */
+data class RoomId(val value: Long)

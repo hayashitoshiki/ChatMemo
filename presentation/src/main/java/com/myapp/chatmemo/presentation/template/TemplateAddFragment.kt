@@ -11,7 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -23,18 +23,31 @@ import androidx.transition.TransitionSet
 import com.myapp.chatmemo.domain.model.value.TemplateMessage
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentTemplateAddBinding
+import com.myapp.chatmemo.presentation.utils.expansion.BaseFragment
+import com.myapp.chatmemo.presentation.utils.expansion.OnTemplateMessageListItemClickListener
 import com.myapp.chatmemo.presentation.utils.transition.FabTransform
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * 定型文作成画面
  */
-class TemplateAddFragment : Fragment() {
+@AndroidEntryPoint
+class TemplateAddFragment : BaseFragment() {
 
     private lateinit var binding: FragmentTemplateAddBinding
     private val args: TemplateAddFragmentArgs by navArgs()
-    private val viewModel: TempalteAddViewModel by inject { parametersOf(args.data) }
+
+    @Inject
+    lateinit var assistedFactory: TempalteAddViewModel.TempalteAddViewModelAssistedFactory
+
+    private val viewModel: TempalteAddViewModel by viewModels {
+        TempalteAddViewModel.provideFactory(
+            this, assistedFactory, args.data
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,7 +93,7 @@ class TemplateAddFragment : Fragment() {
         viewModel.phraseText.observe(viewLifecycleOwner, { setAutoHeigth() })
 
         // 定型文リスト
-        val adapter = TemplateListAdapter(arrayListOf())
+        val adapter = GroupAdapter<ViewHolder>()
         val layoutManager = LinearLayoutManager(requireContext())
         val itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
         val controller = AnimationUtils.loadLayoutAnimation(context, R.anim.fall_down)
@@ -88,24 +101,10 @@ class TemplateAddFragment : Fragment() {
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.layoutAnimation = controller
         binding.recyclerView.addItemDecoration(itemDecoration)
-        adapter.setOnItemClickListener(object : TemplateListAdapter.OnItemClickListener {
-            override fun onItemClickListener(
-                view: View,
-                position: Int,
-                items: MutableList<TemplateMessage>
-            ) {
-                when (view.id) {
-                    R.id.btn_delete -> {
-                        viewModel.updatePhraseList(items)
-                    }
-                }
-            }
-        })
+
         // 追加ボタン
-        binding.btnSubmit.setOnClickListener { viewModel.addPhrase() }
-        // 登録ボタン
-        binding.btnAdd.setOnClickListener { viewModel.submit() }
-        // editTextフォーカス制御
+        binding.btnSubmit.setOnClickListener { viewModel.addPhrase() } // 登録ボタン
+        binding.btnAdd.setOnClickListener { viewModel.submit() } // editTextフォーカス制御
         binding.editTitle.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -126,11 +125,22 @@ class TemplateAddFragment : Fragment() {
 
     // データ追加
     private fun viewUpDate(data: MutableList<TemplateMessage>) {
-        val adapter = binding.recyclerView.adapter as TemplateListAdapter
-        if (adapter.itemCount < data.size) {
-            adapter.setData(data)
-            adapter.notifyDataSetChanged()
+        val adapter = binding.recyclerView.adapter as GroupAdapter<*>
+        val clickListener = object : OnTemplateMessageListItemClickListener {
+            override fun onItemClickListener(
+                view: View,
+                position: Int,
+                item: TemplateMessage
+            ) {
+                when (view.id) {
+                    R.id.btn_delete -> {
+                        viewModel.updatePhraseList(item)
+                    }
+                }
+            }
         }
+        val items = data.map { TemplateMessageItem(it, clickListener) }
+        adapter.update(items)
     }
 
     // 設定画面へ画面戻る

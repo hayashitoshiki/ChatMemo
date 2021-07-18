@@ -59,7 +59,7 @@ class ChatRoomTitleEditViewModelTest {
         chatUseCase = mockk<ChatUseCase>().also {
             coEvery { it.updateRoom((any())) } returns Unit
         }
-        viewModel = RoomTitleEditViewModel(chatroom1, chatUseCase)
+        viewModel = RoomTitleEditViewModel(chatUseCase, chatroom1)
         viewModel.newRoomTitle.observeForever(observerString)
         viewModel.isEnableSubmitButton.observeForever(observerBoolean)
         viewModel.oldRoomTitle.observeForever(observerString)

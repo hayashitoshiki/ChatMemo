@@ -1,14 +1,17 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_version = "1.4.21"
+    ext.kotlin_version = "1.5.0"
     ext.dokka_version = '0.9.17'
+    ext.hilt_version = '2.35'
     repositories {
         google()
+        mavenCentral()
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.0.0"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.android.tools.build:gradle:4.2.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         // safe-args
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.2"
         classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokka_version}"
@@ -18,6 +21,7 @@ buildscript {
 allprojects {
     repositories {
         google()
+        mavenCentral()
         jcenter()
     }
 }
@@ -34,6 +38,7 @@ subprojects { // 配下のモジュール全てに適用される
 
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-kapt'
+    apply plugin: 'dagger.hilt.android.plugin'
 
     android {
         compileSdkVersion 30
@@ -95,14 +100,15 @@ subprojects { // 配下のモジュール全てに適用される
         // ktlint
         ktlint "com.pinterest:ktlint:0.41.0"
 
-        // koin
-        def koin_version = "2.0.1"
-        implementation "org.koin:koin-android:$koin_version"
-        implementation "org.koin:koin-android-scope:$koin_version"
-        implementation "org.koin:koin-android-viewmodel:$koin_version"
+        // hilt
+        implementation "com.google.dagger:hilt-android:$rootProject.hilt_version"
+        kapt "com.google.dagger:hilt-android-compiler:$rootProject.hilt_version"
         // coroutines
         implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
         implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+        // timber
+        def timber_version = "4.7.1"
+        implementation "com.jakewharton.timber:timber:$timber_version"
 
         // test
         testImplementation 'junit:junit:4.13.1'
@@ -139,6 +145,57 @@ subprojects { // 配下のモジュール全てに適用される
     }
 }
 
+apply plugin: "jacoco"
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+// 全プロジェクトのカバレッジ取得
+task jacocoMergeReports(type: JacocoMerge) {
+    group = 'verification'
+    description = "Merge all JaCoCo reports from projects into one."
+
+    gradle.afterProject { p, state ->
+        if (p.rootProject != p && p.plugins.hasPlugin('jacoco')) {
+            if (p.name != "document" && p.name != "ChatMemo") {
+                dependsOn "${p.path}:createDebugCoverageReport"
+                dependsOn "${p.path}:testDebugUnitTest"
+                executionData "${p.buildDir}/jacoco/testDebugUnitTest.exec"
+            }
+        }
+    }
+}
+
+// マージされたカバレッジ取得
+task jacocoTestReports(type: JacocoReport, dependsOn: 'jacocoMergeReports') {
+    group = 'verification'
+    description = "Generate Jacoco coverage reports for the build. Only unit tests."
+
+    executionData jacocoMergeReports.destinationFile
+
+    getSourceDirectories().setFrom(files())
+    getClassDirectories().setFrom(files())
+
+    gradle.afterProject { p, state ->
+        if (p.rootProject != p && p.plugins.hasPlugin('jacoco')) {
+            if (p.name != "document" && p.name != "ChatMemo") {
+                getSourceDirectories().from += "${p.projectDir}/src/main/java"
+                getClassDirectories().from += p.fileTree(dir: "${p.buildDir}/tmp/kotlin-classes/debug")
+                getExecutionData().setFrom(fileTree(dir: project.projectDir, includes: [
+                        '**/*.exec',    //JUnit Test Result
+                        '**/*.ec'])     //Espresso Test Result
+                )
+            }
+        }
+    }
+
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+    }
+}
 
 task clean(type: Delete) {
     delete rootProject.buildDir

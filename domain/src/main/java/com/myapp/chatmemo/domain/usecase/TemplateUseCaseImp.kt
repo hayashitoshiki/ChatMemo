@@ -8,8 +8,9 @@ import com.myapp.chatmemo.domain.repository.LocalTemplateRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class TemplateUseCaseImp(
+class TemplateUseCaseImp @Inject constructor(
     private val localChatRepository: LocalChatRepository,
     private val localTemplateRepository: LocalTemplateRepository
 ) : TemplateUseCase {

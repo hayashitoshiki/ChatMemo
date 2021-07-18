@@ -2,11 +2,20 @@ package com.myapp.chatmemo.domain.model.value
 
 import java.io.Serializable
 
+/**
+ * チャットのコメント定義
+ */
 data class Comment(
-    // コメント
+    /**
+     * コメント
+     */
     val message: String,
-    // ユーザ
+    /**
+     * コメントしたユーザ
+     */
     val user: User,
-    // コメントした時間
+    /**
+     * コメントした時間
+     */
     val time: CommentDateTime
 ) : Serializable

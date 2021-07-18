@@ -10,22 +10,28 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.FragmentTemplateListBinding
-import org.koin.android.viewmodel.ext.android.viewModel
+import com.myapp.chatmemo.presentation.utils.expansion.BaseFragment
+import com.myapp.chatmemo.presentation.utils.expansion.OnTemplateTitleListItemClickListener
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * 定型文一覧画面
  */
-class TtemplateListFragment : Fragment() {
+@AndroidEntryPoint
+class TtemplateListFragment : BaseFragment() {
 
     private lateinit var binding: FragmentTemplateListBinding
-    private val viewModel: TemplateListViewModel by viewModel()
+    private val viewModel: TemplateListViewModel by viewModels()
+    private lateinit var clickListener: OnTemplateTitleListItemClickListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,10 +55,13 @@ class TtemplateListFragment : Fragment() {
 
         // テンプレートリスト
         binding.recyclerView.let {
-            val adapter = PhraseTitleListAdapter()
+            val adapter = GroupAdapter<ViewHolder>()
             val layoutManager = LinearLayoutManager(requireContext())
             val controller = AnimationUtils.loadLayoutAnimation(context, R.anim.fall_down)
-            adapter.setOnItemClickListener(object : PhraseTitleListAdapter.OnItemClickListener {
+            it.adapter = adapter
+            it.layoutManager = layoutManager
+            it.layoutAnimation = controller
+            clickListener = object : OnTemplateTitleListItemClickListener {
                 override fun onItemClickListener(
                     view: View,
                     position: Int,
@@ -61,9 +70,9 @@ class TtemplateListFragment : Fragment() {
                     when (view.id) {
                         R.id.txt_name -> {
                             val extras = FragmentNavigatorExtras(view to "end_title_transition")
-                            val data = bundleOf("data" to item)
+                            val sendData = bundleOf("data" to item)
                             findNavController().navigate(
-                                R.id.action_templateListFragment_to_templateAddFragment, data, null, extras
+                                R.id.action_templateListFragment_to_templateAddFragment, sendData, null, extras
                             )
                         }
                         R.id.btn_delete -> {
@@ -78,12 +87,8 @@ class TtemplateListFragment : Fragment() {
                         }
                     }
                 }
-            })
-            it.adapter = adapter
-            it.layoutManager = layoutManager
-            it.layoutAnimation = controller
-        }
-        // 追加ボタン
+            }
+        } // 追加ボタン
         binding.fab.setOnClickListener {
             val extras = FragmentNavigatorExtras(it to "end_fab_transition")
             val data = bundleOf("data" to null)
@@ -93,8 +98,9 @@ class TtemplateListFragment : Fragment() {
 
     // データ反映
     private fun viewUpDate(data: List<Template>) {
-        val adapter = binding.recyclerView.adapter as PhraseTitleListAdapter
-        adapter.submitList(data)
+        val items = data.map { TemplateTitleItem(it, clickListener) }
+        val adapter = binding.recyclerView.adapter as GroupAdapter<*>
+        adapter.update(items)
     }
 
     // エラートースト表示

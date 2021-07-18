@@ -9,8 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class LocalTemplateRepositoryImp(
+class LocalTemplateRepositoryImp @Inject constructor(
     private val templateDao: com.myapp.chatmemo.data.database.dao.TemplateDao,
     private val phraseDao: com.myapp.chatmemo.data.database.dao.PhraseDao,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO

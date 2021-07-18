@@ -4,14 +4,17 @@ import androidx.lifecycle.*
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.usecase.TemplateUseCase
 import com.myapp.chatmemo.presentation.utils.expansion.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * 定型文一覧画面_UIロジック
  *
  * @property templateUseCase テンプレートに関するUseCase
  */
-class TemplateListViewModel(
+@HiltViewModel
+class TemplateListViewModel @Inject constructor(
     private val templateUseCase: TemplateUseCase
 ) : BaseViewModel() {
 

@@ -7,7 +7,7 @@ import com.myapp.chatmemo.domain.model.value.TemplateId
 import kotlinx.coroutines.flow.Flow
 
 /**
- * チャットに関するDataBaseCRUD用Repository
+ * チャットに関するローカルデータCRUD用Repository
  */
 interface LocalChatRepository {
 
@@ -59,6 +59,8 @@ interface LocalChatRepository {
 
     /**
      * メッセージ追加
+     * @param comment コメント
+     * @param roomId チャットルームID
      */
     suspend fun addComment(
         comment: Comment,
@@ -67,6 +69,7 @@ interface LocalChatRepository {
 
     /**
      * メッセージアップデート
+     * @param commentList コメントリスト
      */
     suspend fun updateComments(commentList: List<Comment>)
 

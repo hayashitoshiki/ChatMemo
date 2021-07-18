@@ -4,13 +4,16 @@ import androidx.lifecycle.*
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.value.RoomId
 import com.myapp.chatmemo.domain.usecase.ChatUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ホーム画面_ロジック
  * @property chatUseCase Chatに関するUseCase
  */
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val chatUseCase: ChatUseCase
 ) : ViewModel() {
 

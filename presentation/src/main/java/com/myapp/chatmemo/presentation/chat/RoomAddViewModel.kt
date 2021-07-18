@@ -13,13 +13,16 @@ import com.myapp.chatmemo.domain.usecase.ChatUseCase
 import com.myapp.chatmemo.domain.usecase.TemplateUseCase
 import com.myapp.chatmemo.presentation.utils.expansion.BaseViewModel
 import com.myapp.chatmemo.presentation.utils.expansion.ViewModelLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /**
  * 新規ルーム作成画面_ロジック
  * @property templateUseCase templateに関するUseCase
  * @property chatUseCase Chatに関するUseCase
  */
-class RoomAddViewModel(
+@HiltViewModel
+class RoomAddViewModel @Inject constructor(
     private val templateUseCase: TemplateUseCase,
     private val chatUseCase: ChatUseCase
 ) : BaseViewModel() {

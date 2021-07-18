@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
@@ -15,17 +16,25 @@ import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.DialogRoomPhraseEditBinding
 import com.myapp.chatmemo.presentation.utils.expansion.firsText
 import com.myapp.chatmemo.presentation.utils.expansion.text
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
+import javax.inject.Inject
 
 /**
  * ルームの定型文設定変更ダイアログ
  */
+@AndroidEntryPoint
 class RoomPhraseEditDialogFragment : DialogFragment() {
 
-    private val viewModel: RoomPhraseEditViewModel by inject {
-        parametersOf(requireArguments().getSerializable("room") as ChatRoom)
+    @Inject
+    lateinit var assistedFactory: RoomPhraseEditViewModel.RoomPhraseEditViewModelAssistedFactory
+
+    private val viewModel: RoomPhraseEditViewModel by viewModels {
+        RoomPhraseEditViewModel.provideFactory(
+            this,
+            assistedFactory,
+            requireArguments().getSerializable("room") as ChatRoom
+        )
     }
     private lateinit var binding: DialogRoomPhraseEditBinding
 

@@ -5,6 +5,9 @@ import com.myapp.chatmemo.domain.model.value.TemplateId
 import com.myapp.chatmemo.domain.model.value.TemplateMessage
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * テンプレートに関するローカルデータソースCRUD用Repository
+ */
 interface LocalTemplateRepository {
 
     // region 定型文タイトル
@@ -18,14 +21,14 @@ interface LocalTemplateRepository {
     /**
      * 定型文登録
      * @param template 追加する定型文リスト
-     * return 正常登録できたか
+     * @return 正常登録できたか
      */
     suspend fun createTemplate(template: Template): Boolean
 
     /**
      * 定型文更新
      * @param template 追加する定型文リスト
-     * return 正常登録できたか
+     * @return 正常登録できたか
      */
     suspend fun updateTemplate(template: Template): Boolean
 
@@ -37,7 +40,7 @@ interface LocalTemplateRepository {
 
     /**
      * 定型文のタイトル一覧取得
-     * return 定型文のタイトル一覧
+     * @return 定型文のタイトル一覧
      */
     fun getTemplateAll(): Flow<List<Template>>
 
@@ -47,6 +50,7 @@ interface LocalTemplateRepository {
 
     /**
      * タイトルに紐づいた定型文リスト取得
+     * @param templateId テンプレートID
      */
     suspend fun getTemplateMessageById(templateId: TemplateId): List<TemplateMessage>
 

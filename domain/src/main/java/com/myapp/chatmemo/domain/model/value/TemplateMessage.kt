@@ -1,6 +1,6 @@
 package com.myapp.chatmemo.domain.model.value
 
-inline class TemplateMessage(
-    // テンプレート文
-    val massage: String
-)
+/**
+ * テンプレート文定義
+ */
+inline class TemplateMessage(val massage: String)

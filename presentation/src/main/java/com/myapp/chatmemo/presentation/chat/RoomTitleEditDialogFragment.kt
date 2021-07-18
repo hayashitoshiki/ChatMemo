@@ -8,21 +8,29 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.presentation.R
 import com.myapp.chatmemo.presentation.databinding.DialogRoomTitleEditBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
+import javax.inject.Inject
 
 /**
  * ルーム名変更ダイアログ
  */
+@AndroidEntryPoint
 class RoomTitleEditDialogFragment : DialogFragment() {
 
-    private val viewModel: RoomTitleEditViewModel by inject {
-        parametersOf(requireArguments().getSerializable("room") as ChatRoom)
+    @Inject
+    lateinit var assistedFactory: RoomTitleEditViewModel.RoomTitleEditViewModelAssistedFactory
+
+    private val viewModel: RoomTitleEditViewModel by viewModels {
+        RoomTitleEditViewModel.provideFactory(
+            assistedFactory,
+            requireArguments().getSerializable("room") as ChatRoom
+        )
     }
     private lateinit var binding: DialogRoomTitleEditBinding
 
