@@ -70,7 +70,7 @@ class HomeViewModelTest {
         Dispatchers.setMain(testDispatcher)
         chatUseCase = mockk<ChatUseCase>().also {
             every { it.getRoomAll() } returns cahtRoomListFlow
-            coEvery { it.deleteRoom(RoomId(any())) } returns Unit
+            coEvery { it.deleteRoom(any()) } returns Unit
         }
         viewModel = HomeViewModel(chatUseCase)
         initObserver()

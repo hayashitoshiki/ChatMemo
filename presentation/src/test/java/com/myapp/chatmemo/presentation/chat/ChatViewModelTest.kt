@@ -89,12 +89,12 @@ class ChatViewModelTest {
             coEvery { it.getChatRoomByRoomById(RoomId(3)) } returns flow { emit(chatroom3) }
             coEvery { it.getChatRoomByRoomById(RoomId(5)) } returns flow { emit(chatroomEmpty) }
             coEvery { it.reverseAllCommentUser(any()) } returns reCommentList
-            coEvery { it.deleteRoom(RoomId(any())) } returns Unit
+            coEvery { it.deleteRoom(any()) } returns Unit
             coEvery { it.updateRoom(any()) } returns Unit
-            coEvery { it.addComment(any(), RoomId(any())) } returns userComment
-            coEvery { it.addTemplateComment(any(), RoomId(any())) } returns Pair(templateConfiguration1, comment1)
+            coEvery { it.addComment(any(), any()) } returns userComment
+            coEvery { it.addTemplateComment(any(), any()) } returns Pair(templateConfiguration1, comment1)
         }
-        viewModel = ChatViewModel(roomId1, chatUseCase)
+        viewModel = ChatViewModel(chatUseCase, roomId1)
         observerInit()
     }
 
@@ -133,12 +133,13 @@ class ChatViewModelTest {
      */
     @Test
     fun updateCommentListByRoomUpdate() {
-        viewModel = ChatViewModel(roomId4, chatUseCase)
+        viewModel = ChatViewModel(chatUseCase, roomId4)
         observerInit()
         val result = viewModel.commentList.value
         assertEquals(chatroom1.commentList, result)
         assertNotEquals(chatroom2.commentList, result)
     }
+
     // endregion
 
     // region コメント送信
@@ -155,7 +156,7 @@ class ChatViewModelTest {
     @Test
     fun submitByTemplateNon() {
         runBlocking {
-            viewModel = ChatViewModel(roomId1, chatUseCase)
+            viewModel = ChatViewModel(chatUseCase, roomId1)
             observerInit()
             val oldCommentListSize = commentList1.size
             viewModel.commentText.value = "test"
@@ -164,8 +165,8 @@ class ChatViewModelTest {
             delay(400)
             val newCommentListSize = viewModel.commentList.value!!.size
             assertEquals(oldCommentListSize, newCommentListSize - 1)
-            coVerify(exactly = 1) { (chatUseCase).addComment(any(), RoomId(any())) }
-            coVerify(exactly = 0) { (chatUseCase).addTemplateComment(any(), RoomId(any())) }
+            coVerify(exactly = 1) { (chatUseCase).addComment(any(), roomId1) }
+            coVerify(exactly = 0) { (chatUseCase).addTemplateComment(any(), roomId1) }
             coVerify(exactly = 1) { (chatUseCase).updateRoom(any()) }
         }
     }
@@ -181,7 +182,7 @@ class ChatViewModelTest {
     @Test
     fun submitByTemplateOrderAndList() {
         runBlocking {
-            viewModel = ChatViewModel(roomId2, chatUseCase)
+            viewModel = ChatViewModel(chatUseCase, roomId2)
             observerInit()
             val oldCommentListSize = commentList2.size
             viewModel.commentText.value = "test"
@@ -189,8 +190,8 @@ class ChatViewModelTest {
             delay(400)
             val newCommentListSize = viewModel.commentList.value!!.size
             assertEquals(oldCommentListSize, newCommentListSize - 2)
-            coVerify(exactly = 1) { (chatUseCase).addComment(any(), RoomId(any())) }
-            coVerify(exactly = 1) { (chatUseCase).addTemplateComment(any(), RoomId(any())) }
+            coVerify(exactly = 1) { (chatUseCase).addComment(any(), roomId2) }
+            coVerify(exactly = 1) { (chatUseCase).addTemplateComment(any(), roomId2) }
             coVerify(exactly = 1) { (chatUseCase).updateRoom(any()) }
         }
     }
@@ -206,7 +207,7 @@ class ChatViewModelTest {
     @Test
     fun submitByTemplatRandam() {
         runBlocking {
-            viewModel = ChatViewModel(roomId3, chatUseCase)
+            viewModel = ChatViewModel(chatUseCase, roomId3)
             observerInit()
             val oldCommentListSize = commentList1.size
             viewModel.commentText.value = "test"
@@ -214,8 +215,8 @@ class ChatViewModelTest {
             delay(400)
             val newCommentListSize = viewModel.commentList.value!!.size
             assertEquals(oldCommentListSize, newCommentListSize - 2)
-            coVerify(exactly = 1) { (chatUseCase).addComment(any(), RoomId(any())) }
-            coVerify(exactly = 1) { (chatUseCase).addTemplateComment(any(), RoomId(any())) }
+            coVerify(exactly = 1) { (chatUseCase).addComment(any(), roomId3) }
+            coVerify(exactly = 1) { (chatUseCase).addTemplateComment(any(), roomId3) }
             coVerify(exactly = 1) { (chatUseCase).updateRoom(any()) }
         }
     }
@@ -248,7 +249,7 @@ class ChatViewModelTest {
      */
     @Test
     fun changeUserByNullComment() {
-        viewModel = ChatViewModel(roomId5, chatUseCase)
+        viewModel = ChatViewModel(chatUseCase, roomId5)
         viewModel.commentText.observeForever(observerString)
         viewModel.isEnableSubmitButton.observeForever(observerBoolean)
         viewModel.chatRoom.observeForever(observerRoom)
@@ -265,7 +266,7 @@ class ChatViewModelTest {
      */
     @Test
     fun changeUserByNotComment() {
-        viewModel = ChatViewModel(roomId5, chatUseCase)
+        viewModel = ChatViewModel(chatUseCase, roomId5)
         observerInit()
         coVerify(exactly = 0) { (chatUseCase).reverseAllCommentUser(any()) }
         assertEquals(chatroomEmpty.commentList, viewModel.commentList.value)

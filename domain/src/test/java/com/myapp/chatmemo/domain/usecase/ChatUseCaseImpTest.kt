@@ -67,12 +67,12 @@ class ChatUseCaseImpTest {
         localChatRepository = mockk<LocalChatRepository>().also {
             coEvery { it.getNextRoomId() } returns RoomId(1)
             coEvery { it.createRoom(any()) } returns Unit
-            coEvery { it.deleteRoom(RoomId(any())) } returns Unit
+            coEvery { it.deleteRoom(any()) } returns Unit
             coEvery { it.updateRoom(any()) } returns Unit
             coEvery { it.getRoomAll() } returns flow { emit(listOf(chatroom1)) }
-            coEvery { it.getRoomById(RoomId(any())) } returns flow { emit(chatroom1) }
+            coEvery { it.getRoomById(any()) } returns flow { emit(chatroom1) }
             coEvery { it.getRoomByTemplateId(TemplateId(any())) } returns listOf(chatroom1)
-            coEvery { it.addComment(any(), RoomId(any())) } returns Unit
+            coEvery { it.addComment(any(), any()) } returns Unit
             coEvery { it.updateComments(any()) } returns Unit
         }
         useCase = ChatUseCaseImp(localChatRepository, testScope, testDispatcher)

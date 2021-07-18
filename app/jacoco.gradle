@@ -1,7 +1,8 @@
 apply plugin: 'jacoco'
 
 jacoco {
-    toolVersion = "0.8.4" //ツールバージョンを指定可能。省略可。
+//    toolVersion = "0.8.4" //ツールバージョンを指定可能。省略可。
+    toolVersion = "0.8.7" //ツールバージョンを指定可能。省略可。
 }
 
 android.applicationVariants.all { variant ->
@@ -16,8 +17,8 @@ android.applicationVariants.all { variant ->
         //AndroidTest後にUnitTestの内容をマージします。
         dependsOn "create${variantName}CoverageReport"
         dependsOn "test${variantName}UnitTest"
-
-        group = "testing"
+        group = "verification"
+//        destination "${project.rootDir}/build/reports/jacoco/${project.name}"
         description = "Generate Jacoco coverage reports for ${realVariantName}"
 
         reports {
