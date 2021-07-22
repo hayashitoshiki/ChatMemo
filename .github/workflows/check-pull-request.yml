@@ -11,12 +11,17 @@ env:
 jobs:
   check:
     name: Check pull request
-    runs-on: ubuntu-18.04 # Java や Ruby を利用するので念の為、環境を固定
+    # runs-on: ubuntu-latest
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        api-level: [ 29 ]
+        target: [ default ]
     steps:
-      - name: Check out
-        uses: actions/checkout@v2
+      # チェックアウト
+      - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
@@ -51,6 +56,34 @@ jobs:
         run: ./gradlew $GRADLE_ANDROID_LINT_TASK
       - name: Run Unit Test
         run: ./gradlew $GRADLE_UNIT_TEST_TASK
+
+      # コードカバレッジをJaCoCo形式で取得
+      - name: Get code coverage for JaCoCo
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          arch: x86_64
+          script: ./gradlew jacocoTestReports
+
+      # コードカバレッジをCodecovへアップロード
+      - name: Upload code coverage to Codecov
+        run: bash <(curl -s https://codecov.io/bash)
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      # テスト結果とコードカバレッジのアップロード
+      - name: Upload test results and code coverage Artifact
+        uses: actions/upload-artifact@v2
+        if: success() || failure()
+        with:
+          name: results
+          path: |
+            **/build/reports/tests/**/*
+            **/build/reports/test-results/**/*
+            **/build/reports/jacoco/**/*
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Set up and run Danger
         if: cancelled() != true # 中断されない限り、エラーでも実行
         env:
