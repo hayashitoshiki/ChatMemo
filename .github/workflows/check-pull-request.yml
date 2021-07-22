@@ -50,10 +50,26 @@ jobs:
         with:
           path: ${{ steps.gem-info.outputs.dir }}
           key: ${{ runner.os }}-gem-${{ steps.gem-info.outputs.key }}
+      # Gradleのキャッシュ復元
+      - uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      # 依存関係の出力
+      - name: Displays the Android dependencies of the project
+        run: ./gradlew androidDependencies
+      # コンパイル
+      - name: Run Compile
+        run: ./gradlew assembleDebug
+      # Ktlint
       - name: Run ktlint
         run: ./gradlew $GRADLE_KTLINT_TASK
+      # Android Lint
       - name: Run Android Lint
         run: ./gradlew $GRADLE_ANDROID_LINT_TASK
+      # Unit Test
       - name: Run Unit Test
         run: ./gradlew $GRADLE_UNIT_TEST_TASK
 
