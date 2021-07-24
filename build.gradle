@@ -194,7 +194,7 @@ task jacocoTestReports(type: JacocoReport, dependsOn: 'jacocoMergeReports') {
                 def kotlinDebugTree = fileTree(dir: "${p.buildDir}/tmp/kotlin-classes/Debug", excludes: fileFilter)
                 getClassDirectories().from += files([javaDebugTree, kotlinDebugTree])
                 getSourceDirectories().from += "${p.projectDir}/src/main/java"
-                getExecutionData().setFrom(fileTree(dir: project.projectDir, includes: [
+                getExecutionData().from += (fileTree(dir: p.projectDir, includes: [
                         '**/*.exec',    //JUnit Test Result
                         '**/*.ec'])     //Espresso Test Result
                 )
