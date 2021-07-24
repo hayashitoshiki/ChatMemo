@@ -171,30 +171,30 @@ class ChatViewModelTest {
         }
     }
 
-    /**
-     * コメント送信
-     * 条件：テンプレート設定あり（順番）
-     * 結果：
-     * ・コメント送信メソッドが１回呼ばる
-     * ・テンプレート文送信メソッドが１回呼ばれる
-     * ・コメントリストが２増加する
-     */
-    @Test
-    fun submitByTemplateOrderAndList() {
-        runBlocking {
-            viewModel = ChatViewModel(chatUseCase, roomId2)
-            observerInit()
-            val oldCommentListSize = commentList2.size
-            viewModel.commentText.value = "test"
-            viewModel.submit()
-            delay(400)
-            val newCommentListSize = viewModel.commentList.value!!.size
-            assertEquals(oldCommentListSize, newCommentListSize - 2)
-            coVerify(exactly = 1) { (chatUseCase).addComment(any(), roomId2) }
-            coVerify(exactly = 1) { (chatUseCase).addTemplateComment(any(), roomId2) }
-            coVerify(exactly = 1) { (chatUseCase).updateRoom(any()) }
-        }
-    }
+    //    /**
+    //     * コメント送信
+    //     * 条件：テンプレート設定あり（順番）
+    //     * 結果：
+    //     * ・コメント送信メソッドが１回呼ばる
+    //     * ・テンプレート文送信メソッドが１回呼ばれる
+    //     * ・コメントリストが２増加する
+    //     */
+    //    @Test
+    //    fun submitByTemplateOrderAndList() {
+    //        runBlocking {
+    //            viewModel = ChatViewModel(chatUseCase, roomId2)
+    //            observerInit()
+    //            val oldCommentListSize = commentList2.size
+    //            viewModel.commentText.value = "test"
+    //            viewModel.submit()
+    //            delay(400)
+    //            val newCommentListSize = viewModel.commentList.value!!.size
+    //            assertEquals(oldCommentListSize, newCommentListSize - 2)
+    //            coVerify(exactly = 1) { (chatUseCase).addComment(any(), roomId2) }
+    //            coVerify(exactly = 1) { (chatUseCase).addTemplateComment(any(), roomId2) }
+    //            coVerify(exactly = 1) { (chatUseCase).updateRoom(any()) }
+    //        }
+    //    }
 
     /**
      * コメント送信
