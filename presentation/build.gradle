@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: "androidx.navigation.safeargs.kotlin"
-apply from: './jacoco.gradle'
 
 dependencies {
     // materialdesign

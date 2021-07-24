@@ -39,6 +39,7 @@ subprojects { // 配下のモジュール全てに適用される
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-kapt'
     apply plugin: 'dagger.hilt.android.plugin'
+    apply from: '../jacoco.gradle'
 
     android {
         compileSdkVersion 30
@@ -155,13 +156,11 @@ jacoco {
 task jacocoMergeReports(type: JacocoMerge) {
     group = 'verification'
     description = "Merge all JaCoCo reports from projects into one."
-
+    executionData = files()
     gradle.afterProject { p, state ->
         if (p.rootProject != p && p.plugins.hasPlugin('jacoco')) {
             if (p.name != "document" && p.name != "ChatMemo") {
-                dependsOn "${p.path}:createDebugCoverageReport"
                 dependsOn "${p.path}:testDebugUnitTest"
-                executionData "${p.buildDir}/jacoco/testDebugUnitTest.exec"
             }
         }
     }
@@ -172,17 +171,31 @@ task jacocoTestReports(type: JacocoReport, dependsOn: 'jacocoMergeReports') {
     group = 'verification'
     description = "Generate Jacoco coverage reports for the build. Only unit tests."
 
-    executionData jacocoMergeReports.destinationFile
-
     getSourceDirectories().setFrom(files())
     getClassDirectories().setFrom(files())
+    //無視するファイル(excludes)の設定を行います
+    def fileFilter = ['**/R.class',
+                      '**/R$*.class',
+                      '**/BuildConfig.*',
+                      '**/Manifest*.*',
+                      'android/**/*.*',
+                      'androidx/**/*.*',
+                      '**/Lambda$*.class',
+                      '**/Lambda.class',
+                      '**/*Lambda.class',
+                      '**/*Lambda*.class',
+                      '**/*Lambda*.*',
+                      '**/*Builder.*'
+    ]
 
     gradle.afterProject { p, state ->
         if (p.rootProject != p && p.plugins.hasPlugin('jacoco')) {
             if (p.name != "document" && p.name != "ChatMemo") {
+                def javaDebugTree = fileTree(dir: "${p.buildDir}/intermediates/javac/Debug/compileDebugJavaWithJavac/classes", excludes: fileFilter)
+                def kotlinDebugTree = fileTree(dir: "${p.buildDir}/tmp/kotlin-classes/Debug", excludes: fileFilter)
+                getClassDirectories().from += files([javaDebugTree, kotlinDebugTree])
                 getSourceDirectories().from += "${p.projectDir}/src/main/java"
-                getClassDirectories().from += p.fileTree(dir: "${p.buildDir}/tmp/kotlin-classes/debug")
-                getExecutionData().setFrom(fileTree(dir: project.projectDir, includes: [
+                getExecutionData().from += (fileTree(dir: p.projectDir, includes: [
                         '**/*.exec',    //JUnit Test Result
                         '**/*.ec'])     //Espresso Test Result
                 )
