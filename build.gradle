@@ -35,11 +35,10 @@ subprojects { // 配下のモジュール全てに適用される
             apply plugin: 'com.android.library'
             break
     }
-
+    apply from: '../jacoco.gradle'
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-kapt'
     apply plugin: 'dagger.hilt.android.plugin'
-    apply from: './jacoco.gradle'
 
     android {
         compileSdkVersion 30
