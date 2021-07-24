@@ -79,7 +79,7 @@ jobs:
         with:
           api-level: 29
           arch: x86_64
-          script: ./gradlew jacocoTestReports
+          script: ./gradlew jacocoMergeReports
 
       # コードカバレッジをCodecovへアップロード
       - name: Upload code coverage to Codecov
