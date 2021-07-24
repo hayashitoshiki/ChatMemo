@@ -39,6 +39,7 @@ subprojects { // 配下のモジュール全てに適用される
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-kapt'
     apply plugin: 'dagger.hilt.android.plugin'
+    apply from: './jacoco.gradle'
 
     android {
         compileSdkVersion 30
@@ -152,22 +153,8 @@ jacoco {
     toolVersion = "0.8.7"
 }
 
-// 全プロジェクトのカバレッジ取得
-task jacocoMergeReports(type: JacocoMerge) {
-    group = 'verification'
-    description = "Merge all JaCoCo reports from projects into one."
-    executionData = files()
-    gradle.afterProject { p, state ->
-        if (p.rootProject != p && p.plugins.hasPlugin('jacoco')) {
-            if (p.name != "document" && p.name != "ChatMemo") {
-//                dependsOn "${p.path}:jacocoDebugTestReport"
-            }
-        }
-    }
-}
-
 // マージされたカバレッジ取得
-task jacocoTestReports(type: JacocoReport, dependsOn: 'jacocoMergeReports') {
+task jacocoTestReports(type: JacocoReport) {
     group = 'verification'
     description = "Generate Jacoco coverage reports for the build. Only unit tests."
 
