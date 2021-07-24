@@ -185,7 +185,7 @@ class ChatViewModelTest {
             viewModel.commentText.value = "test"
             viewModel.submit()
             launch {
-                delay(400)
+                delay(600)
             }.join()
             val newCommentListSize = viewModel.commentList.value!!.size
             assertEquals(oldCommentListSize, newCommentListSize - 2)
@@ -212,7 +212,7 @@ class ChatViewModelTest {
             viewModel.commentText.value = "test"
             viewModel.submit()
             launch {
-                delay(400)
+                delay(600)
             }.join()
             val newCommentListSize = viewModel.commentList.value!!.size
             assertEquals(oldCommentListSize, newCommentListSize - 2)
