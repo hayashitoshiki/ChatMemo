@@ -10,12 +10,9 @@ import com.nhaarman.mockito_kotlin.mock
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -187,9 +184,11 @@ class ChatViewModelTest {
             val oldCommentListSize = commentList2.size
             viewModel.commentText.value = "test"
             viewModel.submit()
-            delay(400)
-            val newCommentListSize =
-                viewModel.commentList.value!!.size //            assertEquals(oldCommentListSize, newCommentListSize - 2)
+            launch {
+                delay(400)
+            }.join()
+            val newCommentListSize = viewModel.commentList.value!!.size
+            assertEquals(oldCommentListSize, newCommentListSize - 2)
             coVerify(exactly = 1) { (chatUseCase).addComment(any(), roomId2) }
             coVerify(exactly = 1) { (chatUseCase).addTemplateComment(any(), roomId2) }
             coVerify(exactly = 1) { (chatUseCase).updateRoom(any()) }
@@ -212,9 +211,11 @@ class ChatViewModelTest {
             val oldCommentListSize = commentList1.size
             viewModel.commentText.value = "test"
             viewModel.submit()
-            delay(400)
-            val newCommentListSize =
-                viewModel.commentList.value!!.size //            assertEquals(oldCommentListSize, newCommentListSize - 2)
+            launch {
+                delay(400)
+            }.join()
+            val newCommentListSize = viewModel.commentList.value!!.size
+            assertEquals(oldCommentListSize, newCommentListSize - 2)
             coVerify(exactly = 1) { (chatUseCase).addComment(any(), roomId3) }
             coVerify(exactly = 1) { (chatUseCase).addTemplateComment(any(), roomId3) }
             coVerify(exactly = 1) { (chatUseCase).updateRoom(any()) }
