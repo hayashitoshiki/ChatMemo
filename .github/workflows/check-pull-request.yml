@@ -37,32 +37,34 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.6'
+      # Danger で利用する gem をここで列挙
       - name: Get gem info
-        env: # Danger で利用する gem をここで列挙
+        env:
           PACKAGES: danger:6.2.0 danger-checkstyle_format:0.1.1 danger-android_lint:0.0.8 danger-junit:1.0.0
         id: gem-info
         run: |
           echo "::set-output name=dir::$(gem environment gemdir)" # キャッシュするgemのディレクトリ
           echo "::set-output name=packages::$PACKAGES" # install 用の文字列
           echo "::set-output name=key::$(echo $PACKAGES | tr ' ' '-')" # キャッシュのキー文字列
-      - name: Restore gem cache # gem のキャッシュをリストア
+      # gem のキャッシュをリストア
+      - name: Restore gem cache
         uses: actions/cache@v2
         with:
           path: ${{ steps.gem-info.outputs.dir }}
           key: ${{ runner.os }}-gem-${{ steps.gem-info.outputs.key }}
-      # Gradleのキャッシュ復元
-      - uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      # 依存関係の出力
-      - name: Displays the Android dependencies of the project
-        run: ./gradlew androidDependencies
-      # コンパイル
-      - name: Run Compile
-        run: ./gradlew assembleDebug
+      #      # Gradleのキャッシュ復元
+      #      - uses: actions/cache@v2
+      #        with:
+      #          path: ~/.gradle/caches
+      #          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+      #          restore-keys: |
+      #            ${{ runner.os }}-gradle-
+      #      # 依存関係の出力
+      #      - name: Displays the Android dependencies of the project
+      #        run: ./gradlew androidDependencies
+      #      # コンパイル
+      #      - name: Run Compile
+      #        run: ./gradlew assembleDebug
       # Ktlint
       - name: Run ktlint
         run: ./gradlew $GRADLE_KTLINT_TASK
