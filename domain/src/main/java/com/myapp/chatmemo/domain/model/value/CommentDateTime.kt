@@ -11,6 +11,8 @@ import java.util.*
 
 /**
  * コメントした日時
+ *
+ * @property date 日時データ
  */
 data class CommentDateTime(val date: LocalDateTime) {
     /**

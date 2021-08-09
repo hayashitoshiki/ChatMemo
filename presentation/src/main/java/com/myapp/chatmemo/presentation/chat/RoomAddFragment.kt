@@ -77,7 +77,8 @@ class RoomAddFragment : BaseFragment() {
             val arrayAdapter = ArrayAdapter(requireActivity(), android.R.layout.simple_dropdown_item_1line, listOf(""))
             spinner.setAdapter(arrayAdapter)
             spinner.keyListener = null
-        } // 新規作成ボタン
+        }
+        // 新規作成ボタン
         binding.btnAddRoom.setOnClickListener {
             lifecycleScope.launch {
                 (requireActivity() as MainActivity).hideNavigationBottom()
@@ -85,7 +86,8 @@ class RoomAddFragment : BaseFragment() {
                 val action = RoomAddFragmentDirections.actionRoomAddFragmentToChatFragment(chatRoom)
                 findNavController().navigate(action)
             }
-        } // editTextフォーカス制御
+        }
+        // editTextフォーカス制御
         binding.editTitle.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

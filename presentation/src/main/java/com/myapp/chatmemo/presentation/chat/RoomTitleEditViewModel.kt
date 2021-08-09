@@ -46,7 +46,11 @@ class RoomTitleEditViewModel @AssistedInject constructor(
         _isEnableSubmitButton.addSource(newRoomTitle) { changeSubmitButton(it) }
     }
 
-    // ルーム名変更
+    /**
+     * ルーム名変更
+     *
+     * @param roomName
+     */
     suspend fun changeRoomName(roomName: String) {
         chatRoomEntity.title = roomName
         chatRoomUseCase.updateRoom(chatRoomEntity)

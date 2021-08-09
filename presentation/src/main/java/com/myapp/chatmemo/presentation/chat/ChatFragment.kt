@@ -91,7 +91,8 @@ class ChatFragment : BaseFragment() {
         }
 
         // 送信ボタン
-        binding.btnSubmit.setOnClickListener { viewModel.submit() } // 変更ボタン
+        binding.btnSubmit.setOnClickListener { viewModel.submit() }
+        // 変更ボタン
         binding.btnChangeUser.setOnClickListener { viewModel.changeUser() }
     }
 
@@ -123,7 +124,8 @@ class ChatFragment : BaseFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) { // 定型文変更ボタン
+        when (item.itemId) {
+            // 定型文変更ボタン
             R.id.menu_edit_room_phrase -> {
                 viewModel.chatRoom.value?.let {
                     val dialogFragment = RoomPhraseEditDialogFragment()
@@ -132,7 +134,8 @@ class ChatFragment : BaseFragment() {
                     dialogFragment.arguments = bundle
                     dialogFragment.show(requireActivity().supportFragmentManager, null)
                 }
-            } // ルーム名変更ボタン
+            }
+            // ルーム名変更ボタン
             R.id.menu_edit_room -> {
                 viewModel.chatRoom.value?.let {
                     val dialogFragment = RoomTitleEditDialogFragment()
@@ -141,7 +144,8 @@ class ChatFragment : BaseFragment() {
                     dialogFragment.arguments = bundle
                     dialogFragment.show(requireActivity().supportFragmentManager, null)
                 }
-            } // 新規作成ボタン
+            }
+            // 新規作成ボタン
             R.id.menu_delete_room -> {
                 AlertDialog.Builder(requireActivity())
                     .setTitle(requireContext().getString(R.string.dialog_title_room_delete))

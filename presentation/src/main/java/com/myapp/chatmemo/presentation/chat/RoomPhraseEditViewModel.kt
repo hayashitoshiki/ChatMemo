@@ -70,7 +70,10 @@ class RoomPhraseEditViewModel @AssistedInject constructor(
         }
     }
 
-    // 送信
+    /**
+     * テンプレート設定変更
+     *
+     */
     suspend fun submit() {
         val templateTitleList = templateTitleList.value ?: return
         val templateModeList = templateModeList.value ?: return

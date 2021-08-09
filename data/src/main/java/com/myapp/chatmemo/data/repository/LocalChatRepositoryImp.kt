@@ -40,7 +40,7 @@ class LocalChatRepositoryImp @Inject constructor(
         withContext(ioDispatcher) {
             val id = roomId.value
             roomDao.deleteById(id)
-            commentDao.deleteById(id)
+            commentDao.deleteByRoomId(id)
         }
     }
 

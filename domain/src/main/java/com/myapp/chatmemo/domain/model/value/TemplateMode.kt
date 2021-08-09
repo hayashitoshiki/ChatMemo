@@ -2,10 +2,16 @@ package com.myapp.chatmemo.domain.model.value
 
 /**
  * テンプレートの表示形式定義
+ *
+ * @property massage テンプレート表記名
  */
 sealed class TemplateMode(var massage: String) {
+
     /**
      * 登録順
+     *
+     * @property message テンプレート表記名
+     * @property position 最後に表示したテンプレート文index
      */
     data class Order(
         var message: String = "順番",
@@ -14,6 +20,9 @@ sealed class TemplateMode(var massage: String) {
 
     /**
      * ランダム
+     *
+     * @property message テンプレート表記名
+     * @property position 表示したテンプレート文indexリスト
      */
     data class Randam(
         var message: String = "ランダム",

@@ -78,7 +78,10 @@ class TempalteAddViewModel @AssistedInject constructor(
         }
     }
 
-    // 登録
+    /**
+     * テンプレート登録
+     *
+     */
     fun submit() {
         viewModelScope.launch {
             var result = false
@@ -100,7 +103,10 @@ class TempalteAddViewModel @AssistedInject constructor(
         }
     }
 
-    // 追加
+    /**
+     * テンプレート文言追加
+     *
+     */
     fun addPhrase() {
         val phrase = TemplateMessage(phraseText.value ?: return)
         val list = phraseList.value ?: return
@@ -109,7 +115,11 @@ class TempalteAddViewModel @AssistedInject constructor(
         phraseText.value = ""
     }
 
-    // リスト更新
+    /**
+     * テンプレート文言リスト更新
+     *
+     * @param item
+     */
     fun updatePhraseList(item: TemplateMessage) {
         val phraseListTmp = phraseList.value
         phraseListTmp?.let {

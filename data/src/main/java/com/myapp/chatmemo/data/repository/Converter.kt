@@ -13,13 +13,24 @@ object Converter {
 
     // region テンプレート関連
 
-    // テンプレート文Entityからテンプレート文オブジェクトへ変換
+    /**
+     * テンプレート文Entityからテンプレート文Entityへ変換
+     *
+     * @param templateMessage テンプレート文Entity
+     * @return テンプレート文Entity
+     */
     fun templateMessageFromPharaseEntity(templateMessage: TemplateMessageEntity): TemplateMessage {
         val message = templateMessage.text
         return TemplateMessage(message)
     }
 
-    // テンプレートオブジェクトとテンプレート文オブジェクトからテンプレート文Entityへ変換
+    /**
+     * テンプレートオブジェクトとテンプレート文オブジェクトからテンプレート文Entityへ変換
+     *
+     * @param template テンプレートオブジェクト
+     * @param message テンプレート文オブジェクト
+     * @return テンプレート文Entity
+     */
     fun templateMessageEntityFromTemplateAndMessage(
         template: Template,
         message: TemplateMessage
@@ -29,14 +40,25 @@ object Converter {
         return TemplateMessageEntity(null, phraseTitle, templateId)
     }
 
-    // テンプレートオブジェクトからテンプレートEntityへ変換
+    /**
+     * テンプレートオブジェクトからテンプレートEntityへ変換
+     *
+     * @param template テンプレートオブジェクト
+     * @return テンプレートEntity
+     */
     fun templateEntityFromTemplate(template: Template): TemplateTitleEntity {
         val templateId = template.templateId.value
         val templateTitle = template.title
         return TemplateTitleEntity(templateId, templateTitle)
     }
 
-    // テンプレートEntityとテンプレート文Entityからテンプレートオブジェクトへ変換
+    /**
+     * テンプレートEntityとテンプレート文Entityからテンプレートオブジェクトへ変換
+     *
+     * @param templateTitleEntity テンプレートEntity
+     * @param templateMessageEntityList テンプレート文Entity
+     * @return テンプレートオブジェクト
+     */
     fun templateFromTemplateEntityAndPhraseEntity(
         templateTitleEntity: TemplateTitleEntity,
         templateMessageEntityList: List<TemplateMessageEntity>
@@ -54,7 +76,13 @@ object Converter {
 
     // region チャットルーム関連
 
-    // コメントオブジェクトからコメントEntityへ変換
+    /**
+     * コメントオブジェクトからコメントEntityへ変換
+     *
+     * @param comment コメントオブジェクト
+     * @param roomId チャットルームID
+     * @return コメントEntity
+     */
     fun commentEntityFromComment(
         comment: Comment,
         roomId: RoomId
@@ -66,7 +94,12 @@ object Converter {
         return CommentEntity(null, message, user, date, roomIdLong)
     }
 
-    // コメントEntityからコメントオブジェクトへ変換
+    /**
+     * コメントEntityからコメントオブジェクトへ変換
+     *
+     * @param commentEntity コメントEntity
+     * @return コメントオブジェクト
+     */
     fun commentFromCommentEntity(commentEntity: CommentEntity): Comment {
         val message = commentEntity.text
         val user = User.getUser(commentEntity.user)
@@ -74,7 +107,12 @@ object Converter {
         return Comment(message, user, commentDate)
     }
 
-    // ChatRoomモデルからChatRoomEntityへ変換
+    /**
+     * ChatRoomモデルからChatRoomEntityへ変換
+     *
+     * @param chatRoom チャットルームモデル
+     * @return チャットルームEntity
+     */
     fun chatEntityFromChat(chatRoom: ChatRoom): ChatRoomEntity {
         val id = chatRoom.roomId.value
         val title = chatRoom.title
@@ -106,7 +144,15 @@ object Converter {
         return ChatRoomEntity(id, title, templateId, mode, point, commentLast, commentLastTime)
     }
 
-    // チャットルーム・コメント・テンプレートタイトル・テンプレート文の各Entitykaraチャットルームオブジェクトへ変換
+    /**
+     * チャットルーム・コメント・テンプレートタイトル・テンプレート文の各Entityからチャットルームオブジェクトへ変換
+     *
+     * @param chatRoomEntity チャットルームEntity
+     * @param commentEntityList コメントリスト
+     * @param templateTitleEntity テンプレートタイトル
+     * @param templateMessageList テンプレート文リスト
+     * @return
+     */
     fun chatFromBy(
         chatRoomEntity: ChatRoomEntity,
         commentEntityList: List<CommentEntity>,

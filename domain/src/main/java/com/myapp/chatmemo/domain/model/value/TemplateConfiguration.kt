@@ -4,14 +4,11 @@ import com.myapp.chatmemo.domain.model.entity.Template
 
 /**
  * テンプレート設定定義
+ *
+ * @property template 使用するテンプレート
+ * @property templateMode テンプレートの表示形式
  */
 data class TemplateConfiguration(
-    /**
-     * 使用するテンプレート
-     */
     var template: Template,
-    /**
-     * テンプレートの表示形式
-     */
     var templateMode: TemplateMode
 )

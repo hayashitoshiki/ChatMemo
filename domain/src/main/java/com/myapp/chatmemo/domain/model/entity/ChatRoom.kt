@@ -5,24 +5,18 @@ import com.myapp.chatmemo.domain.model.value.RoomId
 import com.myapp.chatmemo.domain.model.value.TemplateConfiguration
 import java.io.Serializable
 
+
 /**
  * チャットルーム定義
+ *
+ * @property roomId チャットルームのID
+ * @property title チャットルーム名
+ * @property templateConfiguration テンプレート使用設定
+ * @property commentList 過去のコメントリスト
  */
 data class ChatRoom(
-    /**
-     * チャットルームのID
-     */
     val roomId: RoomId,
-    /**
-     * チャットルーム名
-     */
     var title: String,
-    /**
-     * テンプレート使用設定
-     */
     var templateConfiguration: TemplateConfiguration?,
-    /**
-     * 過去のコメントリスト
-     */
     var commentList: MutableList<Comment>
 ) : Serializable

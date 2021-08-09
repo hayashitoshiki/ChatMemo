@@ -31,7 +31,11 @@ class HomeViewModel @Inject constructor(
         _isNoDataText.value = chatRoomList.isEmpty()
     }
 
-    // ルーム削除
+    /**
+     * チャットルーム削除
+     *
+     * @param roomId 削除するチャットルームのID
+     */
     fun deleteRoom(roomId: RoomId) {
         viewModelScope.launch {
             chatUseCase.deleteRoom(roomId)

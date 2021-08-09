@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
  * チャット画面_UIロジック
  *
  * @property chatUseCase チャットルームに関するビジネスロジック
+ * @property id チャットルームID
  */
 class ChatViewModel @AssistedInject constructor(
     private val chatUseCase: ChatUseCase,
@@ -57,7 +58,10 @@ class ChatViewModel @AssistedInject constructor(
         }
     }
 
-    // 送信
+    /**
+     * コメント送信
+     *
+     */
     fun submit() {
         viewModelScope.launch {
             chatRoom.value?.also { room ->
@@ -82,14 +86,20 @@ class ChatViewModel @AssistedInject constructor(
         }
     }
 
-    // ルーム削除
+    /**
+     * チャットルーム削除
+     *
+     */
     fun deleteRoom() {
         viewModelScope.launch {
             chatUseCase.deleteRoom(chatRoom.value?.roomId ?: return@launch)
         }
     }
 
-    // 立場変更
+    /**
+     * コメント反転
+     *
+     */
     fun changeUser() {
         commentList.value?.let {
             val newCommentList = chatUseCase.reverseAllCommentUser(it)

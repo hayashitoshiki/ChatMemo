@@ -89,7 +89,8 @@ class HomeFragment : BaseFragment() {
                     }
                 }
             }
-        } // Fabボタン
+        }
+        // Fabボタン
         binding.fab.setOnClickListener {
             val extras = FragmentNavigatorExtras(it to "end_fab_transition")
             findNavController().navigate(R.id.action_homeFragment_to_roomAddFragment, null, null, extras)

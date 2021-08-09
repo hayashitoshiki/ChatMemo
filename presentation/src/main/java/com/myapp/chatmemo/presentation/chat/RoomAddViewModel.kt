@@ -50,7 +50,11 @@ class RoomAddViewModel @Inject constructor(
         templateModeList.setValue(modeList)
     }
 
-    // 新規ルーム作成
+    /**
+     * 新規チャットルーム作成
+     *
+     * @return チャットルーム
+     */
     suspend fun createRoom(): ChatRoom {
         val roomId = chatUseCase.getNextRoomId()
         val title = titleText.value ?: throw NullPointerException("タイトルが設定されていないのに呼ばれています")
@@ -75,7 +79,10 @@ class RoomAddViewModel @Inject constructor(
         return room
     }
 
-    // 作成ボタン活性・非活性制御
+    /**
+     * 作成ボタン活性・非活性制御
+     *
+     */
     fun changeSubmitButton() {
         val title = titleText.value
         val templateTitle = templateTitleValue.value

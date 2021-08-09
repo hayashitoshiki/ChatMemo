@@ -33,7 +33,11 @@ class TemplateListViewModel @Inject constructor(
         _isNoDataText.value = templateList.isEmpty()
     }
 
-    // 定型文リスト削除
+    /**
+     * テンプレート削除
+     *
+     * @param template 削除するテンプレート
+     */
     fun deletePhrase(template: Template) {
         viewModelScope.launch {
             status.postValue(null)
