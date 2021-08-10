@@ -98,7 +98,6 @@ jobs:
         run: |
           git config --global user.email "tosikihayasi@outlook.jp"
           git config --global user.name "hayashitoshiki"
-          git remote set-url origin https://hayashitoshiki:${{secrets.USER_GITHUB}}@github.com/hayashitoshiki/ChatMemo.git
           git add .
           git commit -m "update document"
           git push origin feature_doc_action_test
