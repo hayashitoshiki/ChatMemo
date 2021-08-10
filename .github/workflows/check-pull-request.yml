@@ -94,12 +94,10 @@ jobs:
       - name: document update
         run: |
           ./gradlew dokka
-      - name: git setting
-        run: |
-          git config --local user.email "hayashitoshiki"
-          git config --local user.name "tosikihayasi@outlook.jp"
       - name: Commit files
         run: |
+          git config --local user.email "tosikihayasi@outlook.jp"
+          git config --local user.name "hayashitoshiki"
           git remote set-url origin https://hayashitoshiki:${{ secrets.USER_GITHUB }}@github.com/hayashitoshiki/ChatMemo
           git add .
           git commit -m "update document"
