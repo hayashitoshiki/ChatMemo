@@ -5,6 +5,9 @@ import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.TemplateMode
 import com.myapp.chatmemo.presentation.R
 
+/**
+ * テンプレートモード_文言取得
+ */
 @get: StringRes
 val TemplateMode.text: Int
     get() = when (this) {
@@ -16,6 +19,9 @@ val TemplateMode.text: Int
         }
     }
 
+/**
+ * テンプレート選択肢文言取得
+ */
 @get: StringRes
 val Template.firsText: Int
     get() = R.string.spinner_message_first

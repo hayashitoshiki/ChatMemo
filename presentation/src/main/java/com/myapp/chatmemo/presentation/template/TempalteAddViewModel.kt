@@ -2,6 +2,7 @@ package com.myapp.chatmemo.presentation.template
 
 import androidx.lifecycle.*
 import androidx.savedstate.SavedStateRegistryOwner
+import com.myapp.chatmemo.domain.dto.TemplateInputDto
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.TemplateId
 import com.myapp.chatmemo.domain.model.value.TemplateMessage
@@ -78,7 +79,10 @@ class TempalteAddViewModel @AssistedInject constructor(
         }
     }
 
-    // 登録
+    /**
+     * テンプレート登録
+     *
+     */
     fun submit() {
         viewModelScope.launch {
             var result = false
@@ -86,13 +90,13 @@ class TempalteAddViewModel @AssistedInject constructor(
             val phraseList = phraseList.value ?: return@launch
             when (submitText.value) {
                 "追加" -> {
-                    val templateId: TemplateId = templateUseCase.getNextTemplateId()
-                    val template = Template(templateId, templateTitle, phraseList)
-                    result = templateUseCase.createTemplate(template)
+                    val templateInputDto = TemplateInputDto(templateTitle, phraseList)
+                    result = templateUseCase.createTemplate(templateInputDto)
                 }
                 "更新" -> {
-                    val templateId = template?.templateId ?: return@launch
-                    val template = Template(templateId, templateTitle, phraseList)
+                    template ?: return@launch
+                    template.title = templateTitle
+                    template.templateMessageList = phraseList
                     result = templateUseCase.updateTemplate(template)
                 }
             }
@@ -100,7 +104,10 @@ class TempalteAddViewModel @AssistedInject constructor(
         }
     }
 
-    // 追加
+    /**
+     * テンプレート文言追加
+     *
+     */
     fun addPhrase() {
         val phrase = TemplateMessage(phraseText.value ?: return)
         val list = phraseList.value ?: return
@@ -109,7 +116,11 @@ class TempalteAddViewModel @AssistedInject constructor(
         phraseText.value = ""
     }
 
-    // リスト更新
+    /**
+     * テンプレート文言リスト更新
+     *
+     * @param item
+     */
     fun updatePhraseList(item: TemplateMessage) {
         val phraseListTmp = phraseList.value
         phraseListTmp?.let {

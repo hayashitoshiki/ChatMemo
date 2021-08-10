@@ -1,9 +1,11 @@
 package com.myapp.chatmemo.domain.usecase
 
 import com.myapp.chatmemo.common.getDateTimeNow
+import com.myapp.chatmemo.domain.dto.ChatRoomInputDto
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.value.*
 import com.myapp.chatmemo.domain.repository.LocalChatRepository
+import com.myapp.chatmemo.domain.translator.ChatRoomTranslator
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +20,9 @@ class ChatUseCaseImp @Inject constructor(
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : ChatUseCase {
 
-    override suspend fun updateRoom(chatRoom: ChatRoom) {
+    override suspend fun updateRoom(
+        chatRoom: ChatRoom
+    ) {
         localChatRepository.updateRoom(chatRoom)
     }
 
@@ -30,8 +34,11 @@ class ChatUseCaseImp @Inject constructor(
         localChatRepository.deleteRoom(roomId)
     }
 
-    override suspend fun createRoom(chatRoom: ChatRoom) {
+    override suspend fun createRoom(chatRoomInputDto: ChatRoomInputDto): ChatRoom {
+        val roomId = getNextRoomId()
+        val chatRoom = ChatRoomTranslator.createChatRoomConvert(roomId, chatRoomInputDto)
         localChatRepository.createRoom(chatRoom)
+        return chatRoom
     }
 
     override suspend fun getNextRoomId(): RoomId {

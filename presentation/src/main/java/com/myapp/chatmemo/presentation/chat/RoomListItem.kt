@@ -30,7 +30,8 @@ class RoomListItem(
         viewBinderHelper.bind(binding.container, room.toString())
 
         // ルーム名
-        binding.nameLabel.text = room.title // 最新コメント
+        binding.nameLabel.text = room.title
+        // 最新コメント
         if (room.commentList.size != 0) {
             val comment = room.commentList.last()
             binding.txtComment.visibility = View.VISIBLE
@@ -57,7 +58,8 @@ class RoomListItem(
                 }
             }
             true
-        } // 削除ボタン
+        }
+        // 削除ボタン
         binding.btnDelete.setOnClickListener {
             if (binding.container.isOpened) {
                 listenerRoomList.onItemClickListener(it, position, room)

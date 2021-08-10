@@ -4,18 +4,13 @@ import java.io.Serializable
 
 /**
  * チャットのコメント定義
+ *
+ * @property message コメント
+ * @property user コメントしたユーザ
+ * @property time コメントした時間
  */
 data class Comment(
-    /**
-     * コメント
-     */
     val message: String,
-    /**
-     * コメントしたユーザ
-     */
     val user: User,
-    /**
-     * コメントした時間
-     */
     val time: CommentDateTime
 ) : Serializable

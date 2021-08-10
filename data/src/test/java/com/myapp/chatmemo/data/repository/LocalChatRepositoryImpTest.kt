@@ -1,5 +1,9 @@
 package com.myapp.chatmemo.data.repository
 
+import com.myapp.chatmemo.data.database.dao.CommentDao
+import com.myapp.chatmemo.data.database.dao.PhraseDao
+import com.myapp.chatmemo.data.database.dao.RoomDao
+import com.myapp.chatmemo.data.database.dao.TemplateDao
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.*
@@ -19,10 +23,10 @@ class LocalChatRepositoryImpTest {
 
     // mock
     private lateinit var repository: LocalChatRepositoryImp
-    private lateinit var templateDao: com.myapp.chatmemo.data.database.dao.TemplateDao
-    private lateinit var phraseDao: com.myapp.chatmemo.data.database.dao.PhraseDao
-    private lateinit var commentDao: com.myapp.chatmemo.data.database.dao.CommentDao
-    private lateinit var roomDao: com.myapp.chatmemo.data.database.dao.RoomDao
+    private lateinit var templateDao: TemplateDao
+    private lateinit var phraseDao: PhraseDao
+    private lateinit var commentDao: CommentDao
+    private lateinit var roomDao: RoomDao
 
     // data
     private val templateTableSize = 3
@@ -53,7 +57,7 @@ class LocalChatRepositoryImpTest {
 
     @Before
     fun setUp() {
-        roomDao = mockk<com.myapp.chatmemo.data.database.dao.RoomDao>().also {
+        roomDao = mockk<RoomDao>().also {
             coEvery { it.getNextId() } returns templateTableSize.toLong()
             coEvery { it.insert(any()) } returns 1L
             coEvery { it.update(any()) } returns Unit
@@ -62,17 +66,17 @@ class LocalChatRepositoryImpTest {
             coEvery { it.getRoomById(any()) } returns chatRoomEntityFlow
             coEvery { it.getRoomByTemplateId(any()) } returns chatRoomEntityList
         }
-        commentDao = mockk<com.myapp.chatmemo.data.database.dao.CommentDao>().also {
+        commentDao = mockk<CommentDao>().also {
             coEvery { it.insert(any()) } returns Unit
             coEvery { it.getCommentByDate(any()) } returns commentEntity1
-            coEvery { it.deleteById(any()) } returns Unit
+            coEvery { it.deleteByRoomId(any()) } returns Unit
             coEvery { it.getAllCommentByRoom(any()) } returns commentEntityList
             coEvery { it.update(any()) } returns Unit
         }
-        templateDao = mockk<com.myapp.chatmemo.data.database.dao.TemplateDao>().also {
+        templateDao = mockk<TemplateDao>().also {
             coEvery { it.getTemplateById(any()) } returns templateEntity
         }
-        phraseDao = mockk<com.myapp.chatmemo.data.database.dao.PhraseDao>().also {
+        phraseDao = mockk<PhraseDao>().also {
             coEvery { it.getAllByTitle(any()) } returns templateMessageEntityList
         }
         repository = LocalChatRepositoryImp(roomDao, commentDao, templateDao, phraseDao)
@@ -138,7 +142,7 @@ class LocalChatRepositoryImpTest {
             val roomIdLong = roomId.value
             repository.deleteRoom(roomId)
             coVerify(exactly = 1) { (roomDao).deleteById(roomIdLong) }
-            coVerify(exactly = 1) { (commentDao).deleteById(roomIdLong) }
+            coVerify(exactly = 1) { (commentDao).deleteByRoomId(roomIdLong) }
         }
     }
 

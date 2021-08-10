@@ -1,5 +1,6 @@
 package com.myapp.chatmemo.domain.usecase
 
+import com.myapp.chatmemo.domain.dto.TemplateInputDto
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.TemplateId
 import com.myapp.chatmemo.domain.model.value.TemplateMessage
@@ -12,9 +13,9 @@ interface TemplateUseCase {
 
     /**
      * テンプレート作成
-     * @param template 作成するテンプレート
+     * @param templateInputDto 作成するテンプレート
      */
-    suspend fun createTemplate(template: Template): Boolean
+    suspend fun createTemplate(templateInputDto: TemplateInputDto): Boolean
 
     /**
      * テンプレート削除

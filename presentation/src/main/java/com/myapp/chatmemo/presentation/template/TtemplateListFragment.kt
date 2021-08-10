@@ -88,7 +88,8 @@ class TtemplateListFragment : BaseFragment() {
                     }
                 }
             }
-        } // 追加ボタン
+        }
+        // 追加ボタン
         binding.fab.setOnClickListener {
             val extras = FragmentNavigatorExtras(it to "end_fab_transition")
             val data = bundleOf("data" to null)

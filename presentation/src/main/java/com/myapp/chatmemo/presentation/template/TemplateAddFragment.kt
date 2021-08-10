@@ -103,8 +103,10 @@ class TemplateAddFragment : BaseFragment() {
         binding.recyclerView.addItemDecoration(itemDecoration)
 
         // 追加ボタン
-        binding.btnSubmit.setOnClickListener { viewModel.addPhrase() } // 登録ボタン
-        binding.btnAdd.setOnClickListener { viewModel.submit() } // editTextフォーカス制御
+        binding.btnSubmit.setOnClickListener { viewModel.addPhrase() }
+        // 登録ボタン
+        binding.btnAdd.setOnClickListener { viewModel.submit() }
+        // editTextフォーカス制御
         binding.editTitle.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -10,12 +10,12 @@ import dagger.assisted.AssistedInject
 
 /**
  * ルーム名変更ダイアログ_ロジック
- * @property chatRoomEntity chatRoom
+ * @property chatRoom chatRoom
  * @property chatRoomUseCase Chatに関するUseCase
  */
 class RoomTitleEditViewModel @AssistedInject constructor(
     private val chatRoomUseCase: ChatUseCase,
-    @Assisted private var chatRoomEntity: ChatRoom
+    @Assisted private var chatRoom: ChatRoom
 ) : BaseViewModel() {
 
     @AssistedFactory
@@ -42,14 +42,18 @@ class RoomTitleEditViewModel @AssistedInject constructor(
 
     // 初期化
     init {
-        _oldRoomTitle.value = chatRoomEntity.title
+        _oldRoomTitle.value = chatRoom.title
         _isEnableSubmitButton.addSource(newRoomTitle) { changeSubmitButton(it) }
     }
 
-    // ルーム名変更
+    /**
+     * ルーム名変更
+     *
+     * @param roomName
+     */
     suspend fun changeRoomName(roomName: String) {
-        chatRoomEntity.title = roomName
-        chatRoomUseCase.updateRoom(chatRoomEntity)
+        chatRoom.title = roomName
+        chatRoomUseCase.updateRoom(chatRoom)
     }
 
     // 変更ボタン活性・非活性制御

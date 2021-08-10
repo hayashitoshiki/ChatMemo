@@ -70,19 +70,23 @@ class RoomPhraseEditViewModel @AssistedInject constructor(
         }
     }
 
-    // 送信
+    /**
+     * テンプレート設定変更
+     *
+     */
     suspend fun submit() {
         val templateTitleList = templateTitleList.value ?: return
         val templateModeList = templateModeList.value ?: return
         val templateModeValue = templateModeValue.value ?: return
-        if (templateTitleValue.value != templateTitleList[0].title) {
-            val template = templateTitleList.first { it.title == templateTitleValue.value }
-            val templateMode = templateModeList.first { it.massage == templateModeValue }
-            val templateConfiguration = TemplateConfiguration(template, templateMode)
-            chatRoom.templateConfiguration = templateConfiguration
-        } else {
-            chatRoom.templateConfiguration = null
-        }
+        val templateConfiguration =
+            if (templateTitleValue.value != templateTitleList[0].title) {
+                val template = templateTitleList.first { it.title == templateTitleValue.value }
+                val templateMode = templateModeList.first { it.massage == templateModeValue }
+                TemplateConfiguration(template, templateMode)
+            } else {
+                null
+            }
+        chatRoom.templateConfiguration = templateConfiguration
         chatUseCase.updateRoom(chatRoom)
     }
 
