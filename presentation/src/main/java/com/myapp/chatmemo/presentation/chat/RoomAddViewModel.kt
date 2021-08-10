@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
+import com.myapp.chatmemo.domain.dto.ChatRoomInputDto
+import com.myapp.chatmemo.domain.dto.TemplateConfiguretionInputDto
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
-import com.myapp.chatmemo.domain.model.value.Comment
-import com.myapp.chatmemo.domain.model.value.TemplateConfiguration
 import com.myapp.chatmemo.domain.model.value.TemplateMode
 import com.myapp.chatmemo.domain.usecase.ChatUseCase
 import com.myapp.chatmemo.domain.usecase.TemplateUseCase
@@ -56,27 +56,21 @@ class RoomAddViewModel @Inject constructor(
      * @return チャットルーム
      */
     suspend fun createRoom(): ChatRoom {
-        val roomId = chatUseCase.getNextRoomId()
         val title = titleText.value ?: throw NullPointerException("タイトルが設定されていないのに呼ばれています")
-        val templateConfiguration: TemplateConfiguration?
-        val comment = mutableListOf<Comment>()
         val templateTitle = templateTitleValue.value
         val templateList = templateTitleList.value
         val templateMode = templateModeValue.value
         val templateModeList = templateModeList.value ?: throw NullPointerException("テンプレート形式リストがないのに呼ばれています")
-
-        templateConfiguration =
+        val templateInputDto =
             if (!templateTitle.isNullOrEmpty() && !templateList.isNullOrEmpty() && templateTitle != templateList[0].title) {
                 val template = templateList.first { it.title == templateTitle }
                 val mode = templateModeList.first { it.massage == templateMode }
-                TemplateConfiguration(template, mode)
+                TemplateConfiguretionInputDto(template.templateId, template.title, template.templateMessageList, mode)
             } else {
                 null
             }
-
-        val room = ChatRoom(roomId, title, templateConfiguration, comment)
-        chatUseCase.createRoom(room)
-        return room
+        val chatRoomInputDto = ChatRoomInputDto(title, templateInputDto)
+        return chatUseCase.createRoom(chatRoomInputDto)
     }
 
     /**

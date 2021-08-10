@@ -1,10 +1,12 @@
 package com.myapp.chatmemo.domain.usecase
 
+import com.myapp.chatmemo.domain.dto.TemplateInputDto
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.TemplateId
 import com.myapp.chatmemo.domain.model.value.TemplateMessage
 import com.myapp.chatmemo.domain.repository.LocalChatRepository
 import com.myapp.chatmemo.domain.repository.LocalTemplateRepository
+import com.myapp.chatmemo.domain.translator.TemplateTranslator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -15,7 +17,9 @@ class TemplateUseCaseImp @Inject constructor(
     private val localTemplateRepository: LocalTemplateRepository
 ) : TemplateUseCase {
 
-    override suspend fun createTemplate(template: Template): Boolean {
+    override suspend fun createTemplate(templateInputDto: TemplateInputDto): Boolean {
+        val templateId: TemplateId = getNextTemplateId()
+        val template = TemplateTranslator.createTemplateConvert(templateId, templateInputDto)
         return localTemplateRepository.createTemplate(template)
     }
 

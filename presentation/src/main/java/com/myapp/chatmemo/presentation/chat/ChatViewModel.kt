@@ -74,8 +74,8 @@ class ChatViewModel @AssistedInject constructor(
                 room.templateConfiguration?.let { templateConfiguration ->
                     delay(300)
                     val (configuretion, templateComment) = chatUseCase.addTemplateComment(templateConfiguration, roomId)
-                    room.templateConfiguration = configuretion
                     commentList.add(templateComment)
+                    room.templateConfiguration = configuretion
                     room.commentList = commentList
                 }
 

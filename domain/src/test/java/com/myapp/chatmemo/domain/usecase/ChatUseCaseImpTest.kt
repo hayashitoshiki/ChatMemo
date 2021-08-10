@@ -1,5 +1,7 @@
 package com.myapp.chatmemo.domain.usecase
 
+import com.myapp.chatmemo.domain.dto.ChatRoomInputDto
+import com.myapp.chatmemo.domain.dto.TemplateConfiguretionInputDto
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.*
@@ -50,6 +52,7 @@ class ChatUseCaseImpTest {
     private val reCommentList = mutableListOf(reComment1, reComment2, reComment3)
     private val chatroom1 = ChatRoom(roomId1, "room1", null, commentList)
 
+
     private val templateMessage1 = TemplateMessage("test1")
     private val templateMessage2 = TemplateMessage("test2")
     private val templateMessage3 = TemplateMessage("test3")
@@ -60,12 +63,19 @@ class ChatUseCaseImpTest {
     private val templateConfiguration1 = TemplateConfiguration(template, templateMode1)
     private val templateConfiguration2 = TemplateConfiguration(template, templateMode2)
 
+    private val templateId = TemplateId(1)
+    private val templateConfigurationInputDto =
+        TemplateConfiguretionInputDto(templateId, "tempalte1", templateMessageList, templateMode1)
+    private val chatRoomInputDto1 = ChatRoomInputDto("inputDto1", null)
+    private val chatRoomInputDto2 = ChatRoomInputDto("inputDto1", templateConfigurationInputDto)
+
+
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         localChatRepository = mockk<LocalChatRepository>().also {
-            coEvery { it.getNextRoomId() } returns RoomId(1)
+            coEvery { it.getNextRoomId() } returns roomId1
             coEvery { it.createRoom(any()) } returns Unit
             coEvery { it.deleteRoom(any()) } returns Unit
             coEvery { it.updateRoom(any()) } returns Unit
@@ -123,14 +133,42 @@ class ChatUseCaseImpTest {
 
     /**
      * チャットルームを作成する
-     * 条件：なし
-     * 結果：チャットルームを作成するメソッドが呼ばれること
+     * 条件：テンプレート設定なし
+     * 結果：
+     * ・チャットルームを作成するメソッドが呼ばれること
+     * ・Dtoを元にチャットルームモデルが生成されること
      */
     @Test
-    fun createRoom() {
+    fun createRoomByConfigrationNull() {
         runBlocking {
-            useCase.createRoom(chatroom1)
-            coVerify(exactly = 1) { (localChatRepository).createRoom(chatroom1) }
+            val chatRoom = ChatRoom(roomId1, chatRoomInputDto1.chatRoomTitle, null, mutableListOf())
+            val result = useCase.createRoom(chatRoomInputDto1)
+            assertEquals(chatRoom, result)
+            coVerify(exactly = 1) { (localChatRepository).createRoom(chatRoom) }
+        }
+    }
+
+    /**
+     * チャットルームを作成する
+     * 条件：テンプレート設定あり
+     * 結果：
+     * ・チャットルームを作成するメソッドが呼ばれること
+     * ・Dtoを元にチャットルームモデルが生成されること
+     */
+    @Test
+    fun createRoomByConfigration() {
+        runBlocking {
+            val template = Template(
+                chatRoomInputDto2.templateConfiguretionInputDto!!.templateId,
+                chatRoomInputDto2.templateConfiguretionInputDto!!.templateTitle,
+                chatRoomInputDto2.templateConfiguretionInputDto!!.templateMessageList
+            )
+            val templateConfiguration =
+                TemplateConfiguration(template, chatRoomInputDto2.templateConfiguretionInputDto!!.templateMode)
+            val chatRoom = ChatRoom(roomId1, chatRoomInputDto1.chatRoomTitle, templateConfiguration, mutableListOf())
+            val result = useCase.createRoom(chatRoomInputDto2)
+            assertEquals(chatRoom, result)
+            coVerify(exactly = 1) { (localChatRepository).createRoom(chatRoom) }
         }
     }
 

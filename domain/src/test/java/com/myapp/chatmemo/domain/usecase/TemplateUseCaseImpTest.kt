@@ -1,10 +1,14 @@
 package com.myapp.chatmemo.domain.usecase
 
+import com.myapp.chatmemo.domain.dto.TemplateInputDto
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.entity.Template
 import com.myapp.chatmemo.domain.model.value.*
 import com.myapp.chatmemo.domain.repository.LocalChatRepository
 import com.myapp.chatmemo.domain.repository.LocalTemplateRepository
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -13,7 +17,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDateTime
@@ -24,9 +28,11 @@ class TemplateUseCaseImpTest {
     private lateinit var localChatRepository: LocalChatRepository
     private lateinit var localTemplateRepository: LocalTemplateRepository
     private lateinit var useCase: TemplateUseCaseImp
+
     private val templateMessage = TemplateMessage("testMessge")
     private val templateMessageList = listOf(templateMessage)
-    private val template = Template(TemplateId(1), "testTemplate", templateMessageList)
+    private val templateId1 = TemplateId(1)
+    private val template = Template(templateId1, "testTemplate", templateMessageList)
     private val templateList = listOf(template)
     private val roomId1 = RoomId(1)
     private val time1 = CommentDateTime(LocalDateTime.now())
@@ -38,23 +44,25 @@ class TemplateUseCaseImpTest {
     private val commentList = mutableListOf(comment1, comment2, comment3)
     private val chatroom1 = ChatRoom(roomId1, "room1", null, commentList)
 
+    private val templateInputDto = TemplateInputDto("templateInputDto", templateMessageList)
+
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
-        localChatRepository = io.mockk.mockk<LocalChatRepository>()
+        localChatRepository = mockk<LocalChatRepository>()
             .also {
-                io.mockk.coEvery { it.getRoomByTemplateId(TemplateId(1)) } returns mutableListOf(chatroom1)
-                io.mockk.coEvery { it.getRoomByTemplateId(TemplateId(2)) } returns mutableListOf()
+                coEvery { it.getRoomByTemplateId(TemplateId(1)) } returns mutableListOf(chatroom1)
+                coEvery { it.getRoomByTemplateId(TemplateId(2)) } returns mutableListOf()
             }
-        localTemplateRepository = io.mockk.mockk<LocalTemplateRepository>()
+        localTemplateRepository = mockk<LocalTemplateRepository>()
             .also {
-                io.mockk.coEvery { it.createTemplate(any()) } returns true
-                io.mockk.coEvery { it.deleteTemplate(TemplateId(any())) } returns true
-                io.mockk.coEvery { it.updateTemplate(any()) } returns true
-                io.mockk.coEvery { it.getNextTemplateId() } returns TemplateId(1)
-                io.mockk.coEvery { it.getTemplateAll() } returns flow { emit(templateList) }
-                io.mockk.coEvery { it.getTemplateMessageById(TemplateId(any())) } returns listOf(templateMessage)
+                coEvery { it.createTemplate(any()) } returns true
+                coEvery { it.deleteTemplate(TemplateId(any())) } returns true
+                coEvery { it.updateTemplate(any()) } returns true
+                coEvery { it.getNextTemplateId() } returns templateId1
+                coEvery { it.getTemplateAll() } returns flow { emit(templateList) }
+                coEvery { it.getTemplateMessageById(TemplateId(any())) } returns listOf(templateMessage)
             }
         useCase = TemplateUseCaseImp(localChatRepository, localTemplateRepository)
     }
@@ -73,8 +81,9 @@ class TemplateUseCaseImpTest {
     @Test
     fun createTemplate() {
         runBlocking {
-            useCase.createTemplate(template)
-            io.mockk.coVerify(exactly = 1) { (localTemplateRepository).createTemplate(template) }
+            useCase.createTemplate(templateInputDto)
+            val template = Template(templateId1, templateInputDto.templateTitle, templateInputDto.templateMessageList)
+            coVerify(exactly = 1) { (localTemplateRepository).createTemplate(template) }
         }
     }
 
@@ -89,8 +98,8 @@ class TemplateUseCaseImpTest {
     fun deleteTemplateByUse() {
         runBlocking {
             val result = useCase.deleteTemplate(template.templateId)
-            Assert.assertEquals(false, result)
-            io.mockk.coVerify(exactly = 0) { (localTemplateRepository).deleteTemplate(TemplateId(2)) }
+            assertEquals(false, result)
+            coVerify(exactly = 0) { (localTemplateRepository).deleteTemplate(TemplateId(2)) }
         }
     }
 
@@ -105,8 +114,8 @@ class TemplateUseCaseImpTest {
     fun deleteTemplateByNotUse() {
         runBlocking {
             val result = useCase.deleteTemplate(TemplateId(2))
-            Assert.assertEquals(true, result)
-            io.mockk.coVerify(exactly = 1) { (localTemplateRepository).deleteTemplate(TemplateId(2)) }
+            assertEquals(true, result)
+            coVerify(exactly = 1) { (localTemplateRepository).deleteTemplate(TemplateId(2)) }
         }
     }
 
@@ -119,7 +128,7 @@ class TemplateUseCaseImpTest {
     fun updateTemplate() {
         runBlocking {
             useCase.updateTemplate(template)
-            io.mockk.coVerify(exactly = 1) { (localTemplateRepository).updateTemplate(template) }
+            coVerify(exactly = 1) { (localTemplateRepository).updateTemplate(template) }
         }
     }
 
@@ -131,7 +140,7 @@ class TemplateUseCaseImpTest {
     @Test
     fun getTemplateAll() {
         useCase.getTemplateAll()
-        io.mockk.coVerify(exactly = 1) { (localTemplateRepository).getTemplateAll() }
+        coVerify(exactly = 1) { (localTemplateRepository).getTemplateAll() }
     }
 
     /**
@@ -146,9 +155,9 @@ class TemplateUseCaseImpTest {
         runBlocking {
             val result = useCase.getSpinnerTemplateAll()
                 .first()
-            io.mockk.coVerify(exactly = 1) { (localTemplateRepository).getTemplateAll() }
-            Assert.assertEquals(templateList.size + 1, result.size)
-            Assert.assertEquals(templateList[0], result[1])
+            coVerify(exactly = 1) { (localTemplateRepository).getTemplateAll() }
+            assertEquals(templateList.size + 1, result.size)
+            assertEquals(templateList[0], result[1])
         }
     }
 
@@ -161,7 +170,7 @@ class TemplateUseCaseImpTest {
     fun getNextTemplateId() {
         runBlocking {
             useCase.getNextTemplateId()
-            io.mockk.coVerify(exactly = 1) { (localTemplateRepository).getNextTemplateId() }
+            coVerify(exactly = 1) { (localTemplateRepository).getNextTemplateId() }
         }
     }
 
@@ -174,7 +183,7 @@ class TemplateUseCaseImpTest {
     fun getTemplateMessageByTemplateId() {
         runBlocking {
             useCase.getTemplateMessageById(template.templateId)
-            io.mockk.coVerify(exactly = 1) { (localTemplateRepository).getTemplateMessageById(template.templateId) }
+            coVerify(exactly = 1) { (localTemplateRepository).getTemplateMessageById(template.templateId) }
         }
     }
 }

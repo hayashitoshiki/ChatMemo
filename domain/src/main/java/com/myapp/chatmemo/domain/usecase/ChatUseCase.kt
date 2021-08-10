@@ -1,5 +1,6 @@
 package com.myapp.chatmemo.domain.usecase
 
+import com.myapp.chatmemo.domain.dto.ChatRoomInputDto
 import com.myapp.chatmemo.domain.model.entity.ChatRoom
 import com.myapp.chatmemo.domain.model.value.Comment
 import com.myapp.chatmemo.domain.model.value.RoomId
@@ -13,9 +14,11 @@ interface ChatUseCase {
 
     /**
      * チャットルーム作成
-     * @property chatRoom 作成するチャットルーム
+     *
+     * @param chatRoomInputDto チャットルーム生成用データ
+     * @return 生成されたチャットルーム
      */
-    suspend fun createRoom(chatRoom: ChatRoom)
+    suspend fun createRoom(chatRoomInputDto: ChatRoomInputDto): ChatRoom
 
     /**
      * チャットルーム削除
@@ -25,6 +28,7 @@ interface ChatUseCase {
 
     /**
      * チャットルームアップデート
+     *
      * @property chatRoom 更新するチャットルーム
      */
     suspend fun updateRoom(chatRoom: ChatRoom)
@@ -72,5 +76,8 @@ interface ChatUseCase {
      * @property roomId チャットルームのID
      * @return 送信されたコメント
      */
-    fun addComment(message: String, roomId: RoomId): Comment
+    fun addComment(
+        message: String,
+        roomId: RoomId
+    ): Comment
 }
