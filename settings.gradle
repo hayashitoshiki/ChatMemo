@@ -1,5 +1,5 @@
 // 一旦コメントアウト。のちに時間ができたときに修正
-//include ':document'
+include ':document'
 include ':common'
 include ':presentation'
 include ':data'
