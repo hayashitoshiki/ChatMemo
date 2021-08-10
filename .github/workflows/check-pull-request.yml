@@ -101,9 +101,9 @@ jobs:
       - name: Commit files
         run: |
           git add .
-          git commit -m “update document” -a
+          git commit -m “update document”
           git pull
-          git push origin master
+          git push origin feature_doc_action_test
 
       # コンパイル
       - name: Run Compile
