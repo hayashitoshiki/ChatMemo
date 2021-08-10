@@ -103,7 +103,6 @@ jobs:
           git remote set-url origin https://hayashitoshiki:${{ secrets.USER_GITHUB }}@github.com/hayashitoshiki/ChatMemo
           git add .
           git commit -m "update document"
-          git pull origin feature_doc_action_test
           git push origin feature_doc_action_test
 
       # コンパイル
