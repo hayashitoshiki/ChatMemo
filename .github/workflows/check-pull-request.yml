@@ -102,7 +102,7 @@ jobs:
         run: |
           git add .
           git commit -m "update document"
-          git pull
+          git pull origin feature_doc_action_test
           git push origin feature_doc_action_test
 
       # コンパイル
